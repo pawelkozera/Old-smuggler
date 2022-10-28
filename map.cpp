@@ -4,12 +4,15 @@
 #include <iostream>
 #include <QGraphicsView>
 #include <QGridLayout>
+#include <QGraphicsPixmapItem>
 
 Map::Map()
 {
-    map_texture.load("C:/Users/admin/Desktop/projektc++/smuggler/background.png");
+    map_texture.load("../smuggler/assets/map/background.png");
 }
 
-void Map::add_map_to_scene(QGraphicsScene *Scene) {
-    Scene->addPixmap(this->map_texture);
+QGraphicsPixmapItem* Map::add_map_to_scene(QGraphicsScene *Scene) {
+    QGraphicsPixmapItem *p;
+    p = Scene->addPixmap(this->map_texture);
+    return p;
 }

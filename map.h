@@ -2,15 +2,17 @@
 #define MAP_H
 
 #include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QWidget>
 
-class Map
+class Map : public QWidget
 {
 public:
     Map();
 
     QPixmap map_texture;
 
-    void add_map_to_scene(QGraphicsScene *Scene);
+    QGraphicsPixmapItem* add_map_to_scene(QGraphicsScene *Scene);
 };
 
 #endif // MAP_H

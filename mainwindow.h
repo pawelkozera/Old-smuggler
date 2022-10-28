@@ -16,8 +16,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void set_window_parameters();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *Scene;
+
+    void keyPressEvent(QKeyEvent *event);
 };
 #endif // MAINWINDOW_H
