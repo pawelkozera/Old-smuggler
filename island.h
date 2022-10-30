@@ -14,7 +14,7 @@ public:
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
-    virtual void keyPressEvent(QKeyEvent *event);
+    void move_island(QKeyEvent *event);
 };
 
 #endif // ISLAND_H

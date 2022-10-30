@@ -3,6 +3,7 @@
 #include "map.h"
 #include "island.h"
 #include "playercharacter.h"
+#include "eventhandler.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -12,8 +13,6 @@
 
 const int WINDOW_WIDTH = 1408;
 const int WINDOW_HEIGHT = 800;
-
-void set_window_parameters();
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,15 +27,22 @@ MainWindow::MainWindow(QWidget *parent)
     Map map;
 
     // islands
-    //std::vector<Island> islands;
-    Island *starting_island = new Island(WINDOW_WIDTH/4, WINDOW_HEIGHT/10, "starting_island.png");
-    starting_island->setFocus();
+    std::vector<Island *> islands;
+    islands.push_back(new Island(WINDOW_WIDTH/4, WINDOW_HEIGHT/10, "starting_island.png"));
 
     // player character
     PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
+    // event handler
+    EventHandler *eventHandler = new EventHandler(islands);
+    eventHandler->setFocus();
+    Scene->addItem(eventHandler);
+
     // Adding items to the scene
-    Scene->addItem(starting_island);
+    for (int i = 0; i < islands.size(); i++) {
+        Scene->addItem(islands[i]);
+    }
+
     Scene->addItem(player_character);
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);

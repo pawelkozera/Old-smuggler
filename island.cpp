@@ -20,10 +20,9 @@ void Island::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->drawPixmap(borders, island_img);
 }
 
-void Island::keyPressEvent(QKeyEvent *event) {
+void Island::move_island(QKeyEvent *event) {
     int x_speed = MovingSpeed::x_speed;
     int y_speed = MovingSpeed::y_speed;
-    qDebug() << x(); // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     if (event->key() == Qt::Key_A) {
         setPos(x() + x_speed, y());
@@ -37,5 +36,4 @@ void Island::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_S) {
         setPos(x(), y() - y_speed);
     }
-    update();
 }

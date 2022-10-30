@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
         movingspeed.h
         playercharacter.cpp
         playercharacter.h
+        eventhandler.cpp
+        eventhandler.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
