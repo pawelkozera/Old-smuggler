@@ -1,11 +1,16 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "map.h"
+#include <island.h>
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QDebug>
+#include <vector>
+
+const int WINDOW_WIDTH = 1408;
+const int WINDOW_HEIGHT = 800;
 
 void set_window_parameters();
 
@@ -18,8 +23,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     Scene = new QGraphicsScene();
 
-    Map map;
-    QGraphicsPixmapItem *p = map.add_map_to_scene(Scene);
+    // map
+    Map map(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    // islands
+    std::vector<Island> islands;
+    Island is(500, 300, "island1.png");
+
+    // Adding items to the scene
+    //map.add_map_to_scene(Scene);
+    //Scene->addRect(map.window_rect);
+    Scene->addRect(is.borders);
     ui->graphicsView->setScene(Scene);
     ui->graphicsView->show();
 }
@@ -31,7 +45,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::set_window_parameters() {
     this->setCentralWidget(ui->graphicsView);
-    this->setFixedSize(1366, 768);
+    this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setWindowTitle(tr("Old Smuggler"));

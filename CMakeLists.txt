@@ -21,6 +21,8 @@ set(PROJECT_SOURCES
         mainwindow.ui
         map.cpp
         map.h
+        island.cpp
+        island.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
