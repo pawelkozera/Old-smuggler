@@ -7,7 +7,7 @@
 Island::Island(int x, int y, QString img_name) {
     setFlag(QGraphicsItem::ItemIsFocusable);
     is_visible = false;
-    island_img.load("../smuggler/assets/map/island1.png");
+    island_img.load("../smuggler/assets/map/" + img_name);
     borders = QRect(x, y, island_img.width(), island_img.height());
 }
 

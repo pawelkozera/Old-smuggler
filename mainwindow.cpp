@@ -29,12 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     // islands
     //std::vector<Island> islands;
-    Island *island1 = new Island(500, 300, "island1.png");
-    island1->setFocus();
+    Island *starting_island = new Island(500, 300, "starting_island.png");
+    starting_island->setFocus();
 
     // Adding items to the scene
-    Scene->addItem(map);
-    Scene->addItem(island1);
+    Scene->addItem(starting_island);
+    ui->graphicsView->setBackgroundBrush(map->map_texture);
     ui->graphicsView->setScene(Scene);
     ui->graphicsView->show();
 }
