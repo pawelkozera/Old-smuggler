@@ -1,26 +1,40 @@
 #include "island.h"
+#include "movingspeed.h"
 
-#include <QPainter>
 #include <QDebug>
-
-Island::Island(QWidget *parent)
-    : QWidget{parent}
-{
-
-}
+#include <QKeyEvent>
 
 Island::Island(int x, int y, QString img_name) {
+    setFlag(QGraphicsItem::ItemIsFocusable);
     is_visible = false;
-
-    QPixmap island;
-    island.load("../smuggler/assets/map/island1.png");
-
-    borders = QRect(x, y, island.width(), island.height());
+    island_img.load("../smuggler/assets/map/island1.png");
+    borders = QRect(x, y, island_img.width(), island_img.height());
 }
 
-void Island::paintEvent(QPaintEvent *event) {
-    QPainter painter(this);
-    painter.drawEllipse(0, 0, 100, 100);
-    painter.drawText(QPoint(30, 30), "aAAAAAAAAAAAAAAAAAAa");
-    qDebug() << "ASD";
+QRectF Island::boundingRect() const {
+    // outer most edges
+    return borders;
+}
+
+void Island::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    painter->drawPixmap(borders, island_img);
+}
+
+void Island::keyPressEvent(QKeyEvent *event) {
+    int x_speed = MovingSpeed::x_speed;
+    int y_speed = MovingSpeed::y_speed;
+
+    if (event->key() == Qt::Key_A) {
+        setPos(x() - x_speed, y());
+    }
+    if (event->key() == Qt::Key_D) {
+        setPos(x() + x_speed, y());
+    }
+    if (event->key() == Qt::Key_W) {
+        setPos(x(), y() - y_speed);
+    }
+    if (event->key() == Qt::Key_S) {
+        setPos(x(), y() + y_speed);
+    }
+    update();
 }

@@ -1,11 +1,10 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
-#include <QWidget>
+#include <QPainter>
+#include <QGraphicsItem>
 
-class Map : public QWidget
+class Map : public QGraphicsItem
 {
 public:
     Map(int width, int height);
@@ -13,7 +12,9 @@ public:
     QPixmap map_texture;
     QRect window_rect;
 
-    QGraphicsPixmapItem* add_map_to_scene(QGraphicsScene *Scene);
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    virtual void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // MAP_H

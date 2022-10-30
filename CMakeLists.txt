@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         map.h
         island.cpp
         island.h
+        movingspeed.cpp
+        movingspeed.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

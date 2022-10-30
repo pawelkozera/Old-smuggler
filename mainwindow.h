@@ -21,7 +21,5 @@ public:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *Scene;
-
-    void keyPressEvent(QKeyEvent *event);
 };
 #endif // MAINWINDOW_H

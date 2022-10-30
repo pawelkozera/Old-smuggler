@@ -24,16 +24,17 @@ MainWindow::MainWindow(QWidget *parent)
     Scene = new QGraphicsScene();
 
     // map
-    Map map(WINDOW_WIDTH, WINDOW_HEIGHT);
+    Map *map = new Map(WINDOW_WIDTH, WINDOW_HEIGHT);
+    map->setFocus();
 
     // islands
-    std::vector<Island> islands;
-    Island is(500, 300, "island1.png");
+    //std::vector<Island> islands;
+    Island *island1 = new Island(500, 300, "island1.png");
+    island1->setFocus();
 
     // Adding items to the scene
-    //map.add_map_to_scene(Scene);
-    //Scene->addRect(map.window_rect);
-    Scene->addRect(is.borders);
+    Scene->addItem(map);
+    Scene->addItem(island1);
     ui->graphicsView->setScene(Scene);
     ui->graphicsView->show();
 }
@@ -49,19 +50,4 @@ void MainWindow::set_window_parameters() {
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setWindowTitle(tr("Old Smuggler"));
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_A) {
-        qDebug() << "a";
-    }
-    if (event->key() == Qt::Key_D) {
-        qDebug() << "d";
-    }
-    if (event->key() == Qt::Key_W) {
-        qDebug() << "w";
-    }
-    if (event->key() == Qt::Key_S) {
-        qDebug() << "s";
-    }
 }

@@ -1,22 +1,20 @@
 #ifndef ISLAND_H
 #define ISLAND_H
 
-#include <QWidget>
+#include <QPainter>
+#include <QGraphicsItem>
 
-class Island : public QWidget
+class Island : public QGraphicsRectItem
 {
-    Q_OBJECT
 public:
-    explicit Island(QWidget *parent = nullptr);
-
     Island(int x, int y, QString img_name);
-    QRect borders;
     bool is_visible;
+    QRect borders;
+    QPixmap island_img;
 
-    void paintEvent(QPaintEvent *event) override;
-
-signals:
-
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    virtual void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // ISLAND_H
