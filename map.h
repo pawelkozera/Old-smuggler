@@ -1,20 +1,16 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <QPainter>
-#include <QGraphicsItem>
+#include <QPixmap>
 
-class Map : public QGraphicsItem
+class Map
 {
-public:
-    Map(int width, int height);
-
+private:
     QPixmap map_texture;
-    QRect window_rect;
+public:
+    Map();
 
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
-    virtual void keyPressEvent(QKeyEvent *event);
+    QPixmap get_map_texture();
 };
 
 #endif // MAP_H

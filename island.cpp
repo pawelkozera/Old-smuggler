@@ -23,18 +23,19 @@ void Island::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 void Island::keyPressEvent(QKeyEvent *event) {
     int x_speed = MovingSpeed::x_speed;
     int y_speed = MovingSpeed::y_speed;
+    qDebug() << x(); // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     if (event->key() == Qt::Key_A) {
-        setPos(x() - x_speed, y());
-    }
-    if (event->key() == Qt::Key_D) {
         setPos(x() + x_speed, y());
     }
+    if (event->key() == Qt::Key_D) {
+        setPos(x() - x_speed, y());
+    }
     if (event->key() == Qt::Key_W) {
-        setPos(x(), y() - y_speed);
+        setPos(x(), y() + y_speed);
     }
     if (event->key() == Qt::Key_S) {
-        setPos(x(), y() + y_speed);
+        setPos(x(), y() - y_speed);
     }
     update();
 }

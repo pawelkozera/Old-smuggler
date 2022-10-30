@@ -25,6 +25,8 @@ set(PROJECT_SOURCES
         island.h
         movingspeed.cpp
         movingspeed.h
+        playercharacter.cpp
+        playercharacter.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

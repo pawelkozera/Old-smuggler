@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "map.h"
-#include <island.h>
+#include "island.h"
+#include "playercharacter.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -21,20 +22,23 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->set_window_parameters();
 
-    Scene = new QGraphicsScene();
+    Scene = new QGraphicsScene(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // map
-    Map *map = new Map(WINDOW_WIDTH, WINDOW_HEIGHT);
-    map->setFocus();
+    Map map;
 
     // islands
     //std::vector<Island> islands;
-    Island *starting_island = new Island(500, 300, "starting_island.png");
+    Island *starting_island = new Island(WINDOW_WIDTH/4, WINDOW_HEIGHT/10, "starting_island.png");
     starting_island->setFocus();
+
+    // player character
+    PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
     // Adding items to the scene
     Scene->addItem(starting_island);
-    ui->graphicsView->setBackgroundBrush(map->map_texture);
+    Scene->addItem(player_character);
+    ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);
     ui->graphicsView->show();
 }
@@ -49,5 +53,6 @@ void MainWindow::set_window_parameters() {
     this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     setWindowTitle(tr("Old Smuggler"));
 }
