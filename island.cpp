@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 
+
 Island::Island(int x, int y, QString img_name) {
     setFlag(QGraphicsItem::ItemIsFocusable);
     is_visible = false;

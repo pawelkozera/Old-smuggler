@@ -5,6 +5,7 @@
 #include <QGraphicsItem>
 #include <vector>
 
+
 class PlayerCharacter : public QGraphicsRectItem
 {
 public:
@@ -12,11 +13,13 @@ public:
 
     std::vector<QPixmap> player_imgs;
     int current_index_of_player_img;
+    int delay_animation_counter;
+    int delay_animation;
     QRect player_rect;
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
-    virtual void keyPressEvent(QKeyEvent *event);
+    void player_animation(QKeyEvent *event);
 };
 
 #endif // PLAYERCHARACTER_H

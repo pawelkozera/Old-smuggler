@@ -14,6 +14,7 @@
 const int WINDOW_WIDTH = 1408;
 const int WINDOW_HEIGHT = 800;
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -34,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands);
+    EventHandler *eventHandler = new EventHandler(islands, player_character);
     eventHandler->setFocus();
     Scene->addItem(eventHandler);
 

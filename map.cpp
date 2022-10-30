@@ -2,6 +2,7 @@
 
 #include <QDebug>
 
+
 Map::Map() {
     map_texture.load("../smuggler/assets/map/background.png");
 }

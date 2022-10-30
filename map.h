@@ -3,6 +3,7 @@
 
 #include <QPixmap>
 
+
 class Map
 {
 private:
