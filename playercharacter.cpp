@@ -4,7 +4,7 @@
 #include <QKeyEvent>
 
 
-PlayerCharacter::PlayerCharacter(int screen_width, int screen_height) {
+PlayerCharacter::PlayerCharacter(int x, int y) {
     setFlag(QGraphicsItem::ItemIsFocusable);
     current_index_of_player_img = 0;
     delay_animation_counter = 0;
@@ -17,7 +17,7 @@ PlayerCharacter::PlayerCharacter(int screen_width, int screen_height) {
         player_imgs.push_back(player_img);
     }
 
-    player_rect = QRect(screen_width, screen_height, player_imgs[0].width(), player_imgs[0].height());
+    player_rect = QRect(x, y, player_imgs[0].width(), player_imgs[0].height());
 }
 
 QRectF PlayerCharacter::boundingRect() const {

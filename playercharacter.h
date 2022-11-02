@@ -6,16 +6,17 @@
 #include <vector>
 
 
-class PlayerCharacter : public QGraphicsRectItem
+class PlayerCharacter : public QGraphicsPixmapItem
 {
 public:
-    PlayerCharacter(int screen_width, int screen_height);
+    PlayerCharacter(int x, int y);
 
     std::vector<QPixmap> player_imgs;
     int current_index_of_player_img;
     int delay_animation_counter;
     int delay_animation;
     QRect player_rect;
+    QGraphicsPixmapItem *player_item;
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);

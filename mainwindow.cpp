@@ -33,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // player character
     PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+    player_character->player_item = Scene->addPixmap(player_character->player_imgs[0]);
+    player_character->player_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    player_character->player_item->setPos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
     // event handler
     EventHandler *eventHandler = new EventHandler(islands, player_character);
@@ -41,10 +44,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Adding items to the scene
     for (int i = 0; i < islands.size(); i++) {
-        Scene->addItem(islands[i]);
+         islands[i]->island_item = Scene->addPixmap(islands[i]->island_img);
+         islands[i]->island_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+         islands[i]->island_item->setPos(WINDOW_WIDTH/4, WINDOW_HEIGHT/10);
     }
 
     Scene->addItem(player_character);
+
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);
     ui->graphicsView->show();
