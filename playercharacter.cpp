@@ -1,4 +1,5 @@
 #include "playercharacter.h"
+#include "movingspeed.h"
 
 #include <QDebug>
 #include <QKeyEvent>
@@ -84,5 +85,34 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
         }
     }
     delay_animation_counter++;
+}
+
+bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item) {
+    int x = this->x();
+    int y = this->y();
+    QGraphicsPixmapItem *player_item = this->player_item;
+
+    int pixels_to_move_x = MovingSpeed::x_speed;
+    int pixels_to_move_y = MovingSpeed::y_speed;
+
+    if (event->key() == Qt::Key_A) {
+        player_item->setPos(x - pixels_to_move_x, y);
+    }
+    else if (event->key() == Qt::Key_D) {
+        player_item->setPos(x + pixels_to_move_x, y);
+    }
+    else if (event->key() == Qt::Key_W) {
+        player_item->setPos(x, y - pixels_to_move_y);
+    }
+    else if (event->key() == Qt::Key_S) {
+        player_item->setPos(x, y + pixels_to_move_y);
+    }
+
+    if (player_item->collidesWithItem(item, Qt::ContainsItemShape)) {
+        player_item->setPos(x, y);
+        return true;
+    }
+    player_item->setPos(x, y);
+    return false;
 }
 

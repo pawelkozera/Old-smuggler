@@ -29,30 +29,3 @@ void Island::move_island(QKeyEvent *event) {
         island_item->setPos(island_x, island_y - y_speed);
     }
 }
-
-bool Island::collision_with_player(QKeyEvent *event, QGraphicsPixmapItem *player_character) {
-    int x = player_character->x();
-    int y = player_character->y();
-    int pixels_to_move_x = MovingSpeed::x_speed;
-    int pixels_to_move_y = MovingSpeed::y_speed;
-
-    if (event->key() == Qt::Key_A) {
-        player_character->setPos(x - pixels_to_move_x, y);
-    }
-    else if (event->key() == Qt::Key_D) {
-        player_character->setPos(x + pixels_to_move_x, y);
-    }
-    else if (event->key() == Qt::Key_W) {
-        player_character->setPos(x, y - pixels_to_move_y);
-    }
-    else if (event->key() == Qt::Key_S) {
-        player_character->setPos(x, y + pixels_to_move_y);
-    }
-
-    if (player_character->collidesWithItem(island_item, Qt::ContainsItemShape)) {
-        player_character->setPos(x, y);
-        return true;
-    }
-    player_character->setPos(x, y);
-    return false;
-}

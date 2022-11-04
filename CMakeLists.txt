@@ -29,6 +29,8 @@ set(PROJECT_SOURCES
         playercharacter.h
         eventhandler.cpp
         eventhandler.h
+        interactiveobject.cpp
+        interactiveobject.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

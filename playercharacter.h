@@ -21,6 +21,7 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     void player_animation(QKeyEvent *event);
+    bool collision(QKeyEvent *event, QGraphicsPixmapItem *item);
 };
 
 #endif // PLAYERCHARACTER_H

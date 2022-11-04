@@ -15,7 +15,6 @@ EventHandler::EventHandler(std::vector<Island *> islands
 void EventHandler::keyPressEvent(QKeyEvent *event) {
     // islands
     island_collision(event);
-    qDebug() << player_character->x();
 
     // player
     player_character->player_animation(event);
@@ -35,7 +34,7 @@ void EventHandler::island_collision(QKeyEvent *event) {
     }
 
     if (player_island_collision) {
-        if (player_island->collision_with_player(event, player_character->player_item)) {
+        if (player_character->collision(event, player_island->island_item)) {
             for(int i = 0; i < islands.size(); i++) {
                 islands[i]->move_island(event);
             }
