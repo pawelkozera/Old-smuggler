@@ -27,13 +27,7 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
     if (event->key() == Qt::Key_A) {
         key_pressed = true;
         if (delay_animation_counter == delay_animation) {
-            if (current_index_of_player_img < 11 && current_index_of_player_img >= 9) {
-                current_index_of_player_img++;
-            }
-            else {
-                current_index_of_player_img = 9;
-            }
-            delay_animation_counter = 0;
+            change_current_index(11, 9);
         }
     }
 
@@ -41,13 +35,7 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
     if (event->key() == Qt::Key_D) {
         key_pressed = true;
         if (delay_animation_counter == delay_animation) {
-            if (current_index_of_player_img < 5 && current_index_of_player_img >= 3) {
-                current_index_of_player_img++;
-            }
-            else {
-                current_index_of_player_img = 3;
-            }
-            delay_animation_counter = 0;
+            change_current_index(5, 3);
         }
     }
 
@@ -55,13 +43,7 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
     if (event->key() == Qt::Key_W) {
         key_pressed = true;
         if (delay_animation_counter == delay_animation) {
-            if (current_index_of_player_img < 8 && current_index_of_player_img >= 6) {
-                current_index_of_player_img++;
-            }
-            else {
-                current_index_of_player_img = 6;
-            }
-            delay_animation_counter = 0;
+            change_current_index(8, 6);
         }
     }
 
@@ -69,17 +51,21 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
     if (event->key() == Qt::Key_S) {
         key_pressed = true;
         if (delay_animation_counter == delay_animation) {
-            if (current_index_of_player_img < 2 && current_index_of_player_img >= 0) {
-                current_index_of_player_img++;
-            }
-            else {
-                current_index_of_player_img = 0;
-            }
-            delay_animation_counter = 0;
+            change_current_index(2, 0);
         }
     }
     if (key_pressed)
         delay_animation_counter++;
+}
+
+void PlayerCharacter::change_current_index(int max_index, int min_index) {
+    if (current_index_of_player_img < max_index && current_index_of_player_img >= min_index) {
+        current_index_of_player_img++;
+    }
+    else {
+        current_index_of_player_img = min_index;
+    }
+    delay_animation_counter = 0;
 }
 
 void PlayerCharacter::change_character_img() {

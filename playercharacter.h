@@ -22,6 +22,7 @@ public:
 
     void player_animation(QKeyEvent *event);
     void change_character_img();
+    void change_current_index(int max_index, int min_index);
     void collision_on_island(QKeyEvent *event, std::vector<Island *> islands);
     bool collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape = false);
 };
