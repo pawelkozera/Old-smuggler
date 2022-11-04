@@ -5,20 +5,9 @@
 #include <QKeyEvent>
 
 
-Island::Island(int x, int y, QString img_name) {
-
+Island::Island(QString img_name) {
     is_visible = false;
     island_img.load("../smuggler/assets/map/" + img_name);
-    borders = QRect(x, y, island_img.width(), island_img.height());
-}
-
-QRectF Island::boundingRect() const {
-    // outer most edges
-    return borders;
-}
-
-void Island::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    //painter->drawPixmap(borders, island_img);
 }
 
 void Island::move_island(QKeyEvent *event) {

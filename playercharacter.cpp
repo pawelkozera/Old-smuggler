@@ -17,7 +17,9 @@ PlayerCharacter::PlayerCharacter(int x, int y) {
         player_imgs.push_back(player_img);
     }
 
-    player_rect = QRect(x, y, player_imgs[0].width(), player_imgs[0].height());
+    player_rect = QRect(0, 0, player_imgs[0].width(), player_imgs[0].height());
+    this->setX(x);
+    this->setY(y);
 }
 
 QRectF PlayerCharacter::boundingRect() const {

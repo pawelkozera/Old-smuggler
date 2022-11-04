@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="28" height="21" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" source="../../../tiles/sheet1.tsx"/>
- <tileset firstgid="65" source="../../../../box2.tsx"/>
- <tileset firstgid="66" source="../../../../box1.tsx"/>
- <tileset firstgid="67" source="../../../../box3.tsx"/>
- <tileset firstgid="68" source="../../../../box4.tsx"/>
- <tileset firstgid="69" source="../../../../box5.tsx"/>
- <tileset firstgid="70" source="../../../../crate1.tsx"/>
- <tileset firstgid="71" source="../../../../crate2.tsx"/>
- <tileset firstgid="72" source="../../../../crate3.tsx"/>
- <tileset firstgid="73" source="../../../../crate4.tsx"/>
- <tileset firstgid="74" source="../../../../crate5.tsx"/>
  <layer id="1" name="Warstwa Kafelków 1" width="28" height="21">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,11,11,11,11,11,11,11,11,11,11,11,0,0,0,0,0,0,0,0,0,

@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // islands
     std::vector<Island *> islands;
-    islands.push_back(new Island(WINDOW_WIDTH/4, WINDOW_HEIGHT/10, "starting_island.png"));
+    islands.push_back(new Island("starting_island.png"));
 
     // player character
     PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);

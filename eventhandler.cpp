@@ -15,6 +15,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
 void EventHandler::keyPressEvent(QKeyEvent *event) {
     // islands
     island_collision(event);
+    qDebug() << player_character->x();
 
     // player
     player_character->player_animation(event);
