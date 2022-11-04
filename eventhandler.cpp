@@ -24,18 +24,27 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
 }
 
 void EventHandler::island_collision(QKeyEvent *event) {
-    bool player_island_collision = false;
+    bool player_on_island = false;
     Island *player_island;
     for(int i = 0; i < islands.size(); i++) {
-        player_island_collision = player_character->player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
-        if (player_island_collision) {
+        player_on_island = player_character->player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
+        if (player_on_island) {
             player_island = islands[i];
             break;
         }
     }
 
-    if (player_island_collision) {
-        if (player_character->collision(event, player_island->island_item)) {
+    if (player_on_island) {
+        bool player_object_on_island_collision = false;
+        player_on_island = player_character->collision(event, player_island->island_item, true);
+        QGraphicsPixmapItem *island_object_item;
+
+        for(int i = 0; i < player_island->objects.size(); i++) {
+            island_object_item = player_island->objects[i]->item;
+            player_object_on_island_collision = player_character->collision(event, island_object_item);
+        }
+
+        if (!player_object_on_island_collision && player_on_island) {
             for(int i = 0; i < islands.size(); i++) {
                 islands[i]->move_island(event);
             }

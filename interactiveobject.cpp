@@ -2,6 +2,7 @@
 
 InteractiveObject::InteractiveObject(QString img_name) {
     img.load("../smuggler/assets/objects/" + img_name);
+    setPos(0, 0);
 }
 
 void InteractiveObject::move_object(int x, int y) {

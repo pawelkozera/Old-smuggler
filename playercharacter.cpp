@@ -80,7 +80,7 @@ void PlayerCharacter::change_character_img() {
     player_item->setPixmap(player_imgs[current_index_of_player_img]);
 }
 
-bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item) {
+bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape) {
     int x = this->x();
     int y = this->y();
 
@@ -100,9 +100,17 @@ bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item) {
         player_item->setPos(x, y + pixels_to_move_y);
     }
 
-    if (player_item->collidesWithItem(item, Qt::ContainsItemShape)) {
-        player_item->setPos(x, y);
-        return true;
+    if (ContainsItemShape) {
+        if (player_item->collidesWithItem(item, Qt::ContainsItemShape)) {
+            player_item->setPos(x, y);
+            return true;
+        }
+    }
+    else {
+        if (player_item->collidesWithItem(item)) {
+            player_item->setPos(x, y);
+            return true;
+        }
     }
     player_item->setPos(x, y);
     return false;

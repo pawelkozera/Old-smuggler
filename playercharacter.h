@@ -20,7 +20,7 @@ public:
 
     void player_animation(QKeyEvent *event);
     void change_character_img();
-    bool collision(QKeyEvent *event, QGraphicsPixmapItem *item);
+    bool collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape = false);
 };
 
 #endif // PLAYERCHARACTER_H

@@ -1,7 +1,7 @@
 #ifndef INTERACTIVEOBJECT_H
 #define INTERACTIVEOBJECT_H
 
-#include <QGraphicsPixmapItem>
+#include <QGraphicsItem>
 
 class InteractiveObject : public QGraphicsPixmapItem
 {

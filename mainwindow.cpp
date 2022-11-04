@@ -4,7 +4,6 @@
 #include "island.h"
 #include "playercharacter.h"
 #include "eventhandler.h"
-#include "interactiveobject.h"
 #include "resources.h"
 
 #include <QPixmap>
@@ -40,18 +39,18 @@ MainWindow::MainWindow(QWidget *parent)
          islands[i]->island_item->setPos(WINDOW_WIDTH/4, WINDOW_HEIGHT/10);
     }
 
+    // interactive objects
+    Resources *boxes = new Resources("boxes.png");
+    boxes->item = Scene->addPixmap(boxes->img);
+    boxes->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    boxes->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
+    islands[0]->objects.push_back(boxes);
+
     // player character
     PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     player_character->player_item = Scene->addPixmap(player_character->player_imgs[0]);
     player_character->player_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_character->player_item->setPos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
-
-    // interactive objects
-    Resources *resources = new Resources("boxes.png");
-    resources->item = Scene->addPixmap(resources->img);
-    resources->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    resources->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
-    islands[0]->objects.push_back(resources);
 
     // event handler
     EventHandler *eventHandler = new EventHandler(islands, player_character);
