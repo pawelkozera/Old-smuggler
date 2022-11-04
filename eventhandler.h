@@ -18,7 +18,6 @@ public:
     PlayerCharacter *player_character;
 
     virtual void keyPressEvent(QKeyEvent *event);
-    void island_collision(QKeyEvent *event);
 };
 
 #endif // EVENTHANDLER_H

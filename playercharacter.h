@@ -1,6 +1,8 @@
 #ifndef PLAYERCHARACTER_H
 #define PLAYERCHARACTER_H
 
+#include "island.h"
+
 #include <QPainter>
 #include <QGraphicsItem>
 #include <vector>
@@ -20,6 +22,7 @@ public:
 
     void player_animation(QKeyEvent *event);
     void change_character_img();
+    void collision_on_island(QKeyEvent *event, std::vector<Island *> islands);
     bool collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape = false);
 };
 
