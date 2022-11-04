@@ -5,6 +5,7 @@
 #include "playercharacter.h"
 #include "eventhandler.h"
 #include "interactiveobject.h"
+#include "resources.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -44,6 +45,13 @@ MainWindow::MainWindow(QWidget *parent)
     player_character->player_item = Scene->addPixmap(player_character->player_imgs[0]);
     player_character->player_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_character->player_item->setPos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+
+    // interactive objects
+    Resources *resources = new Resources("boxes.png");
+    resources->item = Scene->addPixmap(resources->img);
+    resources->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    resources->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
+    islands[0]->objects.push_back(resources);
 
     // event handler
     EventHandler *eventHandler = new EventHandler(islands, player_character);

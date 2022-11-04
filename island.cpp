@@ -18,14 +18,24 @@ void Island::move_island(QKeyEvent *event) {
 
     if (event->key() == Qt::Key_A) {
         island_item->setPos(island_x + x_speed, island_y);
+        move_objects_on_island(x_speed, 0);
     }
     if (event->key() == Qt::Key_D) {
         island_item->setPos(island_x - x_speed, island_y);
+        move_objects_on_island(-x_speed, 0);
     }
     if (event->key() == Qt::Key_W) {
         island_item->setPos(island_x, island_y + y_speed);
+        move_objects_on_island(0, y_speed);
     }
     if (event->key() == Qt::Key_S) {
         island_item->setPos(island_x, island_y - y_speed);
+        move_objects_on_island(0, -y_speed);
+    }
+}
+
+void Island::move_objects_on_island(int x, int y) {
+    for (int i = 0; i < objects.size(); i++) {
+        objects[i]->move_object(x, y);
     }
 }

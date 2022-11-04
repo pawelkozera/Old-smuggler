@@ -10,6 +10,8 @@ public:
 
     QPixmap img;
     QGraphicsPixmapItem *item;
+
+    void move_object(int x, int y);
 };
 
 #endif // INTERACTIVEOBJECT_H
