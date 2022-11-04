@@ -19,9 +19,7 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     void move_island(QKeyEvent *event);
-    bool collision_with_player(QGraphicsPixmapItem *player_character);
-    void set_last_position(int position, QString direction);
-    void move_to_the_last_position();
+    bool collision_with_player(QKeyEvent *event, QGraphicsPixmapItem *player_character);
 };
 
 #endif // ISLAND_H

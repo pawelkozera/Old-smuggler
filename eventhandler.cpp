@@ -14,29 +14,30 @@ EventHandler::EventHandler(std::vector<Island *> islands
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
     // islands
-    bool player_island_collision = true;
-    for(int i = 0; i < islands.size(); i++) {
-        Island *island = islands[i];
-        player_island_collision = island->collision_with_player(player_character->player_item);
-        if (!player_island_collision) {
-            break;
-        }
-    }
-
-    if (!player_island_collision) {
-        for(int i = 0; i < islands.size(); i++) {
-            Island *island = islands[i];
-            island->move_to_the_last_position();
-        }
-    }
-    else {
-        for(int i = 0; i < islands.size(); i++) {
-            islands[i]->move_island(event);
-        }
-    }
+    island_collision(event);
 
     // player
     player_character->player_animation(event);
 
     update();
+}
+
+void EventHandler::island_collision(QKeyEvent *event) {
+    bool player_island_collision = false;
+    Island *player_island;
+    for(int i = 0; i < islands.size(); i++) {
+        player_island_collision = player_character->player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
+        if (player_island_collision) {
+            player_island = islands[i];
+            break;
+        }
+    }
+
+    if (player_island_collision) {
+        if (player_island->collision_with_player(event, player_character->player_item)) {
+            for(int i = 0; i < islands.size(); i++) {
+                islands[i]->move_island(event);
+            }
+        }
+    }
 }
