@@ -15,12 +15,11 @@ public:
     int current_index_of_player_img;
     int delay_animation_counter;
     int delay_animation;
-    QRect player_rect;
     QGraphicsPixmapItem *player_item;
 
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+
     void player_animation(QKeyEvent *event);
+    void change_character_img();
     bool collision(QKeyEvent *event, QGraphicsPixmapItem *item);
 };
 

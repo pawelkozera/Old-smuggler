@@ -6,7 +6,7 @@
 class InteractiveObject : public QGraphicsPixmapItem
 {
 public:
-    InteractiveObject();
+    InteractiveObject(QString img_name);
 
     QPixmap img;
     QGraphicsPixmapItem *item;

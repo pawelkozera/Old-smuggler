@@ -18,6 +18,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
 
     // player
     player_character->player_animation(event);
+    player_character->change_character_img();
 
     update();
 }

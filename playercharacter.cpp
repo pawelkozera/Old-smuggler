@@ -6,7 +6,6 @@
 
 
 PlayerCharacter::PlayerCharacter(int x, int y) {
-    setFlag(QGraphicsItem::ItemIsFocusable);
     current_index_of_player_img = 0;
     delay_animation_counter = 0;
     delay_animation = 7;
@@ -18,19 +17,9 @@ PlayerCharacter::PlayerCharacter(int x, int y) {
         player_imgs.push_back(player_img);
     }
 
-    player_rect = QRect(0, 0, player_imgs[0].width(), player_imgs[0].height());
-    this->setX(x);
-    this->setY(y);
+    setPos(x, y);
 }
 
-QRectF PlayerCharacter::boundingRect() const {
-    // outer most edges
-    return player_rect;
-}
-
-void PlayerCharacter::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->drawPixmap(player_rect, player_imgs[current_index_of_player_img]);
-}
 
 void PlayerCharacter::player_animation(QKeyEvent *event) {
     // moving left
@@ -87,13 +76,16 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
     delay_animation_counter++;
 }
 
+void PlayerCharacter::change_character_img() {
+    player_item->setPixmap(player_imgs[current_index_of_player_img]);
+}
+
 bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item) {
     int x = this->x();
     int y = this->y();
-    QGraphicsPixmapItem *player_item = this->player_item;
 
-    int pixels_to_move_x = MovingSpeed::x_speed;
-    int pixels_to_move_y = MovingSpeed::y_speed;
+    int pixels_to_move_x = MovingSpeed::x_speed + 1;
+    int pixels_to_move_y = MovingSpeed::y_speed + 1;
 
     if (event->key() == Qt::Key_A) {
         player_item->setPos(x - pixels_to_move_x, y);
