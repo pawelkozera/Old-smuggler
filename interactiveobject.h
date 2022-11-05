@@ -2,6 +2,7 @@
 #define INTERACTIVEOBJECT_H
 
 #include <QGraphicsItem>
+#include <QPainter>
 
 class InteractiveObject : public QGraphicsPixmapItem
 {
@@ -10,6 +11,7 @@ public:
 
     QPixmap img;
     QGraphicsPixmapItem *item;
+    QGraphicsTextItem *text;
 
     void move_object(int x, int y);
 };

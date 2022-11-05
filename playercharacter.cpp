@@ -1,5 +1,6 @@
 #include "playercharacter.h"
 #include "movingspeed.h"
+#include "interactiveobject.h"
 
 #include <QDebug>
 #include <QKeyEvent>
@@ -72,35 +73,27 @@ void PlayerCharacter::change_character_img() {
     player_item->setPixmap(player_imgs[current_index_of_player_img]);
 }
 
-void PlayerCharacter::collision_on_island(QKeyEvent *event, std::vector<Island *> islands) {
+Island* PlayerCharacter::player_on_island(QKeyEvent *event, std::vector<Island *> islands) {
     bool player_on_island = false;
-    Island *player_island;
+
     for(int i = 0; i < islands.size(); i++) {
         player_on_island = player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
         if (player_on_island) {
-            player_island = islands[i];
-            break;
+            return islands[i];
         }
     }
+    return NULL;
+}
 
-    if (player_on_island) {
-        bool player_object_on_island_collision = false;
-        player_on_island = collision(event, player_island->island_item, true);
-        QGraphicsPixmapItem *island_object_item;
+InteractiveObject* PlayerCharacter::collision_with_island_objects(QKeyEvent *event, Island* player_island) {
+    InteractiveObject *island_object = NULL;
 
-        for(int i = 0; i < player_island->objects.size(); i++) {
-            island_object_item = player_island->objects[i]->item;
-            player_object_on_island_collision = collision(event, island_object_item);
-            if (player_object_on_island_collision)
-                break;
-        }
-
-        if (!player_object_on_island_collision && player_on_island) {
-            for(int i = 0; i < islands.size(); i++) {
-                islands[i]->move_island(event);
-            }
-        }
+    for(int i = 0; i < player_island->objects.size(); i++) {
+        island_object = player_island->objects[i];
+        if (collision(event, island_object->item))
+            return island_object;
     }
+    return NULL;
 }
 
 bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape) {

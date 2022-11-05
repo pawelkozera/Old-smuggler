@@ -1,5 +1,7 @@
 #include "interactiveobject.h"
 
+#include <QPoint>
+
 InteractiveObject::InteractiveObject(QString img_name) {
     img.load("../smuggler/assets/objects/" + img_name);
     setPos(0, 0);

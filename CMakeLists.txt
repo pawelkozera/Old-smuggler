@@ -33,6 +33,8 @@ set(PROJECT_SOURCES
         interactiveobject.h
         resources.cpp
         resources.h
+        playerplane.cpp
+        playerplane.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

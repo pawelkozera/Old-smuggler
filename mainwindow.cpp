@@ -5,6 +5,7 @@
 #include "playercharacter.h"
 #include "eventhandler.h"
 #include "resources.h"
+#include "playerplane.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -32,28 +33,42 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<Island *> islands;
     islands.push_back(new Island("starting_island.png"));
 
+    int x = WINDOW_WIDTH/4;
+    int y = WINDOW_HEIGHT/10;
     // Adding items to the scene
     for (int i = 0; i < islands.size(); i++) {
          islands[i]->island_item = Scene->addPixmap(islands[i]->island_img);
          islands[i]->island_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-         islands[i]->island_item->setPos(WINDOW_WIDTH/4, WINDOW_HEIGHT/10);
+         islands[i]->island_item->setPos(x, y);
     }
 
     // interactive objects
     Resources *boxes = new Resources("boxes.png");
+    boxes->text = Scene->addText("Q --------------- E");
     boxes->item = Scene->addPixmap(boxes->img);
     boxes->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     boxes->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
     islands[0]->objects.push_back(boxes);
 
     // player character
-    PlayerCharacter *player_character = new PlayerCharacter(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+    x = WINDOW_WIDTH/2;
+    y = WINDOW_HEIGHT/2;
+    PlayerCharacter *player_character = new PlayerCharacter(x, y);
     player_character->player_item = Scene->addPixmap(player_character->player_imgs[0]);
     player_character->player_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_character->player_item->setPos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
+    // player plane
+    x = islands[0]->island_item->x() + 164;
+    y = islands[0]->island_item->y() + 200;
+    PlayerPlane *player_plane = new PlayerPlane(x, y);
+    player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
+    player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    player_plane->item->setRotation(qreal(90));
+    player_plane->item->setPos(x, y);
+
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane);
     eventHandler->setFocus();
     Scene->addItem(eventHandler);
 
