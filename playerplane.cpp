@@ -2,7 +2,7 @@
 #include "movingspeed.h"
 
 #include <QKeyEvent>
-
+#include <QDebug>
 
 PlayerPlane::PlayerPlane(int x, int y) {
     current_index_of_plane_img = 0;
@@ -17,22 +17,31 @@ PlayerPlane::PlayerPlane(int x, int y) {
     setPos(x, y);
 }
 
-void PlayerPlane::simple_movement(QKeyEvent *event) {
-    int x_speed = MovingSpeed::x_speed;
-    int y_speed = MovingSpeed::y_speed;
+std::pair<int, int> PlayerPlane::center_plane_on_screen(PlayerCharacter *player_character) {
+    std::pair<int, int> pixels_to_move;
+    pixels_to_move.first = player_character->player_item->x() - item->x() - imgs[0].width()/2;
+    pixels_to_move.second = player_character->player_item->y() - item->y() - imgs[0].height()/2;
+
+    return pixels_to_move;
+}
+
+void PlayerPlane::simple_movement_event(QKeyEvent *event,  int x_speed, int y_speed) {
+    if (event->key() == Qt::Key_A) {
+        simple_movement(x_speed, 0);
+    }
+    else if (event->key() == Qt::Key_D) {
+        simple_movement(-x_speed, 0);
+    }
+    else if (event->key() == Qt::Key_W) {
+        simple_movement(0, y_speed);
+    }
+    else if (event->key() == Qt::Key_S) {
+        simple_movement(0, -y_speed);
+    }
+}
+
+void PlayerPlane::simple_movement(int x_speed, int y_speed) {
     int plane_x = item->x();
     int plane_y = item->y();
-
-    if (event->key() == Qt::Key_A) {
-        item->setPos(plane_x + x_speed, plane_y);
-    }
-    if (event->key() == Qt::Key_D) {
-        item->setPos(plane_x - x_speed, plane_y);
-    }
-    if (event->key() == Qt::Key_W) {
-        item->setPos(plane_x, plane_y + y_speed);
-    }
-    if (event->key() == Qt::Key_S) {
-        item->setPos(plane_x, plane_y - y_speed);
-    }
+    item->setPos(plane_x + x_speed, plane_y + y_speed);
 }

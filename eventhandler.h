@@ -18,6 +18,9 @@ public:
                  PlayerPlane *player_plane);
 
     bool player_character_events = true;
+    bool collision_with_plane = false;
+    bool collision_with_island_borders = false;
+
     std::vector<Island *> islands;
     Island *player_island;
     InteractiveObject *object_collided;

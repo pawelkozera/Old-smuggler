@@ -59,13 +59,14 @@ MainWindow::MainWindow(QWidget *parent)
     player_character->player_item->setPos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
     // player plane
-    x = islands[0]->island_item->x() + 164;
-    y = islands[0]->island_item->y() + 200;
+    x = islands[0]->island_item->x();
+    y = islands[0]->island_item->y() + 224;
     PlayerPlane *player_plane = new PlayerPlane(x, y);
     player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
     player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    player_plane->item->setRotation(qreal(90));
     player_plane->item->setPos(x, y);
+    player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
+    player_plane->item->setRotation(qreal(90));
 
     // event handler
     EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane);
