@@ -1,6 +1,8 @@
 #include "eventhandler.h"
 #include "movingspeed.h"
 
+#include "qtimer.h"
+
 #include <QDebug>
 #include <QKeyEvent>
 
@@ -10,12 +12,21 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            PlayerPlane *player_plane)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(my_timer_slot()));
+    timer->start(1000/60);
+
     this->islands = islands;
     this->player_character = player_character;
     this->player_plane = player_plane;
 
     player_island = NULL;
     object_collided = NULL;
+}
+
+void EventHandler::my_timer_slot() {
+    if (!player_character_events)
+        qDebug() << "test";
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
