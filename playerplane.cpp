@@ -45,3 +45,15 @@ void PlayerPlane::simple_movement(int x_speed, int y_speed) {
     int plane_y = item->y();
     item->setPos(plane_x + x_speed, plane_y + y_speed);
 }
+
+Island* PlayerPlane::plane_on_island(QKeyEvent *event, std::vector<Island *> islands) {
+    bool plane_on_island = false;
+
+    for(int i = 0; i < islands.size(); i++) {
+        plane_on_island = item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
+        if (plane_on_island) {
+            return islands[i];
+        }
+    }
+    return NULL;
+}

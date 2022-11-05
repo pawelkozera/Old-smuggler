@@ -60,7 +60,12 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     }
     // player plane
     else {
-
+        Island *plane_on_island = player_plane->plane_on_island(event, islands);
+        if (event->key() == Qt::Key_E && plane_on_island) {
+            player_character_events = true;
+            MovingSpeed::x_speed = 3;
+            MovingSpeed::y_speed = 3;
+        }
     }
 
     update();
