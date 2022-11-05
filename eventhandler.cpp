@@ -61,10 +61,15 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     // player plane
     else {
         Island *plane_on_island = player_plane->plane_on_island(event, islands);
-        if (event->key() == Qt::Key_E && plane_on_island) {
+        if (event->key() == Qt::Key_E && plane_on_island) { // && speed = 0
             player_character_events = true;
             MovingSpeed::x_speed = 3;
             MovingSpeed::y_speed = 3;
+            std::pair<int, int> pixels_to_move (15, -10);
+            for(int i = 0; i < islands.size(); i++) {
+                islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
+            }
+            player_plane->simple_movement(pixels_to_move.first, pixels_to_move.second);
         }
     }
 
