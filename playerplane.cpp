@@ -29,6 +29,46 @@ std::pair<int, int> PlayerPlane::center_plane_on_screen(PlayerCharacter *player_
     return pixels_to_move;
 }
 
+std::pair<int, int> PlayerPlane::leave_plane(PlayerCharacter *player_character) {
+    std::pair<int, int> pixels_to_move;
+    float radius = 18;
+    const float pi = 3.14159265;
+    float degree = 0;
+    int x_last_position = player_character->player_item->x();
+    int y_last_position = player_character->player_item->y();
+    int x = 0;
+    int y = 0;
+
+    bool character_plane_collision = true;
+    while (radius <= 40 && character_plane_collision) {
+        x = radius * sin(pi * 2.0 * degree / 360.0);
+        y = radius * cos(pi * 2.0 * degree / 360.0);
+
+        if (degree <= 90)
+            player_character->player_item->setPos(x_last_position - x, y_last_position - y);
+        else if (degree <= 180)
+            player_character->player_item->setPos(x_last_position - x, y_last_position + y);
+        else if (degree <= 270)
+            player_character->player_item->setPos(x_last_position + x, y_last_position + y);
+        else
+            player_character->player_item->setPos(x_last_position - x, y_last_position - y);
+
+        character_plane_collision = player_character->player_item->collidesWithItem(item);
+
+        degree += 3;
+        if (degree > 360) {
+            degree = 0;
+            radius += 4;
+        }
+    }
+
+    player_character->player_item->setPos(x_last_position, y_last_position);
+    pixels_to_move.first = x;
+    pixels_to_move.second = y;
+
+    return pixels_to_move;
+}
+
 void PlayerPlane::simple_movement_event(QKeyEvent *event,  int x_speed, int y_speed) {
     if (event->key() == Qt::Key_A) {
         simple_movement(x_speed, 0);
@@ -89,6 +129,11 @@ void PlayerPlane::rotate(QKeyEvent *event) {
     }
     else if (event->key() == Qt::Key_D) {
         rotation_degree += rotate;
+    }
+
+    if (abs(rotation_degree) >= 360) {
+        int degree = abs(rotation_degree) - 360;
+        rotation_degree = degree;
     }
     item->setRotation(rotation_degree);
 }

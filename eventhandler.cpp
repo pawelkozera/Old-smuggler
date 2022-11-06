@@ -81,9 +81,12 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
         if (event->key() == Qt::Key_E && plane_on_island && MovingSpeed::x_speed == 0 && MovingSpeed::y_speed == 0) {
             player_character_events = true;
             player_character->change_character_img(0);
+
             MovingSpeed::x_speed = 3;
             MovingSpeed::y_speed = 3;
-            std::pair<int, int> pixels_to_move (15, -10);
+
+            // leaving plane
+            std::pair<int, int> pixels_to_move = player_plane->leave_plane(player_character);
             for(int i = 0; i < islands.size(); i++) {
                 islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
             }

@@ -1,6 +1,5 @@
 #include "playercharacter.h"
 #include "movingspeed.h"
-#include "interactiveobject.h"
 
 #include <QDebug>
 #include <QKeyEvent>
