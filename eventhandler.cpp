@@ -14,7 +14,9 @@ EventHandler::EventHandler(std::vector<Island *> islands
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(my_timer_slot()));
-    timer->start(1000/60);
+    int ms = 1000;
+    int fps = 60;
+    timer->start(ms/fps);
 
     this->islands = islands;
     this->player_character = player_character;
@@ -25,8 +27,12 @@ EventHandler::EventHandler(std::vector<Island *> islands
 }
 
 void EventHandler::my_timer_slot() {
-    if (!player_character_events)
-        qDebug() << "test";
+    if (!player_character_events) {
+        std::pair<int, int> pixels_to_move (MovingSpeed::x_speed, MovingSpeed::y_speed);
+        for(int i = 0; i < islands.size(); i++) {
+            islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
+        }
+    }
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -34,6 +40,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     if (player_character_events) {
         if (event->key() == Qt::Key_E && collision_with_plane) {
             player_character_events = false;
+            player_character->change_character_img(12);
             MovingSpeed::x_speed = 0;
             MovingSpeed::y_speed = 0;
 
@@ -63,17 +70,17 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
                     */
                 }
             }
+
+            player_character->player_animation(event);
+            player_character->change_character_img();
         }
-
-
-        player_character->player_animation(event);
-        player_character->change_character_img();
     }
     // player plane
     else {
         Island *plane_on_island = player_plane->plane_on_island(event, islands);
-        if (event->key() == Qt::Key_E && plane_on_island) { // && speed = 0
+        if (event->key() == Qt::Key_E && plane_on_island && MovingSpeed::x_speed == 0 && MovingSpeed::y_speed == 0) {
             player_character_events = true;
+            player_character->change_character_img(0);
             MovingSpeed::x_speed = 3;
             MovingSpeed::y_speed = 3;
             std::pair<int, int> pixels_to_move (15, -10);
@@ -81,6 +88,12 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
                 islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
             }
             player_plane->simple_movement(pixels_to_move.first, pixels_to_move.second);
+        }
+        else {
+            player_plane->change_power(event);
+            player_plane->rotate(event);
+            player_plane->set_up_current_speed();
+            player_plane->calculate_x_y_speed();
         }
     }
 

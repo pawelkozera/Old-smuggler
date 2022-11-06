@@ -22,7 +22,7 @@ public:
 
 
     void player_animation(QKeyEvent *event);
-    void change_character_img();
+    void change_character_img(int index = -1);
     void change_current_index(int max_index, int min_index);
     Island* player_on_island(QKeyEvent *event, std::vector<Island *> islands);
     InteractiveObject* collision_with_island_objects(QKeyEvent *event, Island* player_island);

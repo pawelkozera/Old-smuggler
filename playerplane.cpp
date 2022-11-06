@@ -3,9 +3,13 @@
 
 #include <QKeyEvent>
 #include <QDebug>
+#include <cmath>
 
 PlayerPlane::PlayerPlane(int x, int y) {
     current_index_of_plane_img = 0;
+    fuel = 0;
+    cargo = 0;
+    rotation_degree = 0;
 
     QPixmap plane_img;
     for (int i = 1; i <= 3; i++) {
@@ -56,4 +60,57 @@ Island* PlayerPlane::plane_on_island(QKeyEvent *event, std::vector<Island *> isl
         }
     }
     return NULL;
+}
+
+void PlayerPlane::change_power(QKeyEvent *event) {
+    if (event->key() == Qt::Key_W) {
+        if (MovingSpeed::current_power < 100)
+            MovingSpeed::current_power++;
+    }
+    else if (event->key() == Qt::Key_S) {
+        if (MovingSpeed::current_power > 0)
+            MovingSpeed::current_power--;
+    }
+}
+
+void PlayerPlane::rotate(QKeyEvent *event) {
+    int rotate = 0;
+    if (MovingSpeed::current_speed/MovingSpeed::division_factor_speed == 0)
+        rotate = 0;
+    else if (MovingSpeed::current_speed/MovingSpeed::division_factor_speed == 1)
+        rotate = 1;
+    else if (MovingSpeed::current_speed/MovingSpeed::division_factor_speed == 2)
+        rotate = 2;
+    else
+        rotate = 3;
+
+    if (event->key() == Qt::Key_A) {
+        rotation_degree -= rotate;
+    }
+    else if (event->key() == Qt::Key_D) {
+        rotation_degree += rotate;
+    }
+    item->setRotation(rotation_degree);
+}
+
+void PlayerPlane::set_up_current_speed() {
+    int current_power = MovingSpeed::current_power/MovingSpeed::division_power_factor_index;
+    if (current_power > 10 || current_power < 0)
+        return;
+
+    int max_speed = MovingSpeed::max_speed[current_power];
+
+    if (MovingSpeed::current_speed < max_speed)
+        MovingSpeed::current_speed++;
+    else if (MovingSpeed::current_speed > max_speed)
+        MovingSpeed::current_speed--;
+}
+
+void PlayerPlane::calculate_x_y_speed() { // naprawic wysiadanie z samolotu pod roznymi katami
+    float current_speed = MovingSpeed::current_speed;
+    float current_degree = rotation_degree;
+    const float pi = 3.14159265;
+
+    MovingSpeed::x_speed = -round(current_speed*cos(current_degree*pi/180.0)/MovingSpeed::division_factor_speed);
+    MovingSpeed::y_speed = -round(current_speed*sin(current_degree*pi/180.0)/MovingSpeed::division_factor_speed);
 }

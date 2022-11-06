@@ -12,7 +12,7 @@ PlayerCharacter::PlayerCharacter(int x, int y) {
     delay_animation = 7;
 
     QPixmap player_img;
-    for (int i = 1; i <= 12; i++) {
+    for (int i = 1; i <= 13; i++) {
         QString location = "../smuggler/assets/player_character/player" + QString::number(i) + QString(".png");
         player_img.load(location);
         player_imgs.push_back(player_img);
@@ -69,8 +69,10 @@ void PlayerCharacter::change_current_index(int max_index, int min_index) {
     delay_animation_counter = 0;
 }
 
-void PlayerCharacter::change_character_img() {
-    player_item->setPixmap(player_imgs[current_index_of_player_img]);
+void PlayerCharacter::change_character_img(int index) {
+    if (index == -1)
+        index = current_index_of_player_img;
+    player_item->setPixmap(player_imgs[index]);
 }
 
 Island* PlayerCharacter::player_on_island(QKeyEvent *event, std::vector<Island *> islands) {
