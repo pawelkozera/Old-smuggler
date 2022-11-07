@@ -17,7 +17,7 @@ public:
     std::vector<QPixmap> player_imgs;
     int current_index_of_player_img;
     int delay_animation_counter;
-    int delay_animation;
+    const int delay_animation = 7;
     QGraphicsPixmapItem *player_item;
 
 

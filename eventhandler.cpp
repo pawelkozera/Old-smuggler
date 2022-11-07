@@ -32,6 +32,8 @@ void EventHandler::my_timer_slot() {
         for(int i = 0; i < islands.size(); i++) {
             islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
         }
+
+        player_plane->animation();
     }
 }
 

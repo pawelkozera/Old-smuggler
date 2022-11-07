@@ -10,6 +10,8 @@ PlayerPlane::PlayerPlane(int x, int y) {
     fuel = 0;
     cargo = 0;
     rotation_degree = 0;
+    delay_animation = 3;
+    delay_animation_counter = 0;
 
     QPixmap plane_img;
     for (int i = 1; i <= 3; i++) {
@@ -19,6 +21,23 @@ PlayerPlane::PlayerPlane(int x, int y) {
     }
 
     setPos(x, y);
+}
+
+void PlayerPlane::animation() {
+    qDebug() << current_index_of_plane_img;
+    if (current_index_of_plane_img >= 2 && delay_animation_counter == delay_animation) {
+        current_index_of_plane_img = 0;
+        delay_animation_counter = 0;
+        item->setPixmap(imgs[current_index_of_plane_img]);
+    }
+    else {
+        if (delay_animation_counter == delay_animation) {
+            current_index_of_plane_img++;
+            item->setPixmap(imgs[current_index_of_plane_img]);
+            delay_animation_counter = 0;
+        }
+    }
+    delay_animation_counter++;
 }
 
 std::pair<int, int> PlayerPlane::center_plane_on_screen(PlayerCharacter *player_character) {

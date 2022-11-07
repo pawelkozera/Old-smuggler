@@ -8,7 +8,6 @@
 PlayerCharacter::PlayerCharacter(int x, int y) {
     current_index_of_player_img = 0;
     delay_animation_counter = 0;
-    delay_animation = 7;
 
     QPixmap player_img;
     for (int i = 1; i <= 13; i++) {
