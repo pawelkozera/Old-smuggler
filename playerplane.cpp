@@ -24,7 +24,6 @@ PlayerPlane::PlayerPlane(int x, int y) {
 }
 
 void PlayerPlane::animation() {
-    qDebug() << current_index_of_plane_img;
     if (current_index_of_plane_img >= 2 && delay_animation_counter == delay_animation) {
         current_index_of_plane_img = 0;
         delay_animation_counter = 0;

@@ -35,6 +35,8 @@ set(PROJECT_SOURCES
         resources.h
         playerplane.cpp
         playerplane.h
+        settings.cpp
+        settings.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

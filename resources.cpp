@@ -1,13 +1,14 @@
 #include "resources.h"
 
-Resources::Resources(QString img_name) : InteractiveObject(img_name) {
-
+Resources::Resources(QString img_name, Settings *settings) : InteractiveObject(img_name) {
+    item = settings->scene->addPixmap(img);
+    item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
 }
 
 void Resources::show_text() {
-    int current_x = item->x();
+    int current_x = item->x() + img.width()/2;
     int current_y = item->y();
+}
 
-    text->setDefaultTextColor(QColor(255, 255, 255));
-    text->setPos(current_x, current_y + 200);
+void Resources::add() {
 }

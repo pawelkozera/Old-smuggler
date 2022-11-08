@@ -6,6 +6,7 @@
 #include "eventhandler.h"
 #include "resources.h"
 #include "playerplane.h"
+#include "settings.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -24,7 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->set_window_parameters();
 
+    // settings
+    Settings *settings = new Settings();
     Scene = new QGraphicsScene(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    settings->scene = Scene;
 
     // map
     Map map;
@@ -43,10 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // interactive objects
-    Resources *boxes = new Resources("boxes.png");
-    boxes->text = Scene->addText("Q --------------- E");
-    boxes->item = Scene->addPixmap(boxes->img);
-    boxes->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    Resources *boxes = new Resources("boxes.png", settings);
     boxes->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
     islands[0]->objects.push_back(boxes);
 
@@ -68,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
 
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings);
     eventHandler->setFocus();
     Scene->addItem(eventHandler);
 

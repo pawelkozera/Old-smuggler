@@ -11,9 +11,10 @@ public:
 
     QPixmap img;
     QGraphicsPixmapItem *item;
-    QGraphicsTextItem *text;
 
     void move_object(int x, int y);
+    virtual void show_text();
+    virtual void add();
 };
 
 #endif // INTERACTIVEOBJECT_H

@@ -12,3 +12,6 @@ void InteractiveObject::move_object(int x, int y) {
     int current_y = item->y();
     item->setPos(current_x + x, current_y + y);
 }
+
+void InteractiveObject::add() {}
+void InteractiveObject::show_text() {}

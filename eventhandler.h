@@ -4,7 +4,7 @@
 #include "island.h"
 #include "playercharacter.h"
 #include "playerplane.h"
-#include "interactiveobject.h"
+#include "settings.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
@@ -17,7 +17,8 @@ class EventHandler : public QObject, public QGraphicsRectItem
 public:
     EventHandler(std::vector<Island *> islands,
                  PlayerCharacter *player_character,
-                 PlayerPlane *player_plane);
+                 PlayerPlane *player_plane,
+                 Settings *settings);
     QTimer *timer;
 
     bool player_character_events = true;
@@ -27,11 +28,17 @@ public:
     std::vector<Island *> islands;
     Island *player_island;
     InteractiveObject *object_collided;
+    Settings *settings;
 
     PlayerCharacter *player_character;
     PlayerPlane *player_plane;
 
     virtual void keyPressEvent(QKeyEvent *event);
+    void entering_plane_event();
+    void character_on_island_event(QKeyEvent *event);
+    void character_moving(QKeyEvent *event);
+    void leaving_plane_event();
+    void plane_events(QKeyEvent *event);
 
 public slots:
     void my_timer_slot();
