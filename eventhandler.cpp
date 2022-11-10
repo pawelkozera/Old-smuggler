@@ -24,6 +24,13 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->player_plane = player_plane;
     this->settings = settings;
 
+    player_character_events = true;
+    collision_with_plane = false;
+    collision_with_island_borders = false;
+
+    player_last_position.first = 0;
+    player_last_position.second = 0;
+
     player_island = NULL;
     object_collided = NULL;
 }
@@ -79,15 +86,37 @@ void EventHandler::entering_plane_event() {
 void EventHandler::character_on_island_event(QKeyEvent *event) {
     player_island = player_character->player_on_island(event, islands);
     if (player_island) {
-        object_collided = player_character->collision_with_island_objects(event, player_island);
+        InteractiveObject *object_collided_bufor = player_character->collision_with_island_objects(event, player_island);
         collision_with_plane = player_character->collision(event, player_plane->item);
         collision_with_island_borders = player_character->collision(event, player_island->island_item, true);
 
-        if (!object_collided && !collision_with_plane && collision_with_island_borders) {
+        if (!object_collided_bufor && !collision_with_plane && collision_with_island_borders) {
             character_moving(event);
         }
-        else if (object_collided) {
-            object_collided->show_text();
+        else if (object_collided_bufor) {
+            player_last_position.first = player_plane->item->x();
+            player_last_position.second = player_plane->item->y();
+            object_collided = object_collided_bufor;
+            object_collided->alert->show_alert_for_object = true;
+            object_collided->show_alert(player_plane->cargo);
+        }
+
+        if (object_collided) {
+            bool player_position_changed = (player_last_position.first != player_plane->item->x() || player_last_position.second != player_plane->item->y());
+
+            if (event->key() == Qt::Key_E) {
+                player_plane->add_cargo(object_collided->max_amount_of_cargo());
+                object_collided->show_alert(player_plane->cargo);
+            }
+            else if (event->key() == Qt::Key_Q) {
+                player_plane->remove_cargo();
+                object_collided->show_alert(player_plane->cargo);
+            }
+            else if (object_collided->alert->show_alert_for_object && player_position_changed) {
+                object_collided->alert->show_alert_for_object = false;
+                object_collided->hide_alert();
+                object_collided = NULL;
+            }
         }
     }
 

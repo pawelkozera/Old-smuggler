@@ -46,8 +46,13 @@ MainWindow::MainWindow(QWidget *parent)
          islands[i]->island_item->setPos(x, y);
     }
 
+    // alert
+    Alert *alert = new Alert();
+    alert->item = Scene->addPixmap(alert->img);
+    alert->item_bar = Scene->addPixmap(alert->img_bar_default);
+
     // interactive objects
-    Resources *boxes = new Resources("boxes.png", settings);
+    Resources *boxes = new Resources("boxes.png", settings, alert, "alert.png");
     boxes->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
     islands[0]->objects.push_back(boxes);
 

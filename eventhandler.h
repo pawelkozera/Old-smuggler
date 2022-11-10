@@ -21,17 +21,18 @@ public:
                  Settings *settings);
     QTimer *timer;
 
-    bool player_character_events = true;
-    bool collision_with_plane = false;
-    bool collision_with_island_borders = false;
+    bool player_character_events;
+    bool collision_with_plane;
+    bool collision_with_island_borders;
 
     std::vector<Island *> islands;
     Island *player_island;
     InteractiveObject *object_collided;
     Settings *settings;
-
     PlayerCharacter *player_character;
     PlayerPlane *player_plane;
+
+    std::pair<int, int> player_last_position;
 
     virtual void keyPressEvent(QKeyEvent *event);
     void entering_plane_event();

@@ -8,15 +8,11 @@
 class Resources : public InteractiveObject
 {
 public:
-    Resources(QString img_name, Settings *settings);
+    Resources(QString img_name, Settings *settings, Alert *alert, QString alert_img_name);
 
-
-    QPixmap alert_img;
-    QGraphicsPixmapItem *alert_item;
-    QGraphicsRectItem *filling;
-
-    void show_text();
-    void add();
+    void show_alert(int cargo);
+    void hide_alert();
+    int max_amount_of_cargo();
 };
 
 #endif // RESOURCES_H

@@ -177,3 +177,13 @@ void PlayerPlane::calculate_x_y_speed() { // naprawic wysiadanie z samolotu pod 
     MovingSpeed::x_speed = -round(current_speed*cos(current_degree*pi/180.0)/MovingSpeed::division_factor_speed);
     MovingSpeed::y_speed = -round(current_speed*sin(current_degree*pi/180.0)/MovingSpeed::division_factor_speed);
 }
+
+void PlayerPlane::add_cargo(int max_cargo) {
+    if (cargo < max_cargo)
+        cargo++;
+}
+
+void PlayerPlane::remove_cargo() {
+    if (cargo > 0)
+        cargo--;
+}

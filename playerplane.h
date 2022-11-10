@@ -29,6 +29,8 @@ public:
     void rotate(QKeyEvent *event);
     void set_up_current_speed();
     void calculate_x_y_speed();
+    void add_cargo(int max_cargo);
+    void remove_cargo();
 };
 
 #endif // PLAYERPLANE_H
