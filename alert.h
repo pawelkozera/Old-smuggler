@@ -14,6 +14,7 @@ public:
     QPixmap img_bar_default;
     QPixmap img_bar;
     QGraphicsPixmapItem *item_bar;
+    QGraphicsTextItem *amount;
     bool show_alert_for_object;
 
     void change_img(QPixmap img);

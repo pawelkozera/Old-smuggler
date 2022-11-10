@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     Alert *alert = new Alert();
     alert->item = Scene->addPixmap(alert->img);
     alert->item_bar = Scene->addPixmap(alert->img_bar_default);
+    alert->amount = Scene->addText("");
 
     // interactive objects
     Resources *boxes = new Resources("boxes.png", settings, alert, "alert.png");
