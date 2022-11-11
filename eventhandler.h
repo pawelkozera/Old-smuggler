@@ -5,6 +5,7 @@
 #include "playercharacter.h"
 #include "playerplane.h"
 #include "settings.h"
+#include "sounds.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
@@ -18,7 +19,8 @@ public:
     EventHandler(std::vector<Island *> islands,
                  PlayerCharacter *player_character,
                  PlayerPlane *player_plane,
-                 Settings *settings);
+                 Settings *settings,
+                 Sounds *sounds);
     QTimer *timer;
 
     bool player_character_events;
@@ -31,6 +33,7 @@ public:
     Settings *settings;
     PlayerCharacter *player_character;
     PlayerPlane *player_plane;
+    Sounds *sounds;
 
     std::pair<int, int> player_last_position;
 

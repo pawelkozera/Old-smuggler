@@ -10,7 +10,8 @@
 EventHandler::EventHandler(std::vector<Island *> islands
                            ,PlayerCharacter *player_character,
                            PlayerPlane *player_plane,
-                           Settings *settings)
+                           Settings *settings,
+                           Sounds *sounds)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
@@ -23,6 +24,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->player_character = player_character;
     this->player_plane = player_plane;
     this->settings = settings;
+    this->sounds = sounds;
 
     player_character_events = true;
     collision_with_plane = false;
@@ -153,20 +155,24 @@ void EventHandler::add_resources_to_plane(QKeyEvent *event) {
         if (interactive_object_collided->cargo_alert) {
             player_plane->add_cargo(interactive_object_collided->max_amount_of_cargo());
             interactive_object_collided->show_alert(player_plane->cargo);
+            sounds->add_resources->play();
         }
         else {
             player_plane->add_fuel(interactive_object_collided->max_amount_of_fuel());
             interactive_object_collided->show_alert(player_plane->fuel);
+            sounds->add_resources->play();
         }
     }
     else if (event->key() == Qt::Key_Q) {
         if (interactive_object_collided->cargo_alert) {
             player_plane->remove_cargo();
             interactive_object_collided->show_alert(player_plane->cargo);
+            sounds->add_resources->play();
         }
         else {
             player_plane->remove_fuel();
             interactive_object_collided->show_alert(player_plane->fuel);
+            sounds->add_resources->play();
         }
     }
     else if (interactive_object_collided->alert->show_alert_for_object && player_position_changed) {

@@ -3,7 +3,6 @@
 
 #include "interactiveobject.h"
 
-
 class Fuel : public InteractiveObject
 {
 public:

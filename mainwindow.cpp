@@ -8,6 +8,7 @@
 #include "fuel.h"
 #include "playerplane.h"
 #include "settings.h"
+#include "sounds.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -30,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
     Settings *settings = new Settings();
     Scene = new QGraphicsScene(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     settings->scene = Scene;
+
+    // sounds
+    Sounds *sounds = new Sounds();
 
     // map
     Map map;
@@ -84,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
     player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
 
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds);
     eventHandler->setFocus();
     Scene->addItem(eventHandler);
 
