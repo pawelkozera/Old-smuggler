@@ -5,6 +5,7 @@
 #include "playercharacter.h"
 #include "eventhandler.h"
 #include "resources.h"
+#include "fuel.h"
 #include "playerplane.h"
 #include "settings.h"
 
@@ -53,9 +54,17 @@ MainWindow::MainWindow(QWidget *parent)
     alert->amount = Scene->addText("");
 
     // interactive objects
-    Resources *boxes = new Resources("boxes.png", settings, alert, "alert.png");
+    Resources *boxes = new Resources("boxes.png", alert, "alert_cargo.png");
+    boxes->item = settings->scene->addPixmap(boxes->img);
+    boxes->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     boxes->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
     islands[0]->objects.push_back(boxes);
+
+    Fuel *fuel = new Fuel("gas_storage.png", alert, "alert_fuel.png");
+    fuel->item = settings->scene->addPixmap(fuel->img);
+    fuel->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    fuel->item->setPos(islands[0]->island_item->x() + 288, islands[0]->island_item->y() + 32);
+    islands[0]->objects.push_back(fuel);
 
     // player character
     x = WINDOW_WIDTH/2;

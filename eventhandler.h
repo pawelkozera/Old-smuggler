@@ -27,7 +27,7 @@ public:
 
     std::vector<Island *> islands;
     Island *player_island;
-    InteractiveObject *object_collided;
+    InteractiveObject *interactive_object_collided;
     Settings *settings;
     PlayerCharacter *player_character;
     PlayerPlane *player_plane;
@@ -40,6 +40,8 @@ public:
     void character_moving(QKeyEvent *event);
     void leaving_plane_event();
     void plane_events(QKeyEvent *event);
+    void set_interactive_object_collided(InteractiveObject *object_collided_bufor);
+    void add_resources_to_plane(QKeyEvent *event);
 
 public slots:
     void my_timer_slot();

@@ -31,6 +31,8 @@ public:
     void calculate_x_y_speed();
     void add_cargo(int max_cargo);
     void remove_cargo();
+    void add_fuel(int max_fuel);
+    void remove_fuel();
 };
 
 #endif // PLAYERPLANE_H

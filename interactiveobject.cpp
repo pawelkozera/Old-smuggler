@@ -2,10 +2,11 @@
 
 #include <QPoint>
 
-InteractiveObject::InteractiveObject(QString img_name, Settings *settings, Alert *alert, QString alert_img_name) {
+InteractiveObject::InteractiveObject(QString img_name, Alert *alert, QString alert_img_name) {
     img.load("../smuggler/assets/objects/" + img_name);
     this->alert = alert;
     this->alert_img.load("../smuggler/assets/objects/" + alert_img_name);;
+    cargo_alert = false;
     setPos(0, 0);
 
     int max_amount_of_cargo = 0;
@@ -20,3 +21,4 @@ void InteractiveObject::move_object(int x, int y) {
 void InteractiveObject::show_alert(int amount) {}
 void InteractiveObject::hide_alert() {}
 int InteractiveObject::max_amount_of_cargo( ){return 0;};
+int InteractiveObject::max_amount_of_fuel(){return 0;};

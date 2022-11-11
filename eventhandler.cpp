@@ -32,7 +32,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     player_last_position.second = 0;
 
     player_island = NULL;
-    object_collided = NULL;
+    interactive_object_collided = NULL;
 }
 
 void EventHandler::my_timer_slot() {
@@ -94,29 +94,11 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
             character_moving(event);
         }
         else if (object_collided_bufor) {
-            player_last_position.first = player_plane->item->x();
-            player_last_position.second = player_plane->item->y();
-            object_collided = object_collided_bufor;
-            object_collided->alert->show_alert_for_object = true;
-            object_collided->show_alert(player_plane->cargo);
+            set_interactive_object_collided(object_collided_bufor);
         }
 
-        if (object_collided) {
-            bool player_position_changed = (player_last_position.first != player_plane->item->x() || player_last_position.second != player_plane->item->y());
-
-            if (event->key() == Qt::Key_E) {
-                player_plane->add_cargo(object_collided->max_amount_of_cargo());
-                object_collided->show_alert(player_plane->cargo);
-            }
-            else if (event->key() == Qt::Key_Q) {
-                player_plane->remove_cargo();
-                object_collided->show_alert(player_plane->cargo);
-            }
-            else if (object_collided->alert->show_alert_for_object && player_position_changed) {
-                object_collided->alert->show_alert_for_object = false;
-                object_collided->hide_alert();
-                object_collided = NULL;
-            }
+        if (interactive_object_collided) {
+            add_resources_to_plane(event);
         }
     }
 
@@ -150,4 +132,46 @@ void EventHandler::plane_events(QKeyEvent *event) {
     player_plane->rotate(event);
     player_plane->set_up_current_speed();
     player_plane->calculate_x_y_speed();
+}
+
+void EventHandler::set_interactive_object_collided(InteractiveObject *object_collided_bufor) {
+    player_last_position.first = player_plane->item->x();
+    player_last_position.second = player_plane->item->y();
+    interactive_object_collided = object_collided_bufor;
+    interactive_object_collided->alert->show_alert_for_object = true;
+
+    if (interactive_object_collided->cargo_alert)
+        interactive_object_collided->show_alert(player_plane->cargo);
+    else
+        interactive_object_collided->show_alert(player_plane->fuel);
+}
+
+void EventHandler::add_resources_to_plane(QKeyEvent *event) {
+    bool player_position_changed = (player_last_position.first != player_plane->item->x() || player_last_position.second != player_plane->item->y());
+
+    if (event->key() == Qt::Key_E) {
+        if (interactive_object_collided->cargo_alert) {
+            player_plane->add_cargo(interactive_object_collided->max_amount_of_cargo());
+            interactive_object_collided->show_alert(player_plane->cargo);
+        }
+        else {
+            player_plane->add_fuel(interactive_object_collided->max_amount_of_fuel());
+            interactive_object_collided->show_alert(player_plane->fuel);
+        }
+    }
+    else if (event->key() == Qt::Key_Q) {
+        if (interactive_object_collided->cargo_alert) {
+            player_plane->remove_cargo();
+            interactive_object_collided->show_alert(player_plane->cargo);
+        }
+        else {
+            player_plane->remove_fuel();
+            interactive_object_collided->show_alert(player_plane->fuel);
+        }
+    }
+    else if (interactive_object_collided->alert->show_alert_for_object && player_position_changed) {
+        interactive_object_collided->alert->show_alert_for_object = false;
+        interactive_object_collided->hide_alert();
+        interactive_object_collided = NULL;
+    }
 }

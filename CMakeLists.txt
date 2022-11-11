@@ -39,6 +39,8 @@ set(PROJECT_SOURCES
         settings.h
         alert.cpp
         alert.h
+        fuel.cpp
+        fuel.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

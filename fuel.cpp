@@ -1,15 +1,16 @@
-#include "resources.h"
+#include "fuel.h"
 
-Resources::Resources(QString img_name, Alert *alert, QString alert_img_name) : InteractiveObject(img_name, alert, alert_img_name) {
+Fuel::Fuel(QString img_name, Alert *alert, QString alert_img_name) : InteractiveObject(img_name, alert, alert_img_name) {
 }
 
-void Resources::show_alert(int cargo) {
-    cargo_alert = true;
-    int x = item->x();
-    int y = item->y() + 200;
+void Fuel::show_alert(int fuel) {
+    cargo_alert = false;
+    int width_gap_box_alert = alert->img.width() - img.width();
+    int x = item->x() - width_gap_box_alert/2;
+    int y = item->y() - 160;
     int bar_x = 47;
     int bar_y = 50;
-    float percentage = static_cast<float> (cargo)/max_amount_of_cargo();
+    float percentage = static_cast<float> (fuel)/max_amount_of_fuel();
     int pixels_for_one_chunk = round(percentage*alert->img_bar.width());
 
     alert->item->setPos(x, y);
@@ -19,19 +20,17 @@ void Resources::show_alert(int cargo) {
     alert->draw_filling(false, pixels_for_one_chunk);
 
     alert->amount->setDefaultTextColor(QColor(0, 0, 0));
-    alert->amount->setPlainText(QString::number(cargo));
+    alert->amount->setPlainText(QString::number(fuel));
     int padding = 10;
     int text_x = alert->item_bar->x() + alert->img_bar.width()/2 - padding;
     int text_y = alert->item_bar->y() + alert->img_bar.height()/2 - padding;
     alert->amount->setPos(text_x, text_y);
 }
 
-void Resources::hide_alert() {
+void Fuel::hide_alert() {
     alert->change_img(alert->img);
     alert->draw_filling(true);
     alert->amount->setPlainText("");
 }
 
-int Resources::max_amount_of_cargo() {
-    return 40;
-}
+int Fuel::max_amount_of_fuel() {return 40;}

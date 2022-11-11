@@ -187,3 +187,13 @@ void PlayerPlane::remove_cargo() {
     if (cargo > 0)
         cargo--;
 }
+
+void PlayerPlane::add_fuel(int max_fuel) {
+    if (fuel < max_fuel)
+        fuel++;
+}
+
+void PlayerPlane::remove_fuel() {
+    if (fuel > 0)
+        fuel--;
+}
