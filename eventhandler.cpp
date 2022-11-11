@@ -38,6 +38,8 @@ EventHandler::EventHandler(std::vector<Island *> islands
 }
 
 void EventHandler::my_timer_slot() {
+    sounds->music->play();
+
     if (!player_character_events) {
         std::pair<int, int> pixels_to_move (MovingSpeed::x_speed, MovingSpeed::y_speed);
         for(int i = 0; i < islands.size(); i++) {
