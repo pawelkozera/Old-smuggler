@@ -17,9 +17,9 @@ public:
     QGraphicsPixmapItem *island_item;
     std::vector<InteractiveObject *> objects;
 
-    void move_island_event(QKeyEvent *event, int x_speed = MovingSpeed::x_speed, int y_speed = MovingSpeed::y_speed);
-    void move_island(int x_speed, int y_speed);
-    void move_objects_on_island(int x, int y);
+    void move_island_event(QKeyEvent *event, long double x_speed = MovingSpeed::x_speed, long double y_speed = MovingSpeed::y_speed);
+    void move_island(long double x_speed, long double y_speed);
+    void move_objects_on_island(long double x, long double y);
 };
 
 #endif // ISLAND_H

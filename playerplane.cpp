@@ -130,28 +130,39 @@ void PlayerPlane::change_power(QKeyEvent *event) {
 }
 
 void PlayerPlane::rotate(QKeyEvent *event) {
-    int rotate = 0;
-    if (MovingSpeed::current_speed/MovingSpeed::division_factor_speed == 0)
+    float rotate = 0;
+
+    if (MovingSpeed::current_speed < 30)
         rotate = 0;
-    else if (MovingSpeed::current_speed/MovingSpeed::division_factor_speed == 1)
+    else if (MovingSpeed::current_speed <= 61)
         rotate = 1;
-    else if (MovingSpeed::current_speed/MovingSpeed::division_factor_speed == 2)
+    else if (MovingSpeed::current_speed <= 121)
         rotate = 2;
     else
         rotate = 3;
 
     if (event->key() == Qt::Key_A) {
-        rotation_degree -= rotate;
+        float i = 0;
+        while (i < rotate) {
+            i += 0.05;
+            rotation_degree -= 0.05;
+            item->setRotation(rotation_degree);
+        }
     }
     else if (event->key() == Qt::Key_D) {
-        rotation_degree += rotate;
+        float i = 0;
+        while (i < rotate) {
+            i += 0.05;
+            rotation_degree += 0.05;
+            item->setRotation(rotation_degree);
+        }
     }
 
     if (abs(rotation_degree) >= 360) {
-        int degree = abs(rotation_degree) - 360;
+        float degree = abs(rotation_degree) - 360;
         rotation_degree = degree;
     }
-    item->setRotation(rotation_degree);
+
 }
 
 void PlayerPlane::set_up_current_speed() {
@@ -165,15 +176,16 @@ void PlayerPlane::set_up_current_speed() {
         MovingSpeed::current_speed += 0.4;
     else if (MovingSpeed::current_speed > max_speed)
         MovingSpeed::current_speed -= 0.5;
+
+    if (MovingSpeed::current_speed < 0)
+        MovingSpeed::current_speed = 0;
 }
 
 void PlayerPlane::calculate_x_y_speed() {
-    float current_speed = MovingSpeed::current_speed;
-    float current_degree = rotation_degree;
-    const float pi = 3.14159265;
+    const long double pi = 3.14159265358979323851;
 
-    MovingSpeed::x_speed = -round(current_speed*cos(current_degree*pi/180.0)/MovingSpeed::division_factor_speed);
-    MovingSpeed::y_speed = -round(current_speed*sin(current_degree*pi/180.0)/MovingSpeed::division_factor_speed);
+    MovingSpeed::x_speed = -(MovingSpeed::current_speed*cos(rotation_degree*pi/180.0)/MovingSpeed::division_factor_speed);
+    MovingSpeed::y_speed = -(MovingSpeed::current_speed*sin(rotation_degree*pi/180.0)/MovingSpeed::division_factor_speed);
 }
 
 void PlayerPlane::add_cargo(int max_cargo) {

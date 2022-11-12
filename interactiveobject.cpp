@@ -11,9 +11,9 @@ InteractiveObject::InteractiveObject(QString img_name, Alert *alert, QString ale
     int max_amount_of_cargo = 0;
 }
 
-void InteractiveObject::move_object(int x, int y) {
-    int current_x = item->x();
-    int current_y = item->y();
+void InteractiveObject::move_object(long double x, long double y) {
+    long double current_x = item->x();
+    long double current_y = item->y();
     item->setPos(current_x + x, current_y + y);
 }
 

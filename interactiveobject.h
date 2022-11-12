@@ -16,7 +16,7 @@ public:
     QPixmap alert_img;
     bool cargo_alert;
 
-    void move_object(int x, int y);
+    void move_object(long double x, long double y);
     virtual void show_alert(int amount);
     virtual void hide_alert();
     int virtual max_amount_of_cargo();

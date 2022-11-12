@@ -45,9 +45,8 @@ void EventHandler::my_timer_slot() {
     if (!player_character_events) {
         interface->draw_speedometer(settings->window_height, false);
 
-        std::pair<int, int> pixels_to_move (MovingSpeed::x_speed, MovingSpeed::y_speed);
         for(int i = 0; i < islands.size(); i++) {
-            islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
+            islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
         player_plane->animation();
@@ -71,7 +70,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     // player plane
     else {
         Island *plane_on_island = player_plane->plane_on_island(event, islands);
-        if (event->key() == Qt::Key_E && plane_on_island && MovingSpeed::x_speed == 0 && MovingSpeed::y_speed == 0) {
+        if (event->key() == Qt::Key_E && plane_on_island && MovingSpeed::current_speed == 0) {
             leaving_plane_event();
             interface->draw_speedometer(settings->window_height);
         }

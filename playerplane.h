@@ -13,7 +13,7 @@ public:
     std::vector<QPixmap> imgs;
     int current_index_of_plane_img;
     QGraphicsPixmapItem *item;
-    int rotation_degree;
+    float rotation_degree;
     int delay_animation_counter;
     int delay_animation;
     int fuel;
