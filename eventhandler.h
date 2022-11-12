@@ -6,6 +6,7 @@
 #include "playerplane.h"
 #include "settings.h"
 #include "sounds.h"
+#include "interface.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
@@ -20,7 +21,9 @@ public:
                  PlayerCharacter *player_character,
                  PlayerPlane *player_plane,
                  Settings *settings,
-                 Sounds *sounds);
+                 Sounds *sounds,
+                 Interface *interface);
+
     QTimer *timer;
 
     bool player_character_events;
@@ -34,6 +37,7 @@ public:
     PlayerCharacter *player_character;
     PlayerPlane *player_plane;
     Sounds *sounds;
+    Interface *interface;
 
     std::pair<int, int> player_last_position;
 

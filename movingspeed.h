@@ -5,13 +5,14 @@
 class MovingSpeed
 {
 public:
-    static int x_speed;
-    static int y_speed;
+    static float x_speed;
+    static float y_speed;
 
     static int current_power;
-    static int current_speed;
+    static float current_speed;
 
     const static int division_power_factor_index;
+    const static int max_power;
     const static float division_factor_speed;
     const static int max_speed[];
 };

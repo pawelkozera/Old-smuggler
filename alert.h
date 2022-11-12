@@ -4,7 +4,7 @@
 #include <QGraphicsPixmapItem>
 
 
-class Alert : public QGraphicsPixmapItem
+class Alert
 {
 public:
     Alert();

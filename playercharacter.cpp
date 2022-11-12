@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 
 
-PlayerCharacter::PlayerCharacter(int x, int y) {
+PlayerCharacter::PlayerCharacter() {
     current_index_of_player_img = 0;
     delay_animation_counter = 0;
 
@@ -15,8 +15,6 @@ PlayerCharacter::PlayerCharacter(int x, int y) {
         player_img.load(location);
         player_imgs.push_back(player_img);
     }
-
-    setPos(x, y);
 }
 
 
@@ -97,8 +95,8 @@ InteractiveObject* PlayerCharacter::collision_with_island_objects(QKeyEvent *eve
 }
 
 bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape) {
-    int x = this->x();
-    int y = this->y();
+    int x = this->player_item->x();
+    int y = this->player_item->y();
 
     int pixels_to_move_x = MovingSpeed::x_speed + 1;
     int pixels_to_move_y = MovingSpeed::y_speed + 1;

@@ -5,10 +5,10 @@
 
 #include <QGraphicsItem>
 
-class PlayerPlane : public QGraphicsPixmapItem
+class PlayerPlane
 {
 public:
-    PlayerPlane(int x, int y);
+    PlayerPlane();
 
     std::vector<QPixmap> imgs;
     int current_index_of_plane_img;

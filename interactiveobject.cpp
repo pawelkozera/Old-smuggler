@@ -7,7 +7,6 @@ InteractiveObject::InteractiveObject(QString img_name, Alert *alert, QString ale
     this->alert = alert;
     this->alert_img.load("../smuggler/assets/objects/" + alert_img_name);;
     cargo_alert = false;
-    setPos(0, 0);
 
     int max_amount_of_cargo = 0;
 }

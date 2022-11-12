@@ -9,10 +9,10 @@
 #include <vector>
 
 
-class PlayerCharacter : public QGraphicsPixmapItem
+class PlayerCharacter
 {
 public:
-    PlayerCharacter(int x, int y);
+    PlayerCharacter();
 
     std::vector<QPixmap> player_imgs;
     int current_index_of_player_img;

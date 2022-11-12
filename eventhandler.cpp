@@ -11,7 +11,8 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            ,PlayerCharacter *player_character,
                            PlayerPlane *player_plane,
                            Settings *settings,
-                           Sounds *sounds)
+                           Sounds *sounds,
+                           Interface *interface)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
@@ -25,6 +26,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->player_plane = player_plane;
     this->settings = settings;
     this->sounds = sounds;
+    this->interface = interface;
 
     player_character_events = true;
     collision_with_plane = false;
@@ -41,12 +43,18 @@ void EventHandler::my_timer_slot() {
     sounds->music->play();
 
     if (!player_character_events) {
+        interface->draw_speedometer(settings->window_height, false);
+
         std::pair<int, int> pixels_to_move (MovingSpeed::x_speed, MovingSpeed::y_speed);
         for(int i = 0; i < islands.size(); i++) {
             islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
         }
 
         player_plane->animation();
+        player_plane->set_up_current_speed();
+        player_plane->calculate_x_y_speed();
+    }
+    else {
     }
 }
 
@@ -65,6 +73,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
         Island *plane_on_island = player_plane->plane_on_island(event, islands);
         if (event->key() == Qt::Key_E && plane_on_island && MovingSpeed::x_speed == 0 && MovingSpeed::y_speed == 0) {
             leaving_plane_event();
+            interface->draw_speedometer(settings->window_height);
         }
         else {
             plane_events(event);
@@ -134,8 +143,6 @@ void EventHandler::leaving_plane_event() {
 void EventHandler::plane_events(QKeyEvent *event) {
     player_plane->change_power(event);
     player_plane->rotate(event);
-    player_plane->set_up_current_speed();
-    player_plane->calculate_x_y_speed();
 }
 
 void EventHandler::set_interactive_object_collided(InteractiveObject *object_collided_bufor) {

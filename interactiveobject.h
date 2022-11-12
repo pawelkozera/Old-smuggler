@@ -5,7 +5,7 @@
 #include <QGraphicsItem>
 #include <QPainter>
 
-class InteractiveObject : public QGraphicsPixmapItem
+class InteractiveObject
 {
 public:
     InteractiveObject(QString img_name, Alert *alert, QString alert_img);

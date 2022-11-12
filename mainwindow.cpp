@@ -9,6 +9,7 @@
 #include "playerplane.h"
 #include "settings.h"
 #include "sounds.h"
+#include "interface.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -28,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->set_window_parameters();
 
     // settings
-    Settings *settings = new Settings();
+    Settings *settings = new Settings(WINDOW_WIDTH, WINDOW_HEIGHT);
     Scene = new QGraphicsScene(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     settings->scene = Scene;
 
@@ -73,22 +74,32 @@ MainWindow::MainWindow(QWidget *parent)
     // player character
     x = WINDOW_WIDTH/2;
     y = WINDOW_HEIGHT/2;
-    PlayerCharacter *player_character = new PlayerCharacter(x, y);
+    PlayerCharacter *player_character = new PlayerCharacter();
     player_character->player_item = Scene->addPixmap(player_character->player_imgs[0]);
     player_character->player_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    player_character->player_item->setPos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+    player_character->player_item->setPos(x, y);
 
     // player plane
     x = islands[0]->island_item->x() + 4;
     y = islands[0]->island_item->y() + 224;
-    PlayerPlane *player_plane = new PlayerPlane(x, y);
+    PlayerPlane *player_plane = new PlayerPlane();
     player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
     player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_plane->item->setPos(x, y);
     player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
 
+    // interface
+    Interface *interface = new Interface();
+    interface->speedometer_item = Scene->addPixmap(interface->blank_img);
+    int padding = 15;
+    interface->speedometer_item->setPos(5, WINDOW_HEIGHT - interface->speedometer_img.height() - padding);
+    interface->power = Scene->addText("");
+    interface->speed = Scene->addText("");
+    interface->power->setPos(172, interface->speedometer_item->y() + 135);
+    interface->speed->setPos(170, interface->speedometer_item->y() + 55);
+
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface);
     eventHandler->setFocus();
     Scene->addItem(eventHandler);
 

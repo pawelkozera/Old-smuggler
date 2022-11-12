@@ -6,7 +6,10 @@
 class Settings
 {
 public:
-    Settings();
+    Settings(int window_width, int window_height);
+
+    int window_width;
+    int window_height;
 
     QGraphicsScene *scene;
 };

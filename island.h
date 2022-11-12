@@ -8,7 +8,7 @@
 #include <QGraphicsItem>
 
 
-class Island : public QGraphicsPixmapItem
+class Island
 {
 public:
     Island(QString img_name);

@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <cmath>
 
-PlayerPlane::PlayerPlane(int x, int y) {
+PlayerPlane::PlayerPlane() {
     current_index_of_plane_img = 0;
     fuel = 0;
     cargo = 0;
@@ -19,8 +19,6 @@ PlayerPlane::PlayerPlane(int x, int y) {
         plane_img.load(location);
         imgs.push_back(plane_img);
     }
-
-    setPos(x, y);
 }
 
 void PlayerPlane::animation() {
@@ -122,7 +120,7 @@ Island* PlayerPlane::plane_on_island(QKeyEvent *event, std::vector<Island *> isl
 
 void PlayerPlane::change_power(QKeyEvent *event) {
     if (event->key() == Qt::Key_W) {
-        if (MovingSpeed::current_power < 100)
+        if (MovingSpeed::current_power < MovingSpeed::max_power)
             MovingSpeed::current_power++;
     }
     else if (event->key() == Qt::Key_S) {
@@ -164,12 +162,12 @@ void PlayerPlane::set_up_current_speed() {
     int max_speed = MovingSpeed::max_speed[current_power];
 
     if (MovingSpeed::current_speed < max_speed)
-        MovingSpeed::current_speed++;
+        MovingSpeed::current_speed += 0.4;
     else if (MovingSpeed::current_speed > max_speed)
-        MovingSpeed::current_speed--;
+        MovingSpeed::current_speed -= 0.5;
 }
 
-void PlayerPlane::calculate_x_y_speed() { // naprawic wysiadanie z samolotu pod roznymi katami
+void PlayerPlane::calculate_x_y_speed() {
     float current_speed = MovingSpeed::current_speed;
     float current_degree = rotation_degree;
     const float pi = 3.14159265;

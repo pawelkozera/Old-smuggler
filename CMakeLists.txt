@@ -44,6 +44,8 @@ set(PROJECT_SOURCES
         fuel.h
         sounds.cpp
         sounds.h
+        interface.cpp
+        interface.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
