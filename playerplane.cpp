@@ -132,7 +132,9 @@ void PlayerPlane::change_power(QKeyEvent *event) {
 void PlayerPlane::rotate(QKeyEvent *event) {
     float rotate = 0;
 
-    if (MovingSpeed::current_speed < 30)
+    if (MovingSpeed::current_speed < 0)
+        rotate = 1;
+    else if (MovingSpeed::current_speed < 30)
         rotate = 0;
     else if (MovingSpeed::current_speed <= 61)
         rotate = 1;
@@ -167,7 +169,7 @@ void PlayerPlane::rotate(QKeyEvent *event) {
 
 void PlayerPlane::set_up_current_speed() {
     int current_power = MovingSpeed::current_power/MovingSpeed::division_power_factor_index;
-    if (current_power > 10 || current_power < 0)
+    if (current_power > 11 || current_power < 0)
         return;
 
     int max_speed = MovingSpeed::max_speed[current_power];
@@ -177,7 +179,7 @@ void PlayerPlane::set_up_current_speed() {
     else if (MovingSpeed::current_speed > max_speed)
         MovingSpeed::current_speed -= 0.5;
 
-    if (MovingSpeed::current_speed < 0)
+    if (MovingSpeed::current_speed < 0 && current_power == 1)
         MovingSpeed::current_speed = 0;
 }
 

@@ -14,7 +14,13 @@ void Interface::draw_speedometer(int window_height, bool blank) {
     }
     else {
         speedometer_item->setPixmap(speedometer_img);
-        power->setPlainText(QString::number(MovingSpeed::current_power / MovingSpeed::division_power_factor_index));
-        speed->setPlainText(QString::number(round(MovingSpeed::current_speed / 6)));
+        int gear = (MovingSpeed::current_power / MovingSpeed::division_power_factor_index) - 1;
+
+        if (gear >= 0)
+            power->setPlainText(QString::number(gear));
+        else
+            power->setPlainText("R");
+
+        speed->setPlainText(QString::number(abs(round(MovingSpeed::current_speed / 6))));
     }
 }
