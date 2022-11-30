@@ -36,12 +36,13 @@ MainWindow::MainWindow(QWidget *parent)
     // sounds
     Sounds *sounds = new Sounds();
 
-    // map
-    Map map;
-
     // islands
     std::vector<Island *> islands;
     islands.push_back(new Island("starting_island.png"));
+    islands.push_back(new Island("island1.png"));
+    islands.push_back(new Island("island1.png"));
+    islands.push_back(new Island("island1.png"));
+    islands.push_back(new Island("island1.png"));
 
     int x = WINDOW_WIDTH/4;
     int y = WINDOW_HEIGHT/10;
@@ -51,6 +52,10 @@ MainWindow::MainWindow(QWidget *parent)
          islands[i]->island_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
          islands[i]->island_item->setPos(x, y);
     }
+
+    // map
+    Map map;
+    map.generate_map(islands);
 
     // alert
     Alert *alert = new Alert();

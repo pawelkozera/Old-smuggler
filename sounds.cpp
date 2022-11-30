@@ -4,7 +4,7 @@
 
 Sounds::Sounds() {
     effects_volume = 1.0;
-    music_volume = 0.1;
+    music_volume = 0;
 
     add_resources = new QSoundEffect;
     add_resources->setSource(QUrl::fromLocalFile("../smuggler/sounds/effects/key_pressed.wav"));
