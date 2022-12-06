@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     // map
     Map map;
     map.generate_map(islands);
+    map.generate_img_of_map(islands);
 
     // alert
     Alert *alert = new Alert();

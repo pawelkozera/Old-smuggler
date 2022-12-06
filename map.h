@@ -16,6 +16,7 @@ public:
 
     void generate_map(std::vector<Island *> islands);
     bool collision_and_gap_between_islands(Island *current_island, std::vector<Island *> islands);
+    void generate_img_of_map(std::vector<Island *> islands);
 };
 
 #endif // MAP_H

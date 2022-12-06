@@ -69,10 +69,12 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     }
     // player plane
     else {
-        Island *plane_on_island = player_plane->plane_on_island(event, islands);
-        if (event->key() == Qt::Key_E && plane_on_island && MovingSpeed::current_speed == 0) {
-            leaving_plane_event();
-            interface->draw_speedometer(settings->window_height);
+        if (event->key() == Qt::Key_E && MovingSpeed::current_speed == 0) {
+            Island *plane_on_island = player_plane->plane_on_island(event, islands);
+            if (plane_on_island) {
+                leaving_plane_event();
+                interface->draw_speedometer(settings->window_height);
+            }
         }
         else {
             plane_events(event);
