@@ -52,6 +52,7 @@ void EventHandler::my_timer_slot() {
         player_plane->animation();
         player_plane->set_up_current_speed();
         player_plane->calculate_x_y_speed();
+        player_plane->fuel_usage();
     }
     else {
     }

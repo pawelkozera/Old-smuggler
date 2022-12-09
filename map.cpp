@@ -17,8 +17,8 @@ void Map::generate_map(std::vector<Island *> islands) {
     // random number generator
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr_x(-400, 400); // range for x, y position
-    std::uniform_int_distribution<> distr_y(-400, 400); // range for x, y position
+    std::uniform_int_distribution<> distr_x(-800, 800); // range for x, y position
+    std::uniform_int_distribution<> distr_y(-800, 800); // range for x, y position
 
     // map generating
     int random_x, random_y;
@@ -28,6 +28,8 @@ void Map::generate_map(std::vector<Island *> islands) {
         while (run_loop) {
             random_x = distr_x(gen) * 10;
             random_y = distr_y(gen) * 10;
+
+            if (random_x > 5000 && random_y >= 4000) continue;
 
             islands[i]->island_item->setPos(random_x, random_y);
             if (!collision_and_gap_between_islands(islands[i], islands)) run_loop = false;

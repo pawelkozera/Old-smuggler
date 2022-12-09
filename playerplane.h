@@ -16,7 +16,7 @@ public:
     float rotation_degree;
     int delay_animation_counter;
     int delay_animation;
-    int fuel;
+    float fuel;
     int cargo;
 
     void animation();
@@ -33,6 +33,7 @@ public:
     void remove_cargo();
     void add_fuel(int max_fuel);
     void remove_fuel();
+    void fuel_usage();
 };
 
 #endif // PLAYERPLANE_H

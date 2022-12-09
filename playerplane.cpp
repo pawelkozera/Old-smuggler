@@ -168,19 +168,25 @@ void PlayerPlane::rotate(QKeyEvent *event) {
 }
 
 void PlayerPlane::set_up_current_speed() {
-    int current_power = MovingSpeed::current_power/MovingSpeed::division_power_factor_index;
-    if (current_power > 11 || current_power < 0)
-        return;
+    if (fuel > 0) {
+        int current_power = MovingSpeed::current_power/MovingSpeed::division_power_factor_index;
+        if (current_power > 11 || current_power < 0)
+            return;
 
-    int max_speed = MovingSpeed::max_speed[current_power];
+        int max_speed = MovingSpeed::max_speed[current_power] - fuel - cargo;
 
-    if (MovingSpeed::current_speed < max_speed)
-        MovingSpeed::current_speed += 0.4;
-    else if (MovingSpeed::current_speed > max_speed)
-        MovingSpeed::current_speed -= 0.5;
+        if (MovingSpeed::current_speed + 0.4 < max_speed)
+            MovingSpeed::current_speed += 0.4;
+        else if (MovingSpeed::current_speed - 0.5 > max_speed)
+            MovingSpeed::current_speed -= 0.5;
 
-    if (MovingSpeed::current_speed < 0 && current_power == 1)
-        MovingSpeed::current_speed = 0;
+        if (MovingSpeed::current_speed < 0 && current_power == 1)
+            MovingSpeed::current_speed = 0;
+    }
+    else {
+        if (MovingSpeed::current_speed > 0)
+            MovingSpeed::current_speed -= 0.5;
+    }
 }
 
 void PlayerPlane::calculate_x_y_speed() {
@@ -208,4 +214,9 @@ void PlayerPlane::add_fuel(int max_fuel) {
 void PlayerPlane::remove_fuel() {
     if (fuel > 0)
         fuel--;
+}
+
+void PlayerPlane::fuel_usage() {
+    if (MovingSpeed::current_speed > 10)
+        fuel -= 0.002;
 }

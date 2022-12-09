@@ -33,4 +33,4 @@ void Fuel::hide_alert() {
     alert->amount->setPlainText("");
 }
 
-int Fuel::max_amount_of_fuel() {return 40;}
+int Fuel::max_amount_of_fuel() {return 20;}
