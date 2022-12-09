@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<Island *> islands;
     islands.push_back(new Island("starting_island.png"));
     islands.push_back(new Island("island1.png"));
+    islands.push_back(new Island("island2.png"));
 
     int x = WINDOW_WIDTH/4;
     int y = WINDOW_HEIGHT/10;
@@ -98,13 +99,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     // interface
     Interface *interface = new Interface();
-    interface->speedometer_item = Scene->addPixmap(interface->blank_img);
+    interface->speedometer_item = Scene->addPixmap(interface->speedometer_img);
+    interface->map_item = Scene->addPixmap(interface->map_img);
     int padding = 15;
     interface->speedometer_item->setPos(5, WINDOW_HEIGHT - interface->speedometer_img.height() - padding);
     interface->power = Scene->addText("");
     interface->speed = Scene->addText("");
     interface->power->setPos(172, interface->speedometer_item->y() + 135);
     interface->speed->setPos(170, interface->speedometer_item->y() + 55);
+    interface->speedometer_item->hide();
+
+    interface->key_to_draw_map = Scene->addText("Press M for map");
+    interface->key_to_draw_map->setDefaultTextColor(QColor(255, 255, 255));
+    interface->key_to_draw_map->setPos(WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT - padding - 20);
+
+    interface->map_item->setPos(0, 0);
+    interface->map_item->hide();
 
     // event handler
     EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface);
