@@ -1,4 +1,4 @@
-#include "map.h"
+    #include "map.h"
 
 #include <QDebug>
 #include <random>
@@ -17,7 +17,8 @@ void Map::generate_map(std::vector<Island *> islands) {
     // random number generator
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(-200, 200); // range for x, y position
+    std::uniform_int_distribution<> distr_x(-400, 400); // range for x, y position
+    std::uniform_int_distribution<> distr_y(-400, 400); // range for x, y position
 
     // map generating
     int random_x, random_y;
@@ -25,8 +26,8 @@ void Map::generate_map(std::vector<Island *> islands) {
 
     for (int i = 1; i < islands.size(); i++) {
         while (run_loop) {
-            random_x = distr(gen) * 10;
-            random_y = distr(gen) * 10;
+            random_x = distr_x(gen) * 10;
+            random_y = distr_y(gen) * 10;
 
             islands[i]->island_item->setPos(random_x, random_y);
             if (!collision_and_gap_between_islands(islands[i], islands)) run_loop = false;
@@ -57,6 +58,24 @@ void Map::generate_img_of_map(std::vector<Island *> islands) {
 
     QPainter painter(&map);
     painter.drawImage(0, 0, blank_map);
+
+    int blank_area_x_start = 441;
+    int blank_areay_start = 164;
+    int blank_area_width = 1110;
+    int blank_area_height = 720;
+
+    int map_width, map_height, map_x, map_y;
+
+    for (int i = 0; i < islands.size(); i++) {
+        map_width = islands[i]->island_img.width()*0.05;
+        map_height = islands[i]->island_img.height()*0.05;
+        QImage bufor_map = islands[i]->island_img.toImage();
+        bufor_map = bufor_map.scaled(map_width, map_height);
+
+        map_x = islands[i]->island_item->x()*0.05 + blank_area_width/2;
+        map_y = islands[i]->island_item->y()*0.05 + blank_area_height/2;
+        painter.drawImage(blank_area_x_start + map_x, blank_areay_start + map_y, bufor_map);
+    }
 
     map.save("../smuggler/assets/interface/map.png");
 }

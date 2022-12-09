@@ -40,9 +40,6 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<Island *> islands;
     islands.push_back(new Island("starting_island.png"));
     islands.push_back(new Island("island1.png"));
-    islands.push_back(new Island("island1.png"));
-    islands.push_back(new Island("island1.png"));
-    islands.push_back(new Island("island1.png"));
 
     int x = WINDOW_WIDTH/4;
     int y = WINDOW_HEIGHT/10;
@@ -84,6 +81,11 @@ MainWindow::MainWindow(QWidget *parent)
     player_character->player_item = Scene->addPixmap(player_character->player_imgs[0]);
     player_character->player_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_character->player_item->setPos(x, y);
+
+    // buforing player character islands collision
+    for (int i = 0; i < islands.size(); i++) {
+        player_character->player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
+    }
 
     // player plane
     x = islands[0]->island_item->x() + 4;
