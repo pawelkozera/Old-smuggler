@@ -2,6 +2,7 @@
 #define EVENTHANDLER_H
 
 #include "island.h"
+#include "map.h"
 #include "playercharacter.h"
 #include "playerplane.h"
 #include "settings.h"
@@ -38,6 +39,7 @@ public:
     PlayerPlane *player_plane;
     Sounds *sounds;
     Interface *interface;
+    Map *map;
 
     std::pair<int, int> player_last_position;
 
@@ -49,6 +51,7 @@ public:
     void plane_events(QKeyEvent *event);
     void set_interactive_object_collided(InteractiveObject *object_collided_bufor);
     void add_resources_to_plane(QKeyEvent *event);
+    void select_target_island();
 
 public slots:
     void my_timer_slot();

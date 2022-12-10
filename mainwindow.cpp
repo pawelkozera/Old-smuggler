@@ -124,6 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
     EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface);
     eventHandler->setFocus();
     Scene->addItem(eventHandler);
+    eventHandler->select_target_island();
 
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);

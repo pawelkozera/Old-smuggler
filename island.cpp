@@ -6,7 +6,7 @@
 
 
 Island::Island(QString img_name) {
-    is_visible = false;
+    target_island = false;
     island_img.load("../smuggler/assets/map/" + img_name);
 }
 

@@ -34,8 +34,10 @@ void Interface::draw_cockpit(int window_height, PlayerPlane const *player_plane)
 }
 
 void Interface::draw_map() {
-    if (map_item->isVisible())
+    if (map_item->isVisible()) {
         map_item->hide();
-    else
+    }
+    else {
         map_item->show();
+    }
 }

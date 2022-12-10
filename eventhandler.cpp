@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QKeyEvent>
 
+#include <random>
+
 
 EventHandler::EventHandler(std::vector<Island *> islands
                            ,PlayerCharacter *player_character,
@@ -197,4 +199,23 @@ void EventHandler::add_resources_to_plane(QKeyEvent *event) {
         interactive_object_collided->hide_alert();
         interactive_object_collided = NULL;
     }
+}
+
+void EventHandler::select_target_island() {
+    for (int i = 0; i < islands.size(); i++) {
+        islands[i]->target_island = false;
+    }
+
+    // random number generator
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(1, islands.size() - 1);
+
+    islands[distr(gen)]->target_island = true;
+
+    map->generate_img_of_map(islands);
+    interface->map_img.load("../smuggler/assets/interface/map.png");
+
+    interface->map_img = interface->map_img.scaled(1408, 792);
+    interface->map_item->setPixmap(interface->map_img);
 }

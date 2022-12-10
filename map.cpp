@@ -77,6 +77,12 @@ void Map::generate_img_of_map(std::vector<Island *> islands) {
         map_x = islands[i]->island_item->x()*0.05 + blank_area_width/2;
         map_y = islands[i]->island_item->y()*0.05 + blank_area_height/2;
         painter.drawImage(blank_area_x_start + map_x, blank_areay_start + map_y, bufor_map);
+
+        if (islands[i]->target_island) {
+            QImage bufor_map_target = islands[i]->island_img.toImage();
+            bufor_map_target = bufor_map_target.scaled(islands[i]->island_img.width()*0.1, islands[i]->island_img.height()*0.1);
+            painter.drawImage(60, 120, bufor_map_target);
+        }
     }
 
     map.save("../smuggler/assets/interface/map.png");
