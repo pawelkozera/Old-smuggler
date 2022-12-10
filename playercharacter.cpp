@@ -10,7 +10,7 @@ PlayerCharacter::PlayerCharacter() {
     delay_animation_counter = 0;
 
     QPixmap player_img;
-    for (int i = 1; i <= 13; i++) {
+    for (int i = 1; i <= 12; i++) {
         QString location = "../smuggler/assets/player_character/player" + QString::number(i) + QString(".png");
         player_img.load(location);
         player_imgs.push_back(player_img);

@@ -93,7 +93,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
 
 void EventHandler::entering_plane_event() {
     player_character_events = false;
-    player_character->change_character_img(12);
+    player_character->player_item->hide();
     MovingSpeed::x_speed = 0;
     MovingSpeed::y_speed = 0;
 
@@ -136,7 +136,7 @@ void EventHandler::character_moving(QKeyEvent *event) {
 
 void EventHandler::leaving_plane_event() {
     player_character_events = true;
-    player_character->change_character_img(0);
+    player_character->player_item->show();
 
     MovingSpeed::x_speed = 3;
     MovingSpeed::y_speed = 3;
