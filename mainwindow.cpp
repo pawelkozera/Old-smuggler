@@ -99,20 +99,24 @@ MainWindow::MainWindow(QWidget *parent)
 
     // interface
     Interface *interface = new Interface();
-    interface->speedometer_item = Scene->addPixmap(interface->speedometer_img);
-    interface->map_item = Scene->addPixmap(interface->map_img);
+    interface->cockpit_item = Scene->addPixmap(interface->cockpit_img);
     int padding = 15;
-    interface->speedometer_item->setPos(5, WINDOW_HEIGHT - interface->speedometer_img.height() - padding);
+    interface->cockpit_item->setPos(5, WINDOW_HEIGHT - interface->cockpit_img.height() - padding);
     interface->power = Scene->addText("");
     interface->speed = Scene->addText("");
-    interface->power->setPos(172, interface->speedometer_item->y() + 135);
-    interface->speed->setPos(170, interface->speedometer_item->y() + 55);
-    interface->speedometer_item->hide();
+    interface->fuel = Scene->addText("");
+    interface->cargo = Scene->addText("");
+    interface->power->setPos(172, interface->cockpit_item->y() + 135);
+    interface->speed->setPos(170, interface->cockpit_item->y() + 55);
+    interface->fuel->setPos(300, interface->cockpit_item->y() + 95);
+    interface->cargo->setPos(54, interface->cockpit_item->y() + 95);
+    interface->cockpit_item->hide();
 
     interface->key_to_draw_map = Scene->addText("Press M for map");
     interface->key_to_draw_map->setDefaultTextColor(QColor(255, 255, 255));
     interface->key_to_draw_map->setPos(WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT - padding - 20);
 
+    interface->map_item = Scene->addPixmap(interface->map_img);
     interface->map_item->setPos(0, 0);
     interface->map_item->hide();
 

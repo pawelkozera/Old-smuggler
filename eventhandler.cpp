@@ -43,7 +43,7 @@ void EventHandler::my_timer_slot() {
     sounds->music->play();
 
     if (!player_character_events) {
-        interface->draw_speedometer(settings->window_height);
+        interface->draw_cockpit(settings->window_height, player_plane);
 
         for(int i = 0; i < islands.size(); i++) {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
@@ -63,7 +63,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     if (player_character_events) {
         if (event->key() == Qt::Key_E && collision_with_plane) {
             entering_plane_event();
-            interface->speedometer_item->show();
+            interface->cockpit_item->show();
         }
         else {
             character_on_island_event(event);
@@ -75,8 +75,8 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
             Island *plane_on_island = player_plane->plane_on_island(event, islands);
             if (plane_on_island) {
                 leaving_plane_event();
-                interface->speedometer_item->hide();
-                interface->draw_speedometer(settings->window_height);
+                interface->cockpit_item->hide();
+                interface->draw_cockpit(settings->window_height, player_plane);
             }
         }
         else {
