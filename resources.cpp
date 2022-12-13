@@ -1,10 +1,10 @@
 #include "resources.h"
 
 Resources::Resources(QString img_name, Alert *alert, QString alert_img_name) : InteractiveObject(img_name, alert, alert_img_name) {
+    cargo_alert = true;
 }
 
 void Resources::show_alert(int cargo) {
-    cargo_alert = true;
     int x = item->x();
     int y = item->y() + 200;
     int bar_x = 47;

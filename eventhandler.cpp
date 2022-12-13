@@ -121,7 +121,7 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
         }
 
         if (interactive_object_collided) {
-            add_resources_to_plane(event);
+            interactive_objects_handler(event);
         }
     }
 
@@ -163,11 +163,13 @@ void EventHandler::set_interactive_object_collided(InteractiveObject *object_col
 
     if (interactive_object_collided->cargo_alert)
         interactive_object_collided->show_alert(player_plane->cargo);
-    else
+    else if (interactive_object_collided->fuel_alert)
         interactive_object_collided->show_alert(player_plane->fuel);
+    else
+        interactive_object_collided->show_alert(player_plane->cargo);
 }
 
-void EventHandler::add_resources_to_plane(QKeyEvent *event) {
+void EventHandler::interactive_objects_handler(QKeyEvent *event) {
     bool player_position_changed = (player_last_position.first != player_plane->item->x() || player_last_position.second != player_plane->item->y());
 
     if (event->key() == Qt::Key_E) {
@@ -176,10 +178,19 @@ void EventHandler::add_resources_to_plane(QKeyEvent *event) {
             interactive_object_collided->show_alert(player_plane->cargo);
             sounds->add_resources->play();
         }
-        else {
+        else if (interactive_object_collided->fuel_alert) {
             player_plane->add_fuel(interactive_object_collided->max_amount_of_fuel());
             interactive_object_collided->show_alert(player_plane->fuel);
             sounds->add_resources->play();
+        }
+        else {
+            if (player_island->target_island) {
+                if (player_plane->cargo > 0) {
+                    player_plane->cargo = 0;
+                    interactive_object_collided->show_alert(player_plane->cargo);
+                    select_target_island(player_island);
+                }
+            }
         }
     }
     else if (event->key() == Qt::Key_Q) {
@@ -188,7 +199,7 @@ void EventHandler::add_resources_to_plane(QKeyEvent *event) {
             interactive_object_collided->show_alert(player_plane->cargo);
             sounds->add_resources->play();
         }
-        else {
+        else if (interactive_object_collided->fuel_alert) {
             player_plane->remove_fuel();
             interactive_object_collided->show_alert(player_plane->fuel);
             sounds->add_resources->play();
@@ -201,7 +212,7 @@ void EventHandler::add_resources_to_plane(QKeyEvent *event) {
     }
 }
 
-void EventHandler::select_target_island() {
+void EventHandler::select_target_island(const Island *previous_target_island) {
     for (int i = 0; i < islands.size(); i++) {
         islands[i]->target_island = false;
     }
@@ -211,8 +222,14 @@ void EventHandler::select_target_island() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distr(1, islands.size() - 1);
 
-    islands[distr(gen)]->target_island = true;
+    int island_index;
+    do {
+       island_index = distr(gen);
+    }
+    while (islands[island_index] == previous_target_island);
 
+
+    islands[island_index]->target_island = true;
     map->generate_img_of_map(islands);
     interface->map_img.load("../smuggler/assets/interface/map.png");
 

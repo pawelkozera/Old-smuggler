@@ -50,8 +50,8 @@ public:
     void leaving_plane_event();
     void plane_events(QKeyEvent *event);
     void set_interactive_object_collided(InteractiveObject *object_collided_bufor);
-    void add_resources_to_plane(QKeyEvent *event);
-    void select_target_island();
+    void interactive_objects_handler(QKeyEvent *event);
+    void select_target_island(Island const *previous_target_index = NULL);
 
 public slots:
     void my_timer_slot();

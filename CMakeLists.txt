@@ -46,6 +46,8 @@ set(PROJECT_SOURCES
         sounds.h
         interface.cpp
         interface.h
+        receiver.cpp
+        receiver.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

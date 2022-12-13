@@ -1,10 +1,10 @@
 #include "fuel.h"
 
 Fuel::Fuel(QString img_name, Alert *alert, QString alert_img_name) : InteractiveObject(img_name, alert, alert_img_name) {
+    fuel_alert = true;
 }
 
 void Fuel::show_alert(int fuel) {
-    cargo_alert = false;
     int width_gap_box_alert = alert->img.width() - img.width();
     int x = item->x() - width_gap_box_alert/2;
     int y = item->y() - 160;

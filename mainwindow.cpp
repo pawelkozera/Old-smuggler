@@ -10,6 +10,7 @@
 #include "settings.h"
 #include "sounds.h"
 #include "interface.h"
+#include "receiver.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -74,6 +75,19 @@ MainWindow::MainWindow(QWidget *parent)
     fuel->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     fuel->item->setPos(islands[0]->island_item->x() + 288, islands[0]->island_item->y() + 32);
     islands[0]->objects.push_back(fuel);
+
+    std::vector<std::pair<int, int>> reciver_coordinates;
+    reciver_coordinates.push_back(std::pair<int, int> (islands[1]->island_item->x() + 832, islands[1]->island_item->y() + 1024));
+    reciver_coordinates.push_back(std::pair<int, int> (islands[2]->island_item->x() + 1120, islands[2]->island_item->y() + 1024));
+
+    for (int i = 1; i < islands.size(); i++) {
+        Receiver *receiver = new Receiver("receiver.png", alert, "alert_receiver.png");
+        receiver->item = settings->scene->addPixmap(receiver->img);
+        receiver->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+
+        receiver->item->setPos(reciver_coordinates[i - 1].first, reciver_coordinates[i - 1].second);
+        islands[i]->objects.push_back(receiver);
+    }
 
     // player character
     x = WINDOW_WIDTH/2;

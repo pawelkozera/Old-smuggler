@@ -15,6 +15,7 @@ public:
     Alert *alert;
     QPixmap alert_img;
     bool cargo_alert;
+    bool fuel_alert;
 
     void move_object(long double x, long double y);
     virtual void show_alert(int amount);
