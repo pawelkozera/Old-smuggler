@@ -35,6 +35,8 @@ void Map::generate_map(std::vector<Island *> islands) {
             if (!collision_and_gap_between_islands(islands[i], islands)) run_loop = false;
         }
         qDebug() << islands[i]->island_item->x() << " " << islands[i]->island_item->y();
+        islands[i]->x_starting = islands[i]->island_item->x();
+        islands[i]->y_starting = islands[i]->island_item->y();
         run_loop = true;
     }
 }
@@ -74,8 +76,8 @@ void Map::generate_img_of_map(std::vector<Island *> islands) {
         QImage bufor_map = islands[i]->island_img.toImage();
         bufor_map = bufor_map.scaled(map_width, map_height);
 
-        map_x = islands[i]->island_item->x()*0.05 + blank_area_width/2;
-        map_y = islands[i]->island_item->y()*0.05 + blank_area_height/2;
+        map_x = islands[i]->x_starting*0.05 + blank_area_width/2;
+        map_y = islands[i]->y_starting*0.05 + blank_area_height/2;
         painter.drawImage(blank_area_x_start + map_x, blank_areay_start + map_y, bufor_map);
 
         if (islands[i]->target_island) {
