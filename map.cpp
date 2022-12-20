@@ -39,6 +39,9 @@ void Map::generate_map(std::vector<Island *> islands) {
         islands[i]->y_starting = islands[i]->island_item->y();
         run_loop = true;
     }
+
+    islands[0]->x_starting = islands[0]->island_item->x();
+    islands[0]->y_starting = islands[0]->island_item->y();
 }
 
 bool Map::collision_and_gap_between_islands(Island *current_island, std::vector<Island *> islands) {
