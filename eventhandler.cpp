@@ -186,6 +186,7 @@ void EventHandler::interactive_objects_handler(QKeyEvent *event) {
         else {
             if (player_island->target_island) {
                 if (player_plane->cargo > 0) {
+                    score->increase(player_plane->cargo);
                     player_plane->cargo = 0;
                     interactive_object_collided->show_alert(player_plane->cargo);
                     select_target_island(player_island);

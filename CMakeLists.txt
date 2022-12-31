@@ -48,6 +48,8 @@ set(PROJECT_SOURCES
         interface.h
         receiver.cpp
         receiver.h
+        score.h
+        score.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

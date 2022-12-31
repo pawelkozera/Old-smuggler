@@ -130,6 +130,10 @@ MainWindow::MainWindow(QWidget *parent)
     interface->key_to_draw_map->setDefaultTextColor(QColor(255, 255, 255));
     interface->key_to_draw_map->setPos(WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT - padding - 20);
 
+    interface->key_to_draw_score = Scene->addText("Score: 0");
+    interface->key_to_draw_score->setDefaultTextColor(QColor(255, 255, 255));
+    interface->key_to_draw_score->setPos(5, 10);
+
     interface->map_item = Scene->addPixmap(interface->map_img);
     interface->map_item->setPos(0, 0);
     interface->map_item->hide();
@@ -137,6 +141,8 @@ MainWindow::MainWindow(QWidget *parent)
     // event handler
     EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface);
     eventHandler->setFocus();
+    eventHandler->score = new Score();
+    eventHandler->score->setScoreView(interface->key_to_draw_score);
     Scene->addItem(eventHandler);
     eventHandler->select_target_island();
 

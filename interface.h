@@ -19,6 +19,7 @@ public:
     QPixmap map_img;
     QGraphicsPixmapItem *map_item;
     QGraphicsTextItem *key_to_draw_map;
+    QGraphicsTextItem *key_to_draw_score;
 
 
     void draw_cockpit(int window_height, PlayerPlane const *player_plane);

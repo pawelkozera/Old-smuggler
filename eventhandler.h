@@ -8,6 +8,7 @@
 #include "settings.h"
 #include "sounds.h"
 #include "interface.h"
+#include "score.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
@@ -40,6 +41,7 @@ public:
     Sounds *sounds;
     Interface *interface;
     Map *map;
+    Score *score;
 
     std::pair<int, int> player_last_position;
 
