@@ -211,6 +211,12 @@ void EventHandler::interactive_objects_handler(QKeyEvent *event) {
         interactive_object_collided->hide_alert();
         interactive_object_collided = NULL;
     }
+
+    // TODO: tymczasowo, zanim znajdziemy miejsce na koniec gry itp.
+
+    if (event->key() == Qt::Key_H) {
+        hallOfFame->show(score->getScore());
+    }
 }
 
 void EventHandler::select_target_island(const Island *previous_target_island) {

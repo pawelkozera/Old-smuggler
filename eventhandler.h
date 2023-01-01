@@ -9,6 +9,7 @@
 #include "sounds.h"
 #include "interface.h"
 #include "score.h"
+#include "hallOfFame.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
@@ -42,6 +43,7 @@ public:
     Interface *interface;
     Map *map;
     Score *score;
+    HallOfFame *hallOfFame;
 
     std::pair<int, int> player_last_position;
 

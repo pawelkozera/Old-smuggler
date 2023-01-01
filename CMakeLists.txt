@@ -50,6 +50,8 @@ set(PROJECT_SOURCES
         receiver.h
         score.h
         score.cpp
+        hallOfFame.h
+        hallOfFame.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

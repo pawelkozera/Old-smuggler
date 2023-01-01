@@ -11,6 +11,7 @@
 #include "sounds.h"
 #include "interface.h"
 #include "receiver.h"
+#include "hallOfFame.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -145,6 +146,9 @@ MainWindow::MainWindow(QWidget *parent)
     eventHandler->score->setScoreView(interface->key_to_draw_score);
     Scene->addItem(eventHandler);
     eventHandler->select_target_island();
+
+    eventHandler->hallOfFame = new HallOfFame();
+    eventHandler->hallOfFame->init();
 
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);
