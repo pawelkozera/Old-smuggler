@@ -1,17 +1,24 @@
 #include "playerplane.h"
 #include "movingspeed.h"
+#include "wind.h"
 
 #include <QKeyEvent>
 #include <QDebug>
 #include <cmath>
+#include <QPixmap>
 
-PlayerPlane::PlayerPlane() {
+PlayerPlane::PlayerPlane(Wind *wind) {
+    x=0;
+    y=0;
     current_index_of_plane_img = 0;
     fuel = 0;
     cargo = 0;
     rotation_degree = 0;
     delay_animation = 3;
     delay_animation_counter = 0;
+    this->wind=wind;
+    wind->UpdateWindDirection();
+    wind->UpdateWindStrength();
 
     QPixmap plane_img;
     for (int i = 1; i <= 3; i++) {
@@ -175,17 +182,47 @@ void PlayerPlane::set_up_current_speed() {
 
         int max_speed = MovingSpeed::max_speed[current_power] - fuel - cargo;
 
+        QVector2D wind_direction=wind->GetWindDirection();
+        QVector2D plane_speed=QVector2D(MovingSpeed::x_speed, MovingSpeed::y_speed);
+        qreal angle=QVector2D::dotProduct(wind_direction, plane_speed);
+
         if (MovingSpeed::current_speed + 0.4 < max_speed)
-            MovingSpeed::current_speed += 0.4;
+        {
+            if(angle>0)
+            {
+                MovingSpeed::current_speed+=wind->GetWindStrength();
+            }
+            else
+            {
+                MovingSpeed::current_speed+=0.5*wind->GetWindStrength();
+            }
+        }
         else if (MovingSpeed::current_speed - 0.5 > max_speed)
-            MovingSpeed::current_speed -= 0.5;
+        {
+
+            if(angle>0)
+            {
+                MovingSpeed::current_speed-=0.5*wind->GetWindStrength();
+            }
+            else
+            {
+                MovingSpeed::current_speed-=wind->GetWindStrength();
+            }
+        }
+
 
         if (MovingSpeed::current_speed < 0 && current_power == 1)
             MovingSpeed::current_speed = 0;
     }
     else {
         if (MovingSpeed::current_speed > 0)
+        {
             MovingSpeed::current_speed -= 0.5;
+            if(MovingSpeed::current_speed<=0)
+            {
+                crash();
+            }
+        }
     }
 }
 
@@ -194,6 +231,7 @@ void PlayerPlane::calculate_x_y_speed() {
 
     MovingSpeed::x_speed = -(MovingSpeed::current_speed*cos(rotation_degree*pi/180.0)/MovingSpeed::division_factor_speed);
     MovingSpeed::y_speed = -(MovingSpeed::current_speed*sin(rotation_degree*pi/180.0)/MovingSpeed::division_factor_speed);
+    caluculate_x_y();
 }
 
 void PlayerPlane::add_cargo(int max_cargo) {
@@ -219,4 +257,63 @@ void PlayerPlane::remove_fuel() {
 void PlayerPlane::fuel_usage() {
     if (MovingSpeed::current_speed > 10)
         fuel -= 0.002;
+}
+
+void PlayerPlane::crash()
+{
+    crash_timer = new QTimer();
+    QAction::connect(crash_timer, &QTimer::timeout, this, &PlayerPlane::UpdateCrashAppearance);
+    crash_timer->start(50);
+}
+
+bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)
+{
+    for(int i = 0; i < islands.size(); i++) {
+        if (item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape)) {
+            if(islands[i]->target_island)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void PlayerPlane::drop_cargo()
+{
+    if(cargo>0)
+    {
+        cargo=0;
+    }
+}
+
+void PlayerPlane::set_text_drop()
+{
+    text_drop=new QGraphicsTextItem("Press Q to drop cargo");
+    QFont font;
+    font.setBold(true);
+    font.pixelSize();
+    font.setPointSize(10);
+    text_drop->setFont(font);
+    text_drop->setDefaultTextColor(QColor(255,255,255));
+    text_drop->setPos(690, 10);
+    text_drop->hide();
+}
+
+void PlayerPlane::caluculate_x_y()
+{
+     x+=MovingSpeed::x_speed;
+     y+=MovingSpeed::y_speed;
+}
+
+
+
+void PlayerPlane::UpdateCrashAppearance()
+{
+    item->setScale(item->scale()*0.9);
+    item->setRotation(item->rotation()+10);
+    if(item->scale()<=0)
+    {
+        crash_timer->stop();
+    }
 }

@@ -11,6 +11,11 @@
 #include "sounds.h"
 #include "interface.h"
 #include "receiver.h"
+#include "hallOfFame.h"
+#include "menu.h"
+#include "wind.h"
+#include "compass.h"
+#include "antiaircraftgun.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -18,8 +23,10 @@
 #include <QDebug>
 #include <vector>
 
+
 const int WINDOW_WIDTH = 1408;
 const int WINDOW_HEIGHT = 800;
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -51,6 +58,15 @@ MainWindow::MainWindow(QWidget *parent)
          islands[i]->island_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
          islands[i]->island_item->setPos(x, y);
     }
+
+    // AntiAircraftGun
+    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings);
+    antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
+    antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
+
+    antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
+    islands[0]->antiAircraftGun = antiAircraftGun;
 
     // map
     Map map;
@@ -102,10 +118,13 @@ MainWindow::MainWindow(QWidget *parent)
         player_character->player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
     }
 
+    // wind vane
+    Wind *wind= new Wind();
+
     // player plane
     x = islands[0]->island_item->x() + 4;
     y = islands[0]->island_item->y() + 224;
-    PlayerPlane *player_plane = new PlayerPlane();
+    PlayerPlane *player_plane = new PlayerPlane(wind);
     player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
     player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_plane->item->setPos(x, y);
@@ -130,19 +149,44 @@ MainWindow::MainWindow(QWidget *parent)
     interface->key_to_draw_map->setDefaultTextColor(QColor(255, 255, 255));
     interface->key_to_draw_map->setPos(WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT - padding - 20);
 
+    interface->key_to_draw_score = Scene->addText("Score: 0");
+    interface->key_to_draw_score->setDefaultTextColor(QColor(255, 255, 255));
+    interface->key_to_draw_score->setFont(QFont("Arial", 30, QFont::Bold));
+    interface->key_to_draw_score->setPos(5, 10);
+
     interface->map_item = Scene->addPixmap(interface->map_img);
     interface->map_item->setPos(0, 0);
     interface->map_item->hide();
 
+    // compass
+    Compass *compass=new Compass();
+    Scene->addItem(compass->compassItem);
+    Scene->addItem(compass->arroItem);
+
+    // menu
+    menu=new Menu();
+    menu->scene=Scene;
+    menu->draw_menu(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    // hall of fame
+    HallOfFame *hallOfFame=new HallOfFame();
+
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface, menu, ui, Scene, wind, compass, hallOfFame);
     eventHandler->setFocus();
+    eventHandler->score = new Score();
+    eventHandler->score->setScoreView(interface->key_to_draw_score);
     Scene->addItem(eventHandler);
     eventHandler->select_target_island();
 
+    eventHandler->hallOfFame = new HallOfFame();
+    eventHandler->hallOfFame->init();
+
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);
+    ui->graphicsView->setScene(menu->scene);
     ui->graphicsView->show();
+
 }
 
 MainWindow::~MainWindow()

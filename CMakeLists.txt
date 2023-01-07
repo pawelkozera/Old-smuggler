@@ -48,6 +48,20 @@ set(PROJECT_SOURCES
         interface.h
         receiver.cpp
         receiver.h
+	menu.h
+        menu.cpp
+        wind.h
+        wind.cpp
+        compass.h
+        compass.cpp
+        score.h
+        score.cpp
+        hallOfFame.h
+        hallOfFame.cpp
+        antiaircraftgun.cpp
+        antiaircraftgun.h
+        bullet.cpp
+        bullet.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

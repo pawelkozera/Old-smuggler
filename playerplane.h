@@ -2,13 +2,20 @@
 #define PLAYERPLANE_H
 
 #include "playercharacter.h"
+#include "wind.h"
 
 #include <QGraphicsItem>
+#include <QMessageBox>
+#include <QElapsedTimer>
+#include <QTimer>
+#include <QObject>
+#include <QLineF>
 
-class PlayerPlane
+class PlayerPlane: public QObject
 {
+    Q_OBJECT
 public:
-    PlayerPlane();
+    PlayerPlane(Wind *wind);
 
     std::vector<QPixmap> imgs;
     int current_index_of_plane_img;
@@ -18,6 +25,13 @@ public:
     int delay_animation;
     float fuel;
     int cargo;
+    Wind *wind;
+    QVector2D plane_speed;
+    void UpdateCrashAppearance();
+    QTimer* crash_timer;
+    QGraphicsTextItem *text_drop;
+    QGraphicsPixmapItem *cargo_item;
+    int x, y;
 
     void animation();
     void simple_movement_event(QKeyEvent *event, int x_speed = MovingSpeed::x_speed, int y_speed = MovingSpeed::y_speed);
@@ -34,6 +48,11 @@ public:
     void add_fuel(int max_fuel);
     void remove_fuel();
     void fuel_usage();
+    void crash();
+    bool IsOnTargetIsland(std::vector<Island *> islands);
+    void drop_cargo();
+    void set_text_drop();
+    void caluculate_x_y();
 };
 
 #endif // PLAYERPLANE_H

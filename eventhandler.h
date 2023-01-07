@@ -8,10 +8,18 @@
 #include "settings.h"
 #include "sounds.h"
 #include "interface.h"
+#include "menu.h"
+#include "ui_mainwindow.h"
+#include "wind.h"
+#include "compass.h"
+#include "score.h"
+#include "hallOfFame.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
 #include <QTimer>
+#include <QThread>
+#include <QLine>
 
 
 class EventHandler : public QObject, public QGraphicsRectItem
@@ -23,16 +31,23 @@ public:
                  PlayerPlane *player_plane,
                  Settings *settings,
                  Sounds *sounds,
-                 Interface *interface);
+                 Interface *interface,
+                 Menu *menu,
+                 Ui::MainWindow *ui,
+                 QGraphicsScene *scene,
+                 Wind *wind,
+                 Compass *compass,
+                 HallOfFame *hallOfFame);
 
     QTimer *timer;
+    QTimer *timer2;
 
     bool player_character_events;
     bool collision_with_plane;
     bool collision_with_island_borders;
 
     std::vector<Island *> islands;
-    Island *player_island;
+    Island *player_island, *target_island;
     InteractiveObject *interactive_object_collided;
     Settings *settings;
     PlayerCharacter *player_character;
@@ -40,6 +55,14 @@ public:
     Sounds *sounds;
     Interface *interface;
     Map *map;
+    Menu *menu;
+    Ui::MainWindow *ui;
+    QGraphicsScene *scene;
+    Wind *wind;
+    QGraphicsPixmapItem *cargo_item;
+    Compass *compass;
+    Score *score;
+    HallOfFame *hallOfFame;
 
     std::pair<int, int> player_last_position;
 
@@ -52,9 +75,16 @@ public:
     void set_interactive_object_collided(InteractiveObject *object_collided_bufor);
     void interactive_objects_handler(QKeyEvent *event);
     void select_target_island(Island const *previous_target_index = NULL);
+    void drop_cago();
+    void cargo_item_update();
+    void UpdateArrowDirection();
+    void setArrow();
+
 
 public slots:
     void my_timer_slot();
+
+
 };
 
 #endif // EVENTHANDLER_H
