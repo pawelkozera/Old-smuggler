@@ -62,6 +62,8 @@ set(PROJECT_SOURCES
         antiaircraftgun.h
         bullet.cpp
         bullet.h
+        enemyplane.cpp
+        enemyplane.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

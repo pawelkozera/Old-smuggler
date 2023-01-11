@@ -1,7 +1,7 @@
 #include "antiaircraftgun.h"
 
-AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings) {
-    img.load("../smuggler/assets/objects/" + img_name);
+AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amount_of_bullets) {
+    img.load("../smuggler/assets/enemy/" + img_name);
     range = 740;
     rotation_angle = 0;
     delay = 70;

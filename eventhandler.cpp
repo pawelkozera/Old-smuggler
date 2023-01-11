@@ -22,7 +22,8 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            QGraphicsScene *scene,
                            Wind *wind,
                            Compass *compass,
-                           HallOfFame *hallOfFame)
+                           HallOfFame *hallOfFame,
+                           std::vector<EnemyPlane *> enemyPlanes)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
@@ -43,6 +44,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->wind=wind;
     this->compass=compass;
     this->hallOfFame=hallOfFame;
+    this->enemyPlanes = enemyPlanes;
 
 
     player_plane->set_text_drop();
@@ -63,12 +65,20 @@ EventHandler::EventHandler(std::vector<Island *> islands
 void EventHandler::my_timer_slot() {
     sounds->music->play();
 
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
+    }
+
     if (!player_character_events) {
         interface->draw_cockpit(settings->window_height, player_plane);
         UpdateArrowDirection();
 
         for(int i = 0; i < islands.size(); i++) {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
+        }
+
+        for(int i = 0; i < enemyPlanes.size(); i++) {
+            enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
         player_plane->animation();
@@ -89,11 +99,11 @@ void EventHandler::my_timer_slot() {
     }
 
     for(int i = 0; i < islands.size(); i++) {
-            if (islands[i]->antiAircraftGun != NULL) {
-                islands[i]->antiAircraftGun->move_used_bullets();
-                islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
-            }
+        if (islands[i]->antiAircraftGun != NULL) {
+            islands[i]->antiAircraftGun->move_used_bullets();
+            islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
         }
+    }
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -290,6 +300,9 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
 void EventHandler::character_moving(QKeyEvent *event) {
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island_event(event);
+    }
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_plane_event(event);
     }
     player_plane->simple_movement_event(event);
 }

@@ -10,7 +10,7 @@
 class AntiAircraftGun
 {
 public:
-    AntiAircraftGun(QString img_name, Settings *settings);
+    AntiAircraftGun(QString img_name, Settings *settings, int amount_of_bullets);
 
     QPixmap img;
     QGraphicsPixmapItem *item;
