@@ -67,6 +67,7 @@ void EventHandler::my_timer_slot() {
 
     for(int i = 0; i < enemyPlanes.size(); i++) {
         enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
+        enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
     }
 
     if (!player_character_events) {
