@@ -5,7 +5,7 @@ Bullet::Bullet(QString img_name) {
     img.load("../smuggler/assets/objects/" + img_name);
     speed = 6;
     x_speed = y_speed = 1;
-    max_range = 600;
+    max_range = 1000;
 }
 
 void Bullet::move_bullet() {

@@ -23,11 +23,14 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            Wind *wind,
                            Compass *compass,
                            HallOfFame *hallOfFame,
-                           std::vector<EnemyPlane *> enemyPlanes)
+                           QList<Cloud*> clouds)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(my_timer_slot()));
+    timerCloud = new QTimer();
+    connect(timerCloud, &QTimer::timeout, this,  &EventHandler::moveCloud);
+    timerCloud->start(20);
     int ms = 1000;
     int fps = 60;
     timer->start(ms/fps);
@@ -44,7 +47,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->wind=wind;
     this->compass=compass;
     this->hallOfFame=hallOfFame;
-    this->enemyPlanes = enemyPlanes;
+    this->clouds=clouds;
 
 
     player_plane->set_text_drop();
@@ -60,15 +63,12 @@ EventHandler::EventHandler(std::vector<Island *> islands
     player_island = NULL;
     interactive_object_collided = NULL;
 
+    wind->UpdateWindDirection();
+
 }
 
 void EventHandler::my_timer_slot() {
     sounds->music->play();
-
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
-        enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
-    }
 
     if (!player_character_events) {
         interface->draw_cockpit(settings->window_height, player_plane);
@@ -76,10 +76,6 @@ void EventHandler::my_timer_slot() {
 
         for(int i = 0; i < islands.size(); i++) {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
-        }
-
-        for(int i = 0; i < enemyPlanes.size(); i++) {
-            enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
         player_plane->animation();
@@ -91,7 +87,7 @@ void EventHandler::my_timer_slot() {
             if (islands[i]->antiAircraftGun != NULL) {
                 if (islands[i]->antiAircraftGun->is_in_range(settings->window_width, settings->window_height)) {
                     islands[i]->antiAircraftGun->rotate(settings->window_width, settings->window_height);
-                    islands[i]->antiAircraftGun->shoot();
+                    islands[i]->antiAircraftGun->shoot(player_plane->item, clouds);
                 }
             }
         }
@@ -100,11 +96,11 @@ void EventHandler::my_timer_slot() {
     }
 
     for(int i = 0; i < islands.size(); i++) {
-        if (islands[i]->antiAircraftGun != NULL) {
-            islands[i]->antiAircraftGun->move_used_bullets();
-            islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
+            if (islands[i]->antiAircraftGun != NULL) {
+                islands[i]->antiAircraftGun->move_used_bullets();
+                islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
+            }
         }
-    }
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -261,7 +257,7 @@ void EventHandler::entering_plane_event() {
 
     // wind vane
     wind->UpdateWindStrength();
-    wind->UpdateWindDirection();
+    //wind->UpdateWindDirection();
     wind->WindSock->show();
     wind->DirectionPixmap->show();
     scene->addItem(wind->WindSock);
@@ -302,10 +298,9 @@ void EventHandler::character_moving(QKeyEvent *event) {
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island_event(event);
     }
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        enemyPlanes[i]->move_plane_event(event);
-    }
     player_plane->simple_movement_event(event);
+    for (Cloud* cloud : clouds)
+        cloud->move_cloud_event(event);
 }
 
 void EventHandler::leaving_plane_event() {
@@ -465,4 +460,23 @@ void EventHandler::setArrow()
     qreal angle= atan2(direction.y(), direction.x());
     compass->arroItem->setRotation(angle * 180.0 / M_PI);
 }
+
+void EventHandler::moveCloud()
+{
+    QVector2D windDirection=wind->GetWindDirection().normalized();
+    for (Cloud* cloud : clouds)
+    {
+        cloud->cloudPixmap->setPos(cloud->cloudPixmap->x() - 2*windDirection.x(), cloud->cloudPixmap->y()- 2*windDirection.y());
+        //qDebug()<<"x: "<<cloud->cloudPixmap->x()<<"  y: "<<cloud->cloudPixmap->y();
+        if(cloud->cloudPixmap->x()>10000)
+            cloud->cloudPixmap->setPos(-10000, cloud->cloudPixmap->y());
+        if(cloud->cloudPixmap->x()<-10000)
+            cloud->cloudPixmap->setPos(10000, cloud->cloudPixmap->y());
+        if(cloud->cloudPixmap->y()>10000)
+            cloud->cloudPixmap->setPos(cloud->cloudPixmap->x(), -10000);
+        if(cloud->cloudPixmap->y()<-10000)
+            cloud->cloudPixmap->setPos(cloud->cloudPixmap->x(), 10000);
+    }
+}
+
 

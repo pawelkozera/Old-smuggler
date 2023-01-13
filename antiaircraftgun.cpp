@@ -1,7 +1,9 @@
 #include "antiaircraftgun.h"
 
-AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amount_of_bullets) {
-    img.load("../smuggler/assets/enemy/" + img_name);
+#include <QPainterPath>
+
+AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings) {
+    img.load("../smuggler/assets/objects/" + img_name);
     range = 740;
     rotation_angle = 0;
     delay = 70;
@@ -38,12 +40,12 @@ void AntiAircraftGun::rotate(int window_width, int window_height) {
     item->setRotation(degree);
 }
 
-void AntiAircraftGun::shoot() {
+void AntiAircraftGun::shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds) {
     bool bullet_used;
     int x = item->x() + img.width()/2;
     int y = item->y() + img.height()/2;
 
-    if (current_delay >= delay) {
+    if (current_delay >= delay && !is_in_cloud(plane, clouds)) {
         for (int i = 0; i < bullets.size(); i++) {
             bullet_used = std::find(used_bullets.begin(), used_bullets.end(), bullets[i]) != used_bullets.end();
             if (!bullet_used) {
@@ -80,4 +82,16 @@ void AntiAircraftGun::check_used_bullets_collision(QGraphicsPixmapItem *target) 
         if (target_hit)
             used_bullets.erase(used_bullets.begin() + i);
     }
+}
+
+bool AntiAircraftGun::is_in_cloud(QGraphicsPixmapItem *plane, QList<Cloud *> clouds)
+{
+    for (Cloud* cloud : clouds)
+    {
+        if (plane->collidesWithItem(cloud->cloudPixmap))
+        {
+           return true;
+        }
+    }
+    return false;
 }

@@ -3,6 +3,7 @@
 
 #include "playercharacter.h"
 #include "wind.h"
+#include "cloud.h"
 
 #include <QGraphicsItem>
 #include <QMessageBox>
@@ -10,12 +11,13 @@
 #include <QTimer>
 #include <QObject>
 #include <QLineF>
+#include <QLine>
 
 class PlayerPlane: public QObject
 {
     Q_OBJECT
 public:
-    PlayerPlane(Wind *wind);
+    PlayerPlane(Wind *wind, QList<Cloud*> clouds);
 
     std::vector<QPixmap> imgs;
     int current_index_of_plane_img;
@@ -26,12 +28,14 @@ public:
     float fuel;
     int cargo;
     Wind *wind;
+    Cloud *cloud;
     QVector2D plane_speed;
     void UpdateCrashAppearance();
     QTimer* crash_timer;
     QGraphicsTextItem *text_drop;
     QGraphicsPixmapItem *cargo_item;
     int x, y;
+    QList<Cloud*> clouds;
 
     void animation();
     void simple_movement_event(QKeyEvent *event, int x_speed = MovingSpeed::x_speed, int y_speed = MovingSpeed::y_speed);

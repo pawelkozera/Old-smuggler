@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QList>
 #include "menu.h"
 #include "hallOfFame.h"
 

@@ -1,13 +1,14 @@
 #include "playerplane.h"
 #include "movingspeed.h"
 #include "wind.h"
+#include "cloud.h"
 
 #include <QKeyEvent>
 #include <QDebug>
 #include <cmath>
 #include <QPixmap>
 
-PlayerPlane::PlayerPlane(Wind *wind) {
+PlayerPlane::PlayerPlane(Wind *wind,  QList<Cloud*> clouds) {
     x=0;
     y=0;
     current_index_of_plane_img = 0;
@@ -17,6 +18,7 @@ PlayerPlane::PlayerPlane(Wind *wind) {
     delay_animation = 3;
     delay_animation_counter = 0;
     this->wind=wind;
+    this->clouds=clouds;
     wind->UpdateWindDirection();
     wind->UpdateWindStrength();
 
@@ -232,6 +234,9 @@ void PlayerPlane::calculate_x_y_speed() {
     MovingSpeed::x_speed = -(MovingSpeed::current_speed*cos(rotation_degree*pi/180.0)/MovingSpeed::division_factor_speed);
     MovingSpeed::y_speed = -(MovingSpeed::current_speed*sin(rotation_degree*pi/180.0)/MovingSpeed::division_factor_speed);
     caluculate_x_y();
+    for (Cloud* cloud : clouds) {
+            cloud->move_cloud(MovingSpeed::x_speed, MovingSpeed::y_speed);
+        }
 }
 
 void PlayerPlane::add_cargo(int max_cargo) {

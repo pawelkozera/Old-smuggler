@@ -14,7 +14,7 @@
 #include "compass.h"
 #include "score.h"
 #include "hallOfFame.h"
-#include "enemyplane.h"
+#include "cloud.h"
 
 #include <vector>
 #include <QGraphicsRectItem>
@@ -39,10 +39,11 @@ public:
                  Wind *wind,
                  Compass *compass,
                  HallOfFame *hallOfFame,
-                 std::vector<EnemyPlane *> enemyPlanes);
+                 QList<Cloud*> clouds);
 
     QTimer *timer;
     QTimer *timer2;
+    QTimer *timerCloud;
 
     bool player_character_events;
     bool collision_with_plane;
@@ -65,7 +66,7 @@ public:
     Compass *compass;
     Score *score;
     HallOfFame *hallOfFame;
-    std::vector<EnemyPlane *> enemyPlanes;
+    QList<Cloud*> clouds;
 
     std::pair<int, int> player_last_position;
 
@@ -82,6 +83,7 @@ public:
     void cargo_item_update();
     void UpdateArrowDirection();
     void setArrow();
+    void moveCloud();
 
 
 public slots:

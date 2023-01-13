@@ -16,7 +16,7 @@
 #include "wind.h"
 #include "compass.h"
 #include "antiaircraftgun.h"
-#include "enemyplane.h"
+#include "cloud.h"
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     // sounds
     Sounds *sounds = new Sounds();
 
+
     // islands
     std::vector<Island *> islands;
     islands.push_back(new Island("starting_island.png"));
@@ -59,6 +60,16 @@ MainWindow::MainWindow(QWidget *parent)
          islands[i]->island_item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
          islands[i]->island_item->setPos(x, y);
     }
+
+    // AntiAircraftGun
+    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings);
+    antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
+    antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
+
+    antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
+    islands[0]->antiAircraftGun = antiAircraftGun;
+
 
     // map
     Map map;
@@ -97,26 +108,6 @@ MainWindow::MainWindow(QWidget *parent)
         islands[i]->objects.push_back(receiver);
     }
 
-    // AntiAircraftGun
-    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
-    antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
-    antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
-
-    antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
-    islands[0]->antiAircraftGun = antiAircraftGun;
-
-    // EnemyPlane
-    std::vector<EnemyPlane *> enemyPlanes;
-
-    EnemyPlane *enemyPlane1 = new EnemyPlane("plane1.png", settings, 10);
-    enemyPlane1->item = Scene->addPixmap(enemyPlane1->img);
-    enemyPlane1->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    enemyPlane1->item->setTransformOriginPoint(enemyPlane1->img.width()/2, enemyPlane1->img.height()/2);
-    enemyPlane1->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
-
-    enemyPlanes.push_back(enemyPlane1);
-
     // player character
     x = WINDOW_WIDTH/2;
     y = WINDOW_HEIGHT/2;
@@ -133,14 +124,30 @@ MainWindow::MainWindow(QWidget *parent)
     // wind vane
     Wind *wind= new Wind();
 
+    // clouds
+    QList<Cloud*> clouds;
+    int n=1;
+    for(int i=0; i<200; i++){
+        Cloud *cloud = new Cloud(n);
+        clouds.append(cloud);
+        if(n==3)
+            n=1;
+        else
+            n++;
+    }
+
     // player plane
     x = islands[0]->island_item->x() + 4;
     y = islands[0]->island_item->y() + 224;
-    PlayerPlane *player_plane = new PlayerPlane(wind);
+    PlayerPlane *player_plane = new PlayerPlane(wind, clouds);
     player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
     player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     player_plane->item->setPos(x, y);
     player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
+
+     for (Cloud* cloud : clouds)
+        Scene->addItem(cloud->cloudPixmap);
+
 
     // interface
     Interface *interface = new Interface();
@@ -174,6 +181,7 @@ MainWindow::MainWindow(QWidget *parent)
     Compass *compass=new Compass();
     Scene->addItem(compass->compassItem);
     Scene->addItem(compass->arroItem);
+    //Scene->addItem(cloud->cloudPixmap);
 
     // menu
     menu=new Menu();
@@ -184,7 +192,7 @@ MainWindow::MainWindow(QWidget *parent)
     HallOfFame *hallOfFame=new HallOfFame();
 
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface, menu, ui, Scene, wind, compass, hallOfFame, enemyPlanes);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface, menu, ui, Scene, wind, compass, hallOfFame, clouds);
     eventHandler->setFocus();
     eventHandler->score = new Score();
     eventHandler->score->setScoreView(interface->key_to_draw_score);
@@ -193,6 +201,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     eventHandler->hallOfFame = new HallOfFame();
     eventHandler->hallOfFame->init();
+
 
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);
