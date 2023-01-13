@@ -13,8 +13,8 @@ public:
     EnemyPlane(QString img_name, Settings *settings, int amount_of_bullets);
 
     int index;
-    int x1, y1;
-    int x2, y2;
+    std::vector<int> x_points;
+    std::vector<int> y_points;
     int speed;
 
     void move_plane_event(QKeyEvent *event, long double x_speed = MovingSpeed::x_speed, long double y_speed = MovingSpeed::y_speed);

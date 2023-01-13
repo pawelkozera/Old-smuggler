@@ -72,11 +72,6 @@ EventHandler::EventHandler(std::vector<Island *> islands
 void EventHandler::my_timer_slot() {
     sounds->music->play();
 
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
-        enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
-    }
-
     if (!player_character_events) {
         interface->draw_cockpit(settings->window_height, player_plane);
         UpdateArrowDirection();
@@ -100,7 +95,7 @@ void EventHandler::my_timer_slot() {
 
         for(int i = 0; i < islands.size(); i++) {
             if (islands[i]->antiAircraftGun != NULL) {
-                if (islands[i]->antiAircraftGun->is_in_range(settings->window_width, settings->window_height)) {
+                if (islands[i]->antiAircraftGun->is_in_range(player_plane->item)) {
                     islands[i]->antiAircraftGun->rotate(settings->window_width, settings->window_height);
                     islands[i]->antiAircraftGun->shoot(player_plane->item, clouds);
                 }
@@ -111,11 +106,27 @@ void EventHandler::my_timer_slot() {
     }
 
     for(int i = 0; i < islands.size(); i++) {
-            if (islands[i]->antiAircraftGun != NULL) {
-                islands[i]->antiAircraftGun->move_used_bullets();
-                islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
-            }
+        if (islands[i]->antiAircraftGun != NULL) {
+            islands[i]->antiAircraftGun->move_used_bullets();
+            islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
         }
+    }
+
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_used_bullets();
+        enemyPlanes[i]->check_used_bullets_collision(player_plane->item);
+    }
+
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        if (enemyPlanes[i]->is_in_range(player_plane->item) && !player_character_events) {
+            enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
+            enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
+            enemyPlanes[i]->shoot(player_plane->item, clouds);
+        }
+        else {
+            enemyPlanes[i]->move_to_point();
+        }
+    }
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {

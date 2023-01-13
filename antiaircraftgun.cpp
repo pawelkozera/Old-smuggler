@@ -20,12 +20,11 @@ AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amoun
     }
 }
 
-bool AntiAircraftGun::is_in_range(int window_width, int window_height) {
-    float x = item->x() - window_width/2;
-    float y = item->y() - window_height/2;
-    float distance = sqrt(x*x+y*y);
+bool AntiAircraftGun::is_in_range(QGraphicsPixmapItem *playerPlaneItem) {
+    QPointF offset = playerPlaneItem->pos() - item->pos();
+    double manhattanL = offset.manhattanLength();
 
-    if (distance <= range) return true;
+    if (manhattanL <= range) return true;
     return false;
 }
 

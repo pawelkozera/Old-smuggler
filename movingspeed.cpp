@@ -13,14 +13,14 @@ const double MovingSpeed::division_factor_speed = 40;
 const int MovingSpeed::max_speed[12] = {
     -30,
     0,
+    30,
     60,
+    90,
     120,
+    150,
     180,
+    210,
     240,
-    300,
-    360,
-    420,
-    480,
-    540,
-    600
+    270,
+    300
 };
