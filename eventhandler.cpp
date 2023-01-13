@@ -23,7 +23,8 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            Wind *wind,
                            Compass *compass,
                            HallOfFame *hallOfFame,
-                           QList<Cloud*> clouds)
+                           QList<Cloud*> clouds,
+                           std::vector<EnemyPlane *> enemyPlanes)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
@@ -48,6 +49,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->compass=compass;
     this->hallOfFame=hallOfFame;
     this->clouds=clouds;
+    this->enemyPlanes = enemyPlanes;
 
 
     player_plane->set_text_drop();
@@ -70,12 +72,25 @@ EventHandler::EventHandler(std::vector<Island *> islands
 void EventHandler::my_timer_slot() {
     sounds->music->play();
 
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
+        enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
+    }
+
     if (!player_character_events) {
         interface->draw_cockpit(settings->window_height, player_plane);
         UpdateArrowDirection();
 
         for(int i = 0; i < islands.size(); i++) {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
+        }
+
+        for(int i = 0; i < islands.size(); i++) {
+            islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
+        }
+
+        for(int i = 0; i < enemyPlanes.size(); i++) {
+            enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
         player_plane->animation();
@@ -297,6 +312,9 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
 void EventHandler::character_moving(QKeyEvent *event) {
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island_event(event);
+    }
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_plane_event(event);
     }
     player_plane->simple_movement_event(event);
     for (Cloud* cloud : clouds)

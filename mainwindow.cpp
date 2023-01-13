@@ -62,13 +62,24 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // AntiAircraftGun
-    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings);
+    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
     antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
     antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
     antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
 
     antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
     islands[0]->antiAircraftGun = antiAircraftGun;
+
+    // EnemyPlane
+    std::vector<EnemyPlane *> enemyPlanes;
+
+    EnemyPlane *enemyPlane1 = new EnemyPlane("plane1.png", settings, 10);
+    enemyPlane1->item = Scene->addPixmap(enemyPlane1->img);
+    enemyPlane1->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    enemyPlane1->item->setTransformOriginPoint(enemyPlane1->img.width()/2, enemyPlane1->img.height()/2);
+    enemyPlane1->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
+
+    enemyPlanes.push_back(enemyPlane1);
 
 
     // map
@@ -192,7 +203,7 @@ MainWindow::MainWindow(QWidget *parent)
     HallOfFame *hallOfFame=new HallOfFame();
 
     // event handler
-    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface, menu, ui, Scene, wind, compass, hallOfFame, clouds);
+    EventHandler *eventHandler = new EventHandler(islands, player_character, player_plane, settings, sounds, interface, menu, ui, Scene, wind, compass, hallOfFame, clouds, enemyPlanes);
     eventHandler->setFocus();
     eventHandler->score = new Score();
     eventHandler->score->setScoreView(interface->key_to_draw_score);
