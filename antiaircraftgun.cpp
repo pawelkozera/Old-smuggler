@@ -2,8 +2,8 @@
 
 #include <QPainterPath>
 
-AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amount_of_bullets) {
-    img.load("../smuggler/assets/enemy/" + img_name);
+AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings) {
+    img.load("../smuggler/assets/objects/" + img_name);
     range = 740;
     rotation_angle = 0;
     delay = 70;
@@ -20,11 +20,12 @@ AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amoun
     }
 }
 
-bool AntiAircraftGun::is_in_range(QGraphicsPixmapItem *playerPlaneItem) {
-    QPointF offset = playerPlaneItem->pos() - item->pos();
-    double manhattanL = offset.manhattanLength();
+bool AntiAircraftGun::is_in_range(int window_width, int window_height) {
+    float x = item->x() - window_width/2;
+    float y = item->y() - window_height/2;
+    float distance = sqrt(x*x+y*y);
 
-    if (manhattanL <= range) return true;
+    if (distance <= range) return true;
     return false;
 }
 

@@ -4,6 +4,7 @@
 Menu::Menu() {
     menu_texture.load("../smuggler/assets/menu/menu_background.png");
     menu_title1.load("../smuggler/assets/menu/title1.png");
+    points_table_title.load("../smuggler/assets/menu/PointsTable.png");
     btnPlay.load("../smuggler/assets/menu/btnPlay1.png");
     btnPoints.load("../smuggler/assets/menu/btnPoints.png");
     btnSettings.load("../smuggler/assets/menu/btnSettings.png");
@@ -12,13 +13,20 @@ Menu::Menu() {
     btnPoints2.load("../smuggler/assets/menu/btnPoints2.png");
     btnSettings2.load("../smuggler/assets/menu/btnSettings2.png");
     btnExit2.load("../smuggler/assets/menu/btnExit2.png");
+    btnMusicON1.load("../smuggler/assets/menu/btnMusicOn1.png");
+    btnMusicON2.load("../smuggler/assets/menu/btnMusicOn2.png");
+    btnMusicOFF1.load("../smuggler/assets/menu/btnMusicOFF1.png");
+    btnMusicOFF2.load("../smuggler/assets/menu/btnMusicOFF2.png");
+    btnBack1.load("../smuggler/assets/menu/btnBack1.png");
+    btnBack2.load("../smuggler/assets/menu/btnBack2.png");
+    paper.load("../smuggler/assets/menu/paper.png");
 }
 
 QImage Menu::get_menu_texture() {
     return menu_texture;
 }
 
-void Menu::draw_menu(int width, int height)
+void Menu::draw_menu(int width, int height, QAudioOutput *audio)
 {
     panel = new QGraphicsRectItem(0,0,width,height);
     QBrush brush;
@@ -59,6 +67,86 @@ void Menu::draw_menu(int width, int height)
    pixmapExit->setScale(0.5);
    scene->addItem(pixmapExit);
 
+   if(audio->volume()==0)
+       pixmapMusic=new QGraphicsPixmapItem(QPixmap::fromImage(btnMusicOFF2));
+   else
+       pixmapMusic=new QGraphicsPixmapItem(QPixmap::fromImage(btnMusicON2));
+   scene->addItem(pixmapMusic);
+   pixmapMusic->hide();
+   pixmapBack=new QGraphicsPixmapItem(QPixmap::fromImage(btnBack1));
+   scene->addItem(pixmapBack);
+   pixmapBack->hide();
+   SettingsVisible=false;
+   pixmapTitlePoints=new QGraphicsPixmapItem(QPixmap::fromImage(points_table_title));
+   scene->addItem(pixmapTitlePoints);
+   pixmapTitlePoints->hide();
+   pixmapPaper=new QGraphicsPixmapItem(QPixmap::fromImage(paper));
+   scene->addItem(pixmapPaper);
+   pixmapPaper->hide();
+}
+
+void Menu::draw_settings()
+{
+    scene->removeItem(pixmapExit);
+    scene->removeItem(pixmapSetings);
+    scene->removeItem(pixmapPoints);
+    scene->removeItem(pixmapPlay);
+
+    int btn_x=(1408/2)-(pixmapPlay->pixmap().width()/4)-90;
+    int btn_y=(800/2)-(pixmapPlay->pixmap().height()/2)+70;
+
+    pixmapMusic->show();
+    pixmapMusic->setPos(btn_x, btn_y);
+    pixmapMusic->setScale(0.6);
+
+    pixmapBack->show();
+    pixmapBack->setPos(btn_x+40, btn_y+120);
+    pixmapBack->setScale(0.5);
+
+}
+
+void Menu::draw_points_table(HallOfFame *hallOfFame)
+{
+    scene->removeItem(pixmapExit);
+    scene->removeItem(pixmapSetings);
+    scene->removeItem(pixmapPoints);
+    scene->removeItem(pixmapPlay);
+    scene->removeItem(pixmapTitle);
+
+    hallOfFame->readFile();
+
+    pixmapTitlePoints->setPos(1408/6, -100);
+    pixmapTitlePoints->setScale(0.9);
+    pixmapTitlePoints->show();
+
+    pixmapPaper->show();
+    pixmapPaper->setPos(372, 250);
+    pixmapPaper->setScale(1.2);
+
+    QFont font;
+    font.setPointSize(20);
+    font.setBold(true);
+    int y_dist=400;
+    Wpis element;
+    for(int i=0;i<hallOfFame->listaSlawy.size();i++)
+    {
+        if(i>8)
+            break;
+        element=hallOfFame->listaSlawy[i];
+        QString nick(element.name);
+        QString points(QString::number(element.score));
+        QGraphicsTextItem *nickItem=new QGraphicsTextItem(nick);
+        QGraphicsTextItem *pointsItem=new QGraphicsTextItem(points);
+        textItems.append(nickItem);
+        textItems.append(pointsItem);
+        nickItem->setPos(490, y_dist);
+        pointsItem->setPos(770, y_dist);
+        nickItem->setFont(font);
+        pointsItem->setFont(font);
+        y_dist+=30;
+        scene->addItem(nickItem);
+        scene->addItem(pointsItem);
+    }
 }
 
 void Menu::remove_menu()
@@ -69,7 +157,15 @@ void Menu::remove_menu()
     scene->removeItem(pixmapPlay);
     scene->removeItem(panel);
     scene->removeItem(pixmapTitle);
+    scene->removeItem(pixmapBack);
+    scene->removeItem(pixmapMusic);
+    scene->removeItem(pixmapTitlePoints);
+    scene->removeItem(pixmapPaper);
     panel->setOpacity(1);
+    for (int i = 0; i < textItems.size(); ++i)
+    {
+            scene->removeItem(textItems[i]);
+    }
 }
 
 void Menu::change_size(int selectedOption)
@@ -141,6 +237,49 @@ void Menu::change_size(int selectedOption)
         pixmapPlay->setPixmap(QPixmap::fromImage(btnPlay));
         pixmapPlay->setPos(btn_x, btn_y);
         pixmapPlay->setScale(0.5);
+    }
+}
+
+void Menu::change_size_settings(int selectedOption, QAudioOutput *audio)
+{
+    int btn_x=(1408/2)-(pixmapPlay->pixmap().width()/4)-90;
+    int btn_y=(800/2)-(pixmapPlay->pixmap().height()/2)+70;
+    if(selectedOption==0)
+    {
+        BackEnable=false;
+        MusicEnable=true;
+        pixmapBack->setPixmap(QPixmap::fromImage(btnBack1));
+        pixmapBack->setScale(0.5);
+        pixmapBack->setPos(btn_x+40, btn_y+120);
+        if(audio->volume()==0)
+        {
+            pixmapMusic->setPixmap(QPixmap::fromImage(btnMusicOFF2));
+        }
+        else
+        {
+            pixmapMusic->setPixmap(QPixmap::fromImage(btnMusicON2));
+        }
+        pixmapMusic->setPos(btn_x, btn_y);
+        pixmapMusic->setScale(0.6);
+
+    }
+    else if(selectedOption==1)
+    {
+        BackEnable=true;
+        MusicEnable=false;
+        if(audio->volume()==0)
+        {
+            pixmapMusic->setPixmap(QPixmap::fromImage(btnMusicOFF1));
+        }
+        else
+        {
+            pixmapMusic->setPixmap(QPixmap::fromImage(btnMusicON1));
+        }
+        pixmapMusic->setPos(btn_x+40, btn_y);
+        pixmapMusic->setScale(0.5);
+        pixmapBack->setPixmap(QPixmap::fromImage(btnBack2));
+        pixmapBack->setScale(0.6);
+        pixmapBack->setPos(btn_x, btn_y+120);
     }
 }
 

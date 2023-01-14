@@ -2,7 +2,9 @@
 #define HALLOFFAME_H
 
 #include <vector>
-#include <QTableWidget>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QFile>
 
 typedef struct {
     int score;
@@ -12,14 +14,10 @@ typedef struct {
 class HallOfFame {
 public:
     HallOfFame();
-    void show(int score);
     void init();
-    void drawHallOfFame();
 
-    QTableWidget *table;
     bool visible=false;
 
-private:
     void readFile();
     void writeFile();
     std::vector<Wpis> listaSlawy;

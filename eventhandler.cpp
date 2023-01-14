@@ -23,8 +23,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            Wind *wind,
                            Compass *compass,
                            HallOfFame *hallOfFame,
-                           QList<Cloud*> clouds,
-                           std::vector<EnemyPlane *> enemyPlanes)
+                           QList<Cloud*> clouds)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
@@ -49,7 +48,6 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->compass=compass;
     this->hallOfFame=hallOfFame;
     this->clouds=clouds;
-    this->enemyPlanes = enemyPlanes;
 
 
     player_plane->set_text_drop();
@@ -80,10 +78,6 @@ void EventHandler::my_timer_slot() {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
-        for(int i = 0; i < enemyPlanes.size(); i++) {
-            enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
-        }
-
         player_plane->animation();
         player_plane->set_up_current_speed();
         player_plane->calculate_x_y_speed();
@@ -91,36 +85,22 @@ void EventHandler::my_timer_slot() {
 
         for(int i = 0; i < islands.size(); i++) {
             if (islands[i]->antiAircraftGun != NULL) {
-                if (islands[i]->antiAircraftGun->is_in_range(player_plane->item)) {
+                if (islands[i]->antiAircraftGun->is_in_range(settings->window_width, settings->window_height)) {
                     islands[i]->antiAircraftGun->rotate(settings->window_width, settings->window_height);
                     islands[i]->antiAircraftGun->shoot(player_plane->item, clouds);
                 }
             }
         }
     }
+    else {
+    }
 
     for(int i = 0; i < islands.size(); i++) {
-        if (islands[i]->antiAircraftGun != NULL) {
-            islands[i]->antiAircraftGun->move_used_bullets();
-            islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
+            if (islands[i]->antiAircraftGun != NULL) {
+                islands[i]->antiAircraftGun->move_used_bullets();
+                islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
+            }
         }
-    }
-
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        enemyPlanes[i]->move_used_bullets();
-        enemyPlanes[i]->check_used_bullets_collision(player_plane->item);
-    }
-
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        if (enemyPlanes[i]->is_in_range(player_plane->item) && !player_character_events) {
-            enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
-            enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
-            enemyPlanes[i]->shoot(player_plane->item, clouds);
-        }
-        else {
-            enemyPlanes[i]->move_to_point();
-        }
-    }
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -175,10 +155,12 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     {
         if(menu->menuIsEnable==true)
         {
-            menu->draw_menu(1408, 800);
+            menu->selectedOption=0;
+            menu->draw_menu(1408, 800, sounds->audio_output);
             ui->graphicsView->setScene(menu->scene);
             ui->graphicsView->show();
             menu->menuIsEnable=false;
+            menu->PlayEnable=true;
         }
         else
         {
@@ -186,6 +168,8 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
             ui->graphicsView->setScene(scene);
             ui->graphicsView->show();
             menu->menuIsEnable=true;
+            menu->SettingsVisible=false;
+            menu->PointsVisible=false;
         }
     }
 
@@ -193,73 +177,134 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     {
         if (event->key() == Qt::Key_Up)
         {
-           if(menu->selectedOption==0)
+            if(menu->SettingsVisible)
             {
-                menu->selectedOption=3;
+                if(menu->selectedOptonStettings==0)
+                {
+                    menu->selectedOptonStettings=1;
+                }
+                else if(menu->selectedOptonStettings==1)
+                {
+                    menu->selectedOptonStettings=0;
+
+                }
+                menu->change_size_settings(menu->selectedOptonStettings, sounds->audio_output);
             }
-           else
-           {
-               menu->selectedOption--;
-           }
-           menu->change_size(menu->selectedOption);
+            else
+            {
+                if(menu->selectedOption==0)
+                 {
+                     menu->selectedOption=3;
+                 }
+                else
+                {
+                    menu->selectedOption--;
+                }
+                menu->change_size(menu->selectedOption);
+            }
         }
         if (event->key() == Qt::Key_Down)
         {
-           if(menu->selectedOption==3)
+
+            if(menu->SettingsVisible)
             {
-                menu->selectedOption=0;
+                if(menu->selectedOptonStettings==0)
+                {
+                    menu->selectedOptonStettings=1;
+                }
+                else if(menu->selectedOptonStettings==1)
+                {
+                    menu->selectedOptonStettings=0;
+
+                }
+                menu->change_size_settings(menu->selectedOptonStettings, sounds->audio_output);
             }
-           else
-           {
-               menu->selectedOption++;
-           }
-           menu->change_size(menu->selectedOption);
+            else
+            {
+                if(menu->selectedOption==3)
+                 {
+                     menu->selectedOption=0;
+                 }
+                else
+                {
+                    menu->selectedOption++;
+                }
+                menu->change_size(menu->selectedOption);
+            }
         }
 
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Space)
         {
-            if(menu->PlayEnable)
+            if(menu->SettingsVisible)
             {
-                menu->remove_menu();
-                ui->graphicsView->setScene(scene);
-                ui->graphicsView->show();
-                menu->menuIsEnable=true;
+                if(menu->BackEnable)
+                {
+                    menu->SettingsVisible=false;
+                    menu->remove_menu();
+                    menu->draw_menu(1408, 800, sounds->audio_output);
+                    menu->BackEnable=false;
+                    menu->PlayEnable=true;
+                }
+                if(menu->MusicEnable)
+                {
+                    if(sounds->audio_output->volume()==0)
+                    {
+                        sounds->audio_output->setVolume(1);
+                        menu->pixmapMusic->setPixmap(QPixmap::fromImage(menu->btnMusicON2));
+                    }
+                    else
+                    {
+                        sounds->audio_output->setVolume(0);
+                        menu->pixmapMusic->setPixmap(QPixmap::fromImage(menu->btnMusicOFF2));
+                    }
+                }
             }
-            else if(menu->PointsEnable)
+            else if(menu->PointsVisible)
             {
-                if(!hallOfFame->visible)
+                menu->PointsVisible=false;
+                menu->remove_menu();
+                menu->draw_menu(1408, 800, sounds->audio_output);
+                menu->PlayEnable=true;
+                menu->selectedOption=0;
+            }
+            else
+            {
+                if(menu->PlayEnable)
                 {
                     menu->remove_menu();
                     ui->graphicsView->setScene(scene);
                     ui->graphicsView->show();
-                    scene->addWidget(hallOfFame->table);
-                    hallOfFame->table->show();
-                    hallOfFame->drawHallOfFame();
-                    hallOfFame->visible=true;
+                    menu->menuIsEnable=true;
                 }
-                else
+                else if(menu->PointsEnable)
                 {
-                    menu->draw_menu(1408, 800);
-                    ui->graphicsView->setScene(menu->scene);
-                    ui->graphicsView->show();
-                    hallOfFame->table->setVisible(false);
-                    hallOfFame->visible=false;
-                    menu->selectedOption=1;
-
+                        hallOfFame->visible=true;
+                        menu->PointsVisible=true;
+                        menu->draw_points_table(hallOfFame);
                 }
-            }
-            else if(menu->SettingsEnable)
-            {
-                qDebug()<<"Settings";
-            }
-            else if(menu->ExitEnable)
-            {
-                QApplication::exit();
+                else if(menu->SettingsEnable)
+                {
+                    if(!menu->SettingsVisible)
+                    {
+                        menu->selectedOption=0;
+                        menu->selectedOptonStettings=0;
+                        menu->draw_settings();
+                        menu->MusicEnable=true;
+                        menu->SettingsVisible=true;
+                    }
+                    else
+                    {
+                        menu->SettingsVisible=false;
+                    }
+                }
+                else if(menu->ExitEnable)
+                {
+                    QApplication::exit();
+                }
             }
         }
 
     }
-
     update();
 }
 
@@ -272,9 +317,6 @@ void EventHandler::entering_plane_event() {
     std::pair<int, int> pixels_to_move = player_plane->center_plane_on_screen(player_character);
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
-    }
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
     }
     player_plane->simple_movement(pixels_to_move.first, pixels_to_move.second);
 
@@ -320,9 +362,6 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
 void EventHandler::character_moving(QKeyEvent *event) {
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island_event(event);
-    }
-    for(int i = 0; i < enemyPlanes.size(); i++) {
-        enemyPlanes[i]->move_plane_event(event);
     }
     player_plane->simple_movement_event(event);
     for (Cloud* cloud : clouds)
@@ -408,11 +447,6 @@ void EventHandler::interactive_objects_handler(QKeyEvent *event) {
         interactive_object_collided->hide_alert();
         interactive_object_collided = NULL;
     }
-    // TODO: tymczasowo, zanim znajdziemy miejsce na koniec gry itp.
-
-       if (event->key() == Qt::Key_H) {
-           hallOfFame->show(score->getScore());
-       }
 }
 
 void EventHandler::select_target_island(const Island *previous_target_island) {

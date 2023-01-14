@@ -3,18 +3,10 @@
 #include <string>
 #include <string.h>
 
-const char* filename = "rekordy.txt";
+const QString fileName = "rekordy.txt";
 
 HallOfFame::HallOfFame()
 {
-    readFile();
-    table=new QTableWidget(listaSlawy.size(), 2);
-    table->setHorizontalHeaderLabels({"Score", "Name"});
-    table->setGeometry(0,0, 1408, 800);
-    table->setFont(QFont("Arial", 20));
-}
-
-void HallOfFame::show(int score) {
     readFile();
 }
 
@@ -25,47 +17,36 @@ void HallOfFame::init() {
     writeFile();
 }
 
-void HallOfFame::drawHallOfFame()
-{
-    for(int i=0;i<listaSlawy.size();i++)
-    {
-        Wpis element=listaSlawy[i];
-        QTableWidgetItem* scoreItem = new QTableWidgetItem(QString::number(element.score));
-        QTableWidgetItem* nameItem = new QTableWidgetItem(element.name);
-        table->setItem(i, 0, scoreItem);
-        table->setItem(i, 1, nameItem);
-    }
-}
-
 void HallOfFame::readFile() {
-    FILE *fptr = fopen(filename, "r");
-    if (fptr == NULL)
+    listaSlawy.clear();
+    QFile file(fileName);
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            printf("Could not open file for reading");
+            qDebug() << "Error while opening file";
             return;
         }
-    char scoreName[20];
-    int score;
-    listaSlawy.clear();
-    while (fscanf(fptr, "%d,%s", &score, scoreName) == 2) {
-        printf("%d %s\n", score, scoreName);
-        Wpis element;
-        element.score = score;
-        strncpy(element.name, scoreName, 20);
-        listaSlawy.push_back(element);
-    }
-    fclose(fptr);
+
+        QTextStream stream(&file);
+        while(!stream.atEnd()) {
+            Wpis wpis;
+            stream >> wpis.score;
+            stream >> wpis.name;
+            listaSlawy.push_back(wpis);
+        }
+        file.close();
 }
 
 void HallOfFame::writeFile() {
-    FILE *fptr = fopen(filename, "w");
-    if (fptr == NULL)
+    QFile file(fileName);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            printf("Could not open file for writing");
+            qDebug() << "Error while opening file";
             return;
         }
-    for(auto element : listaSlawy) {
-        fprintf(fptr, "%d,%s\n", element.score, element.name);
-    }
-    fclose(fptr);
+
+        QTextStream stream(&file);
+        for (const auto& wpis : listaSlawy) {
+            stream << wpis.score << " " << wpis.name << "\n";
+        }
+        file.close();
 }
