@@ -6,6 +6,9 @@
 #include "playerplane.h"
 
 #include <QKeyEvent>
+#include <QPropertyAnimation>
+#include <QGraphicsItemAnimation>
+#include <QTimeLine>
 
 class EnemyPlane : public AntiAircraftGun
 {

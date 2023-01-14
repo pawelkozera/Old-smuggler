@@ -47,5 +47,24 @@ void EnemyPlane::follow_player(int window_width, int window_height, PlayerPlane 
 }
 
 void EnemyPlane::move_to_point() {
+    QPointF destination = QPointF(x_points[index], y_points[index]);
+    QPointF currentPos = item->pos();
+    QVector2D offset(destination - currentPos);
+    qreal distance = offset.length();
 
+    if(distance > speed)
+    {
+        offset.normalize();
+        offset *= speed;
+        item->setPos(currentPos + offset.toPointF());
+
+        double angle = atan2(destination.y() - item->y(), destination.x() - item->x()) * 180 / M_PI;
+        item->setRotation(angle - 180);
+    }
+    else
+    {
+        if (index >= x_points.size() - 1) index = 0;
+        else index++;
+        item->setPos(destination);
+    }
 }
