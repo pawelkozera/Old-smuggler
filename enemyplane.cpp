@@ -25,6 +25,14 @@ void EnemyPlane::move_plane(long double x_speed, long double y_speed) {
     float plane_x = item->x();
     float plane_y = item->y();
 
+    for (int i = 0; i < x_points.size(); i++) {
+        x_points[i] += x_speed;
+    }
+
+    for (int i = 0; i < y_points.size(); i++) {
+        y_points[i] += y_speed;
+    }
+
     item->setPos(plane_x + x_speed, plane_y + y_speed);
 }
 
@@ -52,8 +60,7 @@ void EnemyPlane::move_to_point() {
     QVector2D offset(destination - currentPos);
     qreal distance = offset.length();
 
-    if(distance > speed)
-    {
+    if(distance > speed) {
         offset.normalize();
         offset *= speed;
         item->setPos(currentPos + offset.toPointF());
@@ -61,8 +68,7 @@ void EnemyPlane::move_to_point() {
         double angle = atan2(destination.y() - item->y(), destination.x() - item->x()) * 180 / M_PI;
         item->setRotation(angle - 180);
     }
-    else
-    {
+    else {
         if (index >= x_points.size() - 1) index = 0;
         else index++;
         item->setPos(destination);

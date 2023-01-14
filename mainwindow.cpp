@@ -99,31 +99,6 @@ MainWindow::MainWindow(QWidget *parent)
         islands[i]->objects.push_back(receiver);
     }
 
-    // AntiAircraftGun
-    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
-    antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
-    antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
-
-    antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
-    islands[0]->antiAircraftGun = antiAircraftGun;
-
-    // EnemyPlane
-    std::vector<EnemyPlane *> enemyPlanes;
-
-    EnemyPlane *enemyPlane1 = new EnemyPlane("plane1.png", settings, 10);
-    enemyPlane1->item = Scene->addPixmap(enemyPlane1->img);
-    enemyPlane1->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    enemyPlane1->item->setTransformOriginPoint(enemyPlane1->img.width()/2, enemyPlane1->img.height()/2);
-    enemyPlane1->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
-
-    enemyPlane1->x_points.push_back(islands[0]->island_item->x());
-    enemyPlane1->y_points.push_back(islands[0]->island_item->y());
-    enemyPlane1->x_points.push_back(islands[0]->island_item->x() + 256);
-    enemyPlane1->y_points.push_back(islands[0]->island_item->y() + 384);
-
-    enemyPlanes.push_back(enemyPlane1);
-
     // player character
     x = WINDOW_WIDTH/2;
     y = WINDOW_HEIGHT/2;
@@ -161,7 +136,33 @@ MainWindow::MainWindow(QWidget *parent)
     player_plane->item->setPos(x, y);
     player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
 
-     for (Cloud* cloud : clouds)
+    // AntiAircraftGun
+    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
+    antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
+    antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
+
+    antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
+    islands[0]->antiAircraftGun = antiAircraftGun;
+
+    // EnemyPlane
+    std::vector<EnemyPlane *> enemyPlanes;
+
+    EnemyPlane *enemyPlane1 = new EnemyPlane("plane1.png", settings, 10);
+    enemyPlane1->item = Scene->addPixmap(enemyPlane1->img);
+    enemyPlane1->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    enemyPlane1->item->setTransformOriginPoint(enemyPlane1->img.width()/2, enemyPlane1->img.height()/2);
+    enemyPlane1->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
+
+    enemyPlane1->x_points.push_back(islands[0]->island_item->x());
+    enemyPlane1->y_points.push_back(islands[0]->island_item->y());
+    enemyPlane1->x_points.push_back(islands[0]->island_item->x() + 256);
+    enemyPlane1->y_points.push_back(islands[0]->island_item->y() + 384);
+
+    enemyPlanes.push_back(enemyPlane1);
+
+    // Clouds
+    for (Cloud* cloud : clouds)
         Scene->addItem(cloud->cloudPixmap);
 
 

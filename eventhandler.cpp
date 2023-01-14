@@ -80,10 +80,6 @@ void EventHandler::my_timer_slot() {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
-        for(int i = 0; i < islands.size(); i++) {
-            islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
-        }
-
         for(int i = 0; i < enemyPlanes.size(); i++) {
             enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
@@ -101,8 +97,6 @@ void EventHandler::my_timer_slot() {
                 }
             }
         }
-    }
-    else {
     }
 
     for(int i = 0; i < islands.size(); i++) {
@@ -278,6 +272,9 @@ void EventHandler::entering_plane_event() {
     std::pair<int, int> pixels_to_move = player_plane->center_plane_on_screen(player_character);
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island(pixels_to_move.first, pixels_to_move.second);
+    }
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
     }
     player_plane->simple_movement(pixels_to_move.first, pixels_to_move.second);
 
