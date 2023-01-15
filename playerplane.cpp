@@ -23,6 +23,7 @@ PlayerPlane::PlayerPlane(Wind *wind,  QList<Cloud*> clouds) {
     wind->UpdateWindStrength();
     hp = 10;
     tank_damaged = false;
+    crash_timer = new QTimer();
 
     QPixmap plane_img;
     for (int i = 1; i <= 3; i++) {
@@ -276,10 +277,9 @@ void PlayerPlane::fuel_usage() {
 
 void PlayerPlane::crash()
 {
-    crash_timer = new QTimer();
+    gameOver=true;
     QAction::connect(crash_timer, &QTimer::timeout, this, &PlayerPlane::UpdateCrashAppearance);
     crash_timer->start(50);
-    gameOver=true;
 }
 
 bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)
@@ -292,6 +292,13 @@ bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)
             }
         }
     }
+    return false;
+}
+
+bool PlayerPlane::IsOnHomeIsland(Island *island)
+{
+    if (item->collidesWithItem(island->island_item, Qt::ContainsItemShape))
+        return true;
     return false;
 }
 
@@ -322,14 +329,27 @@ void PlayerPlane::caluculate_x_y()
      y+=MovingSpeed::y_speed;
 }
 
-
-
 void PlayerPlane::UpdateCrashAppearance()
 {
+    crash_timer->stop();
+    /*
     item->setScale(item->scale()*0.9);
-    item->setRotation(item->rotation()+10);
-    if(item->scale()<=0)
+    rotation_degree += 10;
+    item->setRotation(rotation_degree);
+    if(item->scale()<=0.1)
     {
         crash_timer->stop();
     }
+    */
+}
+
+void PlayerPlane::restart() {
+    cargo = fuel = 0;
+    hp = 10;
+    tank_damaged = false;
+    item->setScale(originalScale);
+    rotation_degree = 0;
+    item->setRotation(0);
+    MovingSpeed::current_power = 20;
+    MovingSpeed::current_speed = 0;
 }

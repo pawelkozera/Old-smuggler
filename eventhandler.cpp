@@ -34,10 +34,11 @@ EventHandler::EventHandler(std::vector<Island *> islands
     timerCloud->start(20);
     timerGameOver = new QTimer();
     connect(timerGameOver, &QTimer::timeout, this,  &EventHandler::GameOver);
-    timerGameOver->start(100);
-    int ms = 1000;
-    int fps = 60;
+    timerGameOver->start(1000);
+    ms = 1000;
+    fps = 60;
     timer->start(ms/fps);
+    waitForCrash = new QTimer();
 
     this->islands = islands;
     this->player_character = player_character;
@@ -123,6 +124,9 @@ void EventHandler::my_timer_slot() {
             enemyPlanes[i]->move_to_point();
         }
     }
+
+    if (player_plane->IsOnHomeIsland(islands[0]) && player_plane->tank_damaged)
+        player_plane->tank_damaged = false;
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -578,7 +582,6 @@ void EventHandler::handleReturnPressed()
     QString nick=menu->nickInput->text();
     hallOfFame->writeFile(nick, score->getScore());
     menu->remove_game_over();
-    menu->remove_menu();
     menu->selectedOption=0;
     menu->draw_menu(1408, 800, sounds->audio_output);
     ui->graphicsView->setScene(menu->scene);
@@ -588,32 +591,69 @@ void EventHandler::handleReturnPressed()
     score->reset();
     this->setFocus();
     player_plane->gameOver=false;
+
+    reset_game();
+
+    menu->nickInput->disconnect();
 }
 
 void EventHandler::GameOver()
 {
-    if(player_plane->gameOver)
-    {
-        waitForCrash = new QTimer();
-        waitForCrash->start(3000);
-        connect(waitForCrash, &QTimer::timeout, this,  &EventHandler::wait);
-        timerGameOver->stop();
-    }
     if(player_plane->hp<=0)
     {
         player_plane->crash();
-        waitForCrash = new QTimer();
-        waitForCrash->start(3000);
+        waitForCrash->start(1000);
+        menu->draw_game_over(score->getScore());
         connect(waitForCrash, &QTimer::timeout, this,  &EventHandler::wait);
         timerGameOver->stop();
+        timer->stop();
     }
 }
 
 void EventHandler::wait()
 {
-    menu->draw_game_over(score->getScore());
     connect(menu->nickInput, &QLineEdit::returnPressed, this, &EventHandler::handleReturnPressed);
     waitForCrash->stop();
+}
+
+void EventHandler::reset_game() {
+    leaving_plane_event();
+
+    map->generate_map(islands);
+    map->generate_img_of_map(islands);
+    QPixmap newMap("../smuggler/assets/interface/map.png");
+    newMap = newMap.scaled(1408, 792);
+    interface->map_item->setPixmap(newMap);
+
+    int x = WINDOW_WIDTH/4;
+    int y = WINDOW_HEIGHT/10;
+    islands[0]->island_item->setPos(x, y);
+    islands[0]->objects[0]->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
+    islands[0]->objects[1]->item->setPos(islands[0]->island_item->x() + 288, islands[0]->island_item->y() + 32);
+
+    player_plane->item->setScale(player_plane->originalScale);
+
+    player_plane->restart();
+    interface->draw_cockpit(settings->window_height, player_plane);
+
+    x = islands[0]->island_item->x() + 4;
+    y = islands[0]->island_item->y() + 224;
+    player_plane->item->setPos(x, y);
+
+    for (int i = 0; i < islands.size(); i++) {
+        player_character->player_item->collidesWithItem(islands[i]->island_item, Qt::ContainsItemShape);
+    }
+
+    std::vector<std::pair<int, int>> reciver_coordinates;
+    reciver_coordinates.push_back(std::pair<int, int> (islands[1]->island_item->x() + 832, islands[1]->island_item->y() + 1024));
+    reciver_coordinates.push_back(std::pair<int, int> (islands[2]->island_item->x() + 1120, islands[2]->island_item->y() + 1024));
+
+    for (int i = 1; i < islands.size(); i++) {
+        islands[i]->objects[0]->item->setPos(reciver_coordinates[i - 1].first, reciver_coordinates[i - 1].second);
+    }
+
+    timerGameOver->start(1000);
+    timer->start(ms/fps);
 }
 
 

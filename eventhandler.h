@@ -53,6 +53,12 @@ public:
     bool collision_with_plane;
     bool collision_with_island_borders;
 
+    int ms;
+    int fps;
+
+    int WINDOW_WIDTH;
+    int WINDOW_HEIGHT;
+
     std::vector<Island *> islands;
     Island *player_island, *target_island;
     InteractiveObject *interactive_object_collided;
@@ -93,7 +99,7 @@ public:
     void handleReturnPressed();
     void GameOver();
     void wait();
-
+    void reset_game();
 
 public slots:
     void my_timer_slot();

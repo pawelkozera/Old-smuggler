@@ -39,6 +39,7 @@ public:
     int hp;
     bool tank_damaged;
     bool gameOver=false;
+    double originalScale;
 
     void animation();
     void simple_movement_event(QKeyEvent *event, int x_speed = MovingSpeed::x_speed, int y_speed = MovingSpeed::y_speed);
@@ -57,9 +58,11 @@ public:
     void fuel_usage();
     void crash();
     bool IsOnTargetIsland(std::vector<Island *> islands);
+    bool IsOnHomeIsland(Island *island);
     void drop_cargo();
     void set_text_drop();
     void caluculate_x_y();
+    void restart();
 };
 
 #endif // PLAYERPLANE_H

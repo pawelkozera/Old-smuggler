@@ -128,15 +128,6 @@ MainWindow::MainWindow(QWidget *parent)
             n++;
     }
 
-    // player plane
-    x = islands[0]->island_item->x() + 4;
-    y = islands[0]->island_item->y() + 224;
-    PlayerPlane *player_plane = new PlayerPlane(wind, clouds);
-    player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
-    player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    player_plane->item->setPos(x, y);
-    player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
-
     // AntiAircraftGun
     AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
     antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
@@ -145,6 +136,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
     islands[0]->antiAircraftGun = antiAircraftGun;
+
+    // player plane
+    x = islands[0]->island_item->x() + 4;
+    y = islands[0]->island_item->y() + 224;
+    PlayerPlane *player_plane = new PlayerPlane(wind, clouds);
+    player_plane->item = Scene->addPixmap(player_plane->imgs[0]);
+    player_plane->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+    player_plane->item->setPos(x, y);
+    player_plane->item->setTransformOriginPoint(player_plane->imgs[0].width()/2, player_plane->imgs[0].height()/2);
+    player_plane->originalScale = player_plane->item->scale();
 
     // EnemyPlane
     std::vector<EnemyPlane *> enemyPlanes;
@@ -215,6 +216,8 @@ MainWindow::MainWindow(QWidget *parent)
     eventHandler->score->setScoreView(interface->key_to_draw_score);
     Scene->addItem(eventHandler);
     eventHandler->select_target_island();
+    eventHandler->WINDOW_HEIGHT = WINDOW_HEIGHT;
+    eventHandler->WINDOW_WIDTH = WINDOW_WIDTH;
 
     ui->graphicsView->setBackgroundBrush(map.get_map_texture());
     ui->graphicsView->setScene(Scene);

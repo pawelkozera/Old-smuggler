@@ -218,7 +218,7 @@ void Menu::remove_menu()
     panel->setOpacity(1);
     for (int i = 0; i < textItems.size(); ++i)
     {
-            scene->removeItem(textItems[i]);
+        scene->removeItem(textItems[i]);
     }
 }
 
