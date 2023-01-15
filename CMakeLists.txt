@@ -64,6 +64,8 @@ set(PROJECT_SOURCES
         bullet.h
         cloud.h
         cloud.cpp
+        enemyplane.cpp
+        enemyplane.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

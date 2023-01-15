@@ -36,6 +36,8 @@ public:
     QGraphicsPixmapItem *cargo_item;
     int x, y;
     QList<Cloud*> clouds;
+    int hp;
+    bool tank_damaged;
 
     void animation();
     void simple_movement_event(QKeyEvent *event, int x_speed = MovingSpeed::x_speed, int y_speed = MovingSpeed::y_speed);

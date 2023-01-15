@@ -21,6 +21,8 @@ PlayerPlane::PlayerPlane(Wind *wind,  QList<Cloud*> clouds) {
     this->clouds=clouds;
     wind->UpdateWindDirection();
     wind->UpdateWindStrength();
+    hp = 10;
+    tank_damaged = false;
 
     QPixmap plane_img;
     for (int i = 1; i <= 3; i++) {
@@ -182,7 +184,11 @@ void PlayerPlane::set_up_current_speed() {
         if (current_power > 11 || current_power < 0)
             return;
 
-        int max_speed = MovingSpeed::max_speed[current_power] - fuel - cargo;
+        int plane_damaged_debuff = 0;
+        if (hp < 10 && hp >= 5) plane_damaged_debuff = 10;
+        else if (hp >= 0 && hp < 5) plane_damaged_debuff = 20;
+
+        int max_speed = MovingSpeed::max_speed[current_power] - fuel - cargo - plane_damaged_debuff;
 
         QVector2D wind_direction=wind->GetWindDirection();
         QVector2D plane_speed=QVector2D(MovingSpeed::x_speed, MovingSpeed::y_speed);
@@ -260,8 +266,12 @@ void PlayerPlane::remove_fuel() {
 }
 
 void PlayerPlane::fuel_usage() {
-    if (MovingSpeed::current_speed > 10)
-        fuel -= 0.002;
+    if (MovingSpeed::current_speed > 10) {
+        if (tank_damaged)
+            fuel -= 0.004;
+        else
+            fuel -= 0.002;
+    }
 }
 
 void PlayerPlane::crash()

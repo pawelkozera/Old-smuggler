@@ -2,8 +2,8 @@
 
 #include <QPainterPath>
 
-AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings) {
-    img.load("../smuggler/assets/objects/" + img_name);
+AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amount_of_bullets) {
+    img.load("../smuggler/assets/enemy/" + img_name);
     range = 740;
     rotation_angle = 0;
     delay = 70;
@@ -20,12 +20,11 @@ AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings) {
     }
 }
 
-bool AntiAircraftGun::is_in_range(int window_width, int window_height) {
-    float x = item->x() - window_width/2;
-    float y = item->y() - window_height/2;
-    float distance = sqrt(x*x+y*y);
+bool AntiAircraftGun::is_in_range(QGraphicsPixmapItem *playerPlaneItem) {
+    QPointF offset = playerPlaneItem->pos() - item->pos();
+    double manhattanL = offset.manhattanLength();
 
-    if (distance <= range) return true;
+    if (manhattanL <= range) return true;
     return false;
 }
 
@@ -75,12 +74,20 @@ void AntiAircraftGun::move_used_bullets() {
     }
 }
 
-void AntiAircraftGun::check_used_bullets_collision(QGraphicsPixmapItem *target) {
+void AntiAircraftGun::check_used_bullets_collision(QGraphicsPixmapItem *target, int *target_hp, bool *target_fuel) {
     bool target_hit = false;
+    int chance;
     for (int i = 0; i < used_bullets.size(); i++) {
         target_hit = used_bullets[i]->collision(target);
-        if (target_hit)
+        if (target_hit) {
             used_bullets.erase(used_bullets.begin() + i);
+            if (*target_hp > 0)
+                *target_hp = *target_hp - 1;
+
+            chance = rand() % 10;
+            if (chance < 2)
+                *target_fuel = true;
+        }
     }
 }
 

@@ -58,7 +58,6 @@ bool Bullet::out_of_range() {
 bool Bullet::collision(QGraphicsPixmapItem *target) {
     if (item->collidesWithItem(target)) {
         item->hide();
-        qDebug() << "hit";
         return true;
     }
     return false;

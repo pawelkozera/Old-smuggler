@@ -23,7 +23,8 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            Wind *wind,
                            Compass *compass,
                            HallOfFame *hallOfFame,
-                           QList<Cloud*> clouds)
+                           QList<Cloud*> clouds,
+                           std::vector<EnemyPlane *> enemyPlanes)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     timer = new QTimer();
@@ -48,6 +49,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->compass=compass;
     this->hallOfFame=hallOfFame;
     this->clouds=clouds;
+    this->enemyPlanes = enemyPlanes;
 
 
     player_plane->set_text_drop();
@@ -78,6 +80,10 @@ void EventHandler::my_timer_slot() {
             islands[i]->move_island(MovingSpeed::x_speed, MovingSpeed::y_speed);
         }
 
+        for(int i = 0; i < enemyPlanes.size(); i++) {
+            enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
+        }
+
         player_plane->animation();
         player_plane->set_up_current_speed();
         player_plane->calculate_x_y_speed();
@@ -85,22 +91,36 @@ void EventHandler::my_timer_slot() {
 
         for(int i = 0; i < islands.size(); i++) {
             if (islands[i]->antiAircraftGun != NULL) {
-                if (islands[i]->antiAircraftGun->is_in_range(settings->window_width, settings->window_height)) {
+                if (islands[i]->antiAircraftGun->is_in_range(player_plane->item)) {
                     islands[i]->antiAircraftGun->rotate(settings->window_width, settings->window_height);
                     islands[i]->antiAircraftGun->shoot(player_plane->item, clouds);
                 }
             }
         }
     }
-    else {
-    }
 
     for(int i = 0; i < islands.size(); i++) {
-            if (islands[i]->antiAircraftGun != NULL) {
-                islands[i]->antiAircraftGun->move_used_bullets();
-                islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item);
-            }
+        if (islands[i]->antiAircraftGun != NULL) {
+            islands[i]->antiAircraftGun->move_used_bullets();
+            islands[i]->antiAircraftGun->check_used_bullets_collision(player_plane->item, &player_plane->hp, &player_plane->tank_damaged);
         }
+    }
+
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_used_bullets();
+        enemyPlanes[i]->check_used_bullets_collision(player_plane->item, &player_plane->hp, &player_plane->tank_damaged);
+    }
+
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        if (enemyPlanes[i]->is_in_range(player_plane->item) && !player_character_events) {
+            enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
+            enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
+            enemyPlanes[i]->shoot(player_plane->item, clouds);
+        }
+        else {
+            enemyPlanes[i]->move_to_point();
+        }
+    }
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -320,6 +340,10 @@ void EventHandler::entering_plane_event() {
     }
     player_plane->simple_movement(pixels_to_move.first, pixels_to_move.second);
 
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_plane(MovingSpeed::x_speed, MovingSpeed::y_speed);
+    }
+
     // wind vane
     wind->UpdateWindStrength();
     //wind->UpdateWindDirection();
@@ -362,6 +386,9 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
 void EventHandler::character_moving(QKeyEvent *event) {
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island_event(event);
+    }
+    for(int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->move_plane_event(event);
     }
     player_plane->simple_movement_event(event);
     for (Cloud* cloud : clouds)
