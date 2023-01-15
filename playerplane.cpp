@@ -279,6 +279,7 @@ void PlayerPlane::crash()
     crash_timer = new QTimer();
     QAction::connect(crash_timer, &QTimer::timeout, this, &PlayerPlane::UpdateCrashAppearance);
     crash_timer->start(50);
+    gameOver=true;
 }
 
 bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)

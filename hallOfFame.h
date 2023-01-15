@@ -14,12 +14,11 @@ typedef struct {
 class HallOfFame {
 public:
     HallOfFame();
-    void init();
 
     bool visible=false;
 
     void readFile();
-    void writeFile();
+    void writeFile(QString nick, int points);
     std::vector<Wpis> listaSlawy;
 };
 

@@ -38,6 +38,7 @@ public:
     QList<Cloud*> clouds;
     int hp;
     bool tank_damaged;
+    bool gameOver=false;
 
     void animation();
     void simple_movement_event(QKeyEvent *event, int x_speed = MovingSpeed::x_speed, int y_speed = MovingSpeed::y_speed);

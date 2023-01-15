@@ -20,6 +20,8 @@ Menu::Menu() {
     btnBack1.load("../smuggler/assets/menu/btnBack1.png");
     btnBack2.load("../smuggler/assets/menu/btnBack2.png");
     paper.load("../smuggler/assets/menu/paper.png");
+    game_over.load("../smuggler/assets/menu/GameOver.png");
+    game_over_paper.load("../smuggler/assets/menu/GameOverPaper.png");
 }
 
 QImage Menu::get_menu_texture() {
@@ -128,7 +130,7 @@ void Menu::draw_points_table(HallOfFame *hallOfFame)
     font.setBold(true);
     int y_dist=400;
     Wpis element;
-    for(int i=0;i<hallOfFame->listaSlawy.size();i++)
+    for(int i=0;i<hallOfFame->listaSlawy.size()-1;i++)
     {
         if(i>8)
             break;
@@ -147,6 +149,58 @@ void Menu::draw_points_table(HallOfFame *hallOfFame)
         scene->addItem(nickItem);
         scene->addItem(pointsItem);
     }
+}
+
+void Menu::draw_game_over(int points)
+{
+    panel = new QGraphicsRectItem(0,0,1408,800);
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(Qt::white);
+    QImage background=menu_texture.scaled(1408, 800);
+    brush.setTextureImage(background);
+    panel->setBrush(brush);
+    panel->setOpacity(0.9);
+    scene->addItem(panel);
+
+    pixmapGameOver = new QGraphicsPixmapItem(QPixmap::fromImage(game_over));
+    pixmapGameOver->setPos(1408/6, 50);
+    pixmapGameOver->setScale(0.9);
+    scene->addItem(pixmapGameOver);
+
+    pixmapGameOverPaper = new QGraphicsPixmapItem(QPixmap::fromImage(game_over_paper));
+    pixmapGameOverPaper->setPos(500, 250);
+    pixmapGameOverPaper->setScale(0.9);
+    scene->addItem(pixmapGameOverPaper);
+
+    nickInput = new QLineEdit();
+    nickInput->setVisible(true);
+    nickInput->setPlaceholderText("Enter your nick");
+    nickInput->setGeometry(600, 400, 230, 60);
+    nickInput->setMaxLength(15);
+    //nickInput->setFocus();
+    QFont fontNick("Arial", 18);
+    fontNick.setBold(true);
+    nickInput->setFont(fontNick);
+    nickInput->setStyleSheet("background: transparent;border: 2px solid black;");
+    nickInput->setAlignment(Qt::AlignCenter);
+    scene->addWidget(nickInput);
+
+    textPoints = new QGraphicsTextItem(QString::number(points));
+    textPoints->setPos(680, 590);
+    QFont fontPoints("Arial", 50);
+    fontPoints.setBold(true);
+    textPoints->setFont(fontPoints);
+    scene->addItem(textPoints);
+}
+
+void Menu::remove_game_over()
+{
+    scene->removeItem(panel);
+    scene->removeItem(pixmapGameOver);
+    scene->removeItem(pixmapGameOverPaper);
+    scene->removeItem(textPoints);
+    nickInput->setVisible(false);
 }
 
 void Menu::remove_menu()

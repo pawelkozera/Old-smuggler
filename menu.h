@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QIcon>
 #include <QGraphicsSceneMouseEvent>
+#include <QLineEdit>
+#include <QAction>
 
 #include "sounds.h"
 #include "hallOfFame.h"
@@ -28,6 +30,8 @@ class Menu
     QImage btnBack2;
     QImage points_table_title;
     QImage paper;
+    QImage game_over;
+    QImage game_over_paper;
 
  public:
     QImage btnMusicON1;
@@ -45,6 +49,10 @@ class Menu
     QGraphicsPixmapItem *pixmapTitlePoints;
     QGraphicsPixmapItem *pixmapPaper;
     QList<QGraphicsTextItem*> textItems;
+    QGraphicsPixmapItem *pixmapGameOver;
+    QGraphicsPixmapItem *pixmapGameOverPaper;
+    QLineEdit *nickInput;
+    QGraphicsTextItem *textPoints;
 
     bool PlayEnable=true;
     bool PointsEnable=false;
@@ -61,6 +69,8 @@ class Menu
     void draw_menu( int width, int height, QAudioOutput *audio);
     void draw_settings();
     void draw_points_table(HallOfFame *hallOfFame);
+    void draw_game_over(int points);
+    void remove_game_over();
     void remove_menu();
     void change_size(int selectedOption);
     void change_size_settings(int selectedOption, QAudioOutput *audio);

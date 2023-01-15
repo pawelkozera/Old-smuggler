@@ -46,6 +46,8 @@ public:
     QTimer *timer;
     QTimer *timer2;
     QTimer *timerCloud;
+    QTimer *timerGameOver;
+    QTimer *waitForCrash;
 
     bool player_character_events;
     bool collision_with_plane;
@@ -88,6 +90,9 @@ public:
     void UpdateArrowDirection();
     void setArrow();
     void moveCloud();
+    void handleReturnPressed();
+    void GameOver();
+    void wait();
 
 
 public slots:

@@ -11,12 +11,6 @@ HallOfFame::HallOfFame()
 }
 
 
-void HallOfFame::init() {
-    listaSlawy.push_back( { 1000, "Rzr"} );
-    listaSlawy.push_back( { 100, "Kuzikson"} );
-    writeFile();
-}
-
 void HallOfFame::readFile() {
     listaSlawy.clear();
     QFile file(fileName);
@@ -29,24 +23,22 @@ void HallOfFame::readFile() {
         QTextStream stream(&file);
         while(!stream.atEnd()) {
             Wpis wpis;
-            stream >> wpis.score;
             stream >> wpis.name;
+            stream >> wpis.score;
             listaSlawy.push_back(wpis);
         }
         file.close();
 }
 
-void HallOfFame::writeFile() {
+void HallOfFame::writeFile(QString nick, int points) {
     QFile file(fileName);
-        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            qDebug() << "Error while opening file";
-            return;
-        }
+       if(!file.open(QIODevice::WriteOnly | QIODevice::Append))
+       {
+           qDebug() << "Error while opening file";
+           return;
+       }
 
-        QTextStream stream(&file);
-        for (const auto& wpis : listaSlawy) {
-            stream << wpis.score << " " << wpis.name << "\n";
-        }
-        file.close();
+       QTextStream stream(&file);
+       stream << nick << " " << points <<"\n";
+       file.close();
 }

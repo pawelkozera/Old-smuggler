@@ -32,6 +32,9 @@ EventHandler::EventHandler(std::vector<Island *> islands
     timerCloud = new QTimer();
     connect(timerCloud, &QTimer::timeout, this,  &EventHandler::moveCloud);
     timerCloud->start(20);
+    timerGameOver = new QTimer();
+    connect(timerGameOver, &QTimer::timeout, this,  &EventHandler::GameOver);
+    timerGameOver->start(100);
     int ms = 1000;
     int fps = 60;
     timer->start(ms/fps);
@@ -50,7 +53,6 @@ EventHandler::EventHandler(std::vector<Island *> islands
     this->hallOfFame=hallOfFame;
     this->clouds=clouds;
     this->enemyPlanes = enemyPlanes;
-
 
     player_plane->set_text_drop();
     scene->addItem(player_plane->text_drop);
@@ -124,6 +126,11 @@ void EventHandler::my_timer_slot() {
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
+    if(event->key() == Qt::Key_G)
+    {
+        menu->draw_game_over(score->getScore());
+        connect(menu->nickInput, &QLineEdit::returnPressed, this, &EventHandler::handleReturnPressed);
+    }
     // player character
     if (player_character_events) {
         if (event->key() == Qt::Key_E && collision_with_plane) {
@@ -564,6 +571,49 @@ void EventHandler::moveCloud()
         if(cloud->cloudPixmap->y()<-10000)
             cloud->cloudPixmap->setPos(cloud->cloudPixmap->x(), 10000);
     }
+}
+
+void EventHandler::handleReturnPressed()
+{
+    QString nick=menu->nickInput->text();
+    hallOfFame->writeFile(nick, score->getScore());
+    menu->remove_game_over();
+    menu->remove_menu();
+    menu->selectedOption=0;
+    menu->draw_menu(1408, 800, sounds->audio_output);
+    ui->graphicsView->setScene(menu->scene);
+    ui->graphicsView->show();
+    menu->menuIsEnable=false;
+    menu->PlayEnable=true;
+    score->reset();
+    this->setFocus();
+    player_plane->gameOver=false;
+}
+
+void EventHandler::GameOver()
+{
+    if(player_plane->gameOver)
+    {
+        waitForCrash = new QTimer();
+        waitForCrash->start(3000);
+        connect(waitForCrash, &QTimer::timeout, this,  &EventHandler::wait);
+        timerGameOver->stop();
+    }
+    if(player_plane->hp<=0)
+    {
+        player_plane->crash();
+        waitForCrash = new QTimer();
+        waitForCrash->start(3000);
+        connect(waitForCrash, &QTimer::timeout, this,  &EventHandler::wait);
+        timerGameOver->stop();
+    }
+}
+
+void EventHandler::wait()
+{
+    menu->draw_game_over(score->getScore());
+    connect(menu->nickInput, &QLineEdit::returnPressed, this, &EventHandler::handleReturnPressed);
+    waitForCrash->stop();
 }
 
 
