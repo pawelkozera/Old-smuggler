@@ -295,7 +295,7 @@ bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)
     return false;
 }
 
-bool PlayerPlane::IsOnHomeIsland(Island *island)
+bool PlayerPlane::IsOnIsland(Island *island)
 {
     if (item->collidesWithItem(island->island_item, Qt::ContainsItemShape))
         return true;

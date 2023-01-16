@@ -100,6 +100,7 @@ public:
     void GameOver();
     void wait();
     void reset_game();
+    void fuel_run_out();
 
 public slots:
     void my_timer_slot();

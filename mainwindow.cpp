@@ -53,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
     islands.push_back(new Island("starting_island.png"));
     islands.push_back(new Island("island1.png"));
     islands.push_back(new Island("island2.png"));
+    islands.push_back(new Island("island3.png"));
+    islands.push_back(new Island("island4.png"));
 
     int x = WINDOW_WIDTH/4;
     int y = WINDOW_HEIGHT/10;
@@ -90,6 +92,8 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<std::pair<int, int>> reciver_coordinates;
     reciver_coordinates.push_back(std::pair<int, int> (islands[1]->island_item->x() + 832, islands[1]->island_item->y() + 1024));
     reciver_coordinates.push_back(std::pair<int, int> (islands[2]->island_item->x() + 1120, islands[2]->island_item->y() + 1024));
+    reciver_coordinates.push_back(std::pair<int, int> (islands[3]->island_item->x() + 768, islands[3]->island_item->y() + 886));
+    reciver_coordinates.push_back(std::pair<int, int> (islands[4]->island_item->x() + 1024, islands[4]->island_item->y() + 800));
 
     for (int i = 1; i < islands.size(); i++) {
         Receiver *receiver = new Receiver("receiver.png", alert, "alert_receiver.png");
@@ -129,13 +133,21 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // AntiAircraftGun
-    AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
-    antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
-    antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
+    std::vector<std::pair<int, int>> antiaircraftgun_coordinates;
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[1]->island_item->x() + 1600, islands[1]->island_item->y() + 286));
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[2]->island_item->x() + 1760, islands[2]->island_item->y() + 480));
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[3]->island_item->x() + 1792, islands[3]->island_item->y() + 192));
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[4]->island_item->x() + 1792, islands[4]->island_item->y() + 544));
 
-    antiAircraftGun->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
-    islands[0]->antiAircraftGun = antiAircraftGun;
+    for (int i = 1; i < islands.size(); i++) {
+        AntiAircraftGun *antiAircraftGun = new AntiAircraftGun("aircraftgun.png", settings, 5);
+        antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
+        antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+        antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
+
+        antiAircraftGun->item->setPos(antiaircraftgun_coordinates[i - 1].first, antiaircraftgun_coordinates[i - 1].second);
+        islands[i]->antiAircraftGun = antiAircraftGun;
+    }
 
     // player plane
     x = islands[0]->island_item->x() + 4;
@@ -150,18 +162,20 @@ MainWindow::MainWindow(QWidget *parent)
     // EnemyPlane
     std::vector<EnemyPlane *> enemyPlanes;
 
-    EnemyPlane *enemyPlane1 = new EnemyPlane("plane1.png", settings, 10);
-    enemyPlane1->item = Scene->addPixmap(enemyPlane1->img);
-    enemyPlane1->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
-    enemyPlane1->item->setTransformOriginPoint(enemyPlane1->img.width()/2, enemyPlane1->img.height()/2);
-    enemyPlane1->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 384);
+    for (int i = 1; i < 4; i += 2) {
+        EnemyPlane *enemyPlane1 = new EnemyPlane("plane1.png", settings, 10);
+        enemyPlane1->item = Scene->addPixmap(enemyPlane1->img);
+        enemyPlane1->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
+        enemyPlane1->item->setTransformOriginPoint(enemyPlane1->img.width()/2, enemyPlane1->img.height()/2);
+        enemyPlane1->item->setPos(islands[i]->island_item->x() + 256, islands[i]->island_item->y() + 384);
 
-    enemyPlane1->x_points.push_back(islands[0]->island_item->x());
-    enemyPlane1->y_points.push_back(islands[0]->island_item->y());
-    enemyPlane1->x_points.push_back(islands[0]->island_item->x() + 256);
-    enemyPlane1->y_points.push_back(islands[0]->island_item->y() + 384);
+        enemyPlane1->x_points.push_back(islands[i]->island_item->x() - WINDOW_WIDTH);
+        enemyPlane1->y_points.push_back(islands[i]->island_item->y() - WINDOW_WIDTH);
+        enemyPlane1->x_points.push_back(islands[i+1]->island_item->x() - WINDOW_WIDTH);
+        enemyPlane1->y_points.push_back(islands[i+1]->island_item->y() - WINDOW_WIDTH);
 
-    enemyPlanes.push_back(enemyPlane1);
+        enemyPlanes.push_back(enemyPlane1);
+    }
 
     // Clouds
     for (Cloud* cloud : clouds)

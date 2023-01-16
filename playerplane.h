@@ -58,7 +58,7 @@ public:
     void fuel_usage();
     void crash();
     bool IsOnTargetIsland(std::vector<Island *> islands);
-    bool IsOnHomeIsland(Island *island);
+    bool IsOnIsland(Island *island);
     void drop_cargo();
     void set_text_drop();
     void caluculate_x_y();

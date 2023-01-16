@@ -112,9 +112,7 @@ void EventHandler::my_timer_slot() {
     for(int i = 0; i < enemyPlanes.size(); i++) {
         enemyPlanes[i]->move_used_bullets();
         enemyPlanes[i]->check_used_bullets_collision(player_plane->item, &player_plane->hp, &player_plane->tank_damaged);
-    }
 
-    for(int i = 0; i < enemyPlanes.size(); i++) {
         if (enemyPlanes[i]->collision_with_player_plane(player_plane) && !player_character_events) {
             player_plane->hp = 0;
         }
@@ -128,8 +126,10 @@ void EventHandler::my_timer_slot() {
         }
     }
 
-    if (player_plane->IsOnHomeIsland(islands[0]) && player_plane->tank_damaged)
+    if (player_plane->IsOnIsland(islands[0]) && player_plane->tank_damaged)
         player_plane->tank_damaged = false;
+
+    fuel_run_out();
 }
 
 void EventHandler::keyPressEvent(QKeyEvent *event) {
@@ -650,13 +650,46 @@ void EventHandler::reset_game() {
     std::vector<std::pair<int, int>> reciver_coordinates;
     reciver_coordinates.push_back(std::pair<int, int> (islands[1]->island_item->x() + 832, islands[1]->island_item->y() + 1024));
     reciver_coordinates.push_back(std::pair<int, int> (islands[2]->island_item->x() + 1120, islands[2]->island_item->y() + 1024));
+    reciver_coordinates.push_back(std::pair<int, int> (islands[3]->island_item->x() + 768, islands[3]->island_item->y() + 886));
+    reciver_coordinates.push_back(std::pair<int, int> (islands[4]->island_item->x() + 1024, islands[4]->island_item->y() + 800));
 
     for (int i = 1; i < islands.size(); i++) {
         islands[i]->objects[0]->item->setPos(reciver_coordinates[i - 1].first, reciver_coordinates[i - 1].second);
+    }
+
+    std::vector<std::pair<int, int>> antiaircraftgun_coordinates;
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[1]->island_item->x() + 1600, islands[1]->island_item->y() + 286));
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[2]->island_item->x() + 1760, islands[2]->island_item->y() + 480));
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[3]->island_item->x() + 1792, islands[3]->island_item->y() + 192));
+    antiaircraftgun_coordinates.push_back(std::pair<int, int> (islands[4]->island_item->x() + 1792, islands[4]->island_item->y() + 544));
+
+    for (int i = 1; i < islands.size(); i++) {
+        islands[i]->antiAircraftGun->item->setPos(antiaircraftgun_coordinates[i - 1].first, antiaircraftgun_coordinates[i - 1].second);
+    }
+
+    int plane_island_spawn = 1;
+    for (int i = 0; i < enemyPlanes.size(); i++) {
+        enemyPlanes[i]->item->setPos(islands[plane_island_spawn]->island_item->x() + 256, islands[plane_island_spawn]->island_item->y() + 384);
+        enemyPlanes[i]->x_points[i] = islands[plane_island_spawn]->island_item->x() - WINDOW_WIDTH;
+        enemyPlanes[i]->y_points[i] = islands[plane_island_spawn]->island_item->y() - WINDOW_WIDTH;
+        enemyPlanes[i]->x_points[i] = islands[plane_island_spawn + 1]->island_item->x() - WINDOW_WIDTH;
+        enemyPlanes[i]->y_points[i] = islands[plane_island_spawn + 1]->island_item->y() - WINDOW_WIDTH;
+
+        plane_island_spawn += 2;
     }
 
     timerGameOver->start(1000);
     timer->start(ms/fps);
 }
 
+void EventHandler::fuel_run_out() {
+    bool isPlaneOnIsland = false;
+    for (int i = 0; i < islands.size(); i++) {
+        if (player_plane->IsOnIsland(islands[i]))
+            isPlaneOnIsland = true;
+    }
+
+    if (player_plane->fuel <= 0 && MovingSpeed::current_speed <= 0 && !player_character_events && !isPlaneOnIsland)
+        player_plane->hp = 0;
+}
 
