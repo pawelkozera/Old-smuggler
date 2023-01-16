@@ -14,6 +14,12 @@ public:
     float music_volume;
 
     QSoundEffect *add_resources;
+    QSoundEffect *gun_shot;
+    QSoundEffect *prop_plane;
+    QSoundEffect *map_opening;
+    QSoundEffect *menu_button;
+    QSoundEffect *menu_button_space;
+    QSoundEffect *score;
     QMediaPlayer *music;
     QAudioOutput *audio_output;
 };

@@ -96,10 +96,13 @@ void EventHandler::my_timer_slot() {
             if (islands[i]->antiAircraftGun != NULL) {
                 if (islands[i]->antiAircraftGun->is_in_range(player_plane->item)) {
                     islands[i]->antiAircraftGun->rotate(settings->window_width, settings->window_height);
-                    islands[i]->antiAircraftGun->shoot(player_plane->item, clouds);
+                    islands[i]->antiAircraftGun->shoot(player_plane->item, clouds, sounds);
                 }
             }
         }
+    }
+    else {
+        sounds->prop_plane->play();
     }
 
     for(int i = 0; i < islands.size(); i++) {
@@ -119,7 +122,7 @@ void EventHandler::my_timer_slot() {
         else if (enemyPlanes[i]->is_in_range(player_plane->item) && !player_character_events) {
             enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
             enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
-            enemyPlanes[i]->shoot(player_plane->item, clouds);
+            enemyPlanes[i]->shoot(player_plane->item, clouds, sounds);
         }
         else {
             enemyPlanes[i]->move_to_point();
@@ -167,6 +170,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
                 player_plane->drop_cargo();
                 drop_cago();
                 select_target_island();
+                sounds->score->play();
             }
         }
         else {
@@ -182,6 +186,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     }
     // both plane and player character
     if (event->key() == Qt::Key_M) {
+        sounds->map_opening->play();
         interface->draw_map();
     }
     // menu
@@ -211,6 +216,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     {
         if (event->key() == Qt::Key_Up)
         {
+            sounds->menu_button->play();
             if(menu->SettingsVisible)
             {
                 if(menu->selectedOptonStettings==0)
@@ -239,7 +245,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
         }
         if (event->key() == Qt::Key_Down)
         {
-
+            sounds->menu_button->play();
             if(menu->SettingsVisible)
             {
                 if(menu->selectedOptonStettings==0)
@@ -269,8 +275,10 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
 
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Space)
         {
+            sounds->menu_button_space->play();
             if(menu->SettingsVisible)
             {
+                sounds->menu_button->play();
                 if(menu->BackEnable)
                 {
                     menu->SettingsVisible=false;
@@ -368,6 +376,7 @@ void EventHandler::entering_plane_event() {
 
     compass->compassItem->show();
     compass->arroItem->show();
+    interface->cockpit_item->show();
 }
 
 void EventHandler::character_on_island_event(QKeyEvent *event) {
@@ -416,6 +425,7 @@ void EventHandler::leaving_plane_event() {
     wind->DirectionPixmap->hide();
     compass->compassItem->hide();
     compass->arroItem->hide();
+    interface->cockpit_item->hide();
 
     MovingSpeed::x_speed = 3;
     MovingSpeed::y_speed = 3;
@@ -467,6 +477,7 @@ void EventHandler::interactive_objects_handler(QKeyEvent *event) {
                     player_plane->cargo = 0;
                     interactive_object_collided->show_alert(player_plane->cargo);
                     select_target_island(player_island);
+                    sounds->score->play();
                 }
             }
         }
@@ -638,6 +649,7 @@ void EventHandler::reset_game() {
 
     player_plane->restart();
     interface->draw_cockpit(settings->window_height, player_plane);
+    interface->cockpit_item->hide();
 
     x = islands[0]->island_item->x() + 4;
     y = islands[0]->island_item->y() + 224;
@@ -680,6 +692,8 @@ void EventHandler::reset_game() {
 
     timerGameOver->start(1000);
     timer->start(ms/fps);
+
+    sounds->menu_button_space->play();
 }
 
 void EventHandler::fuel_run_out() {

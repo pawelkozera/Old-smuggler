@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include "settings.h"
 #include "cloud.h"
+#include "sounds.h"
 
 class AntiAircraftGun
 {
@@ -25,7 +26,7 @@ public:
 
     bool is_in_range(QGraphicsPixmapItem *playerPlaneItem);
     void rotate(int window_width, int window_height);
-    void shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds);
+    void shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds, Sounds *sounds);
     void move_used_bullets();
     void check_used_bullets_collision(QGraphicsPixmapItem *target, int *target_hp, bool *target_fuel);
     bool is_in_cloud(QGraphicsPixmapItem *plane, QList<Cloud*> clouds);

@@ -39,7 +39,7 @@ void AntiAircraftGun::rotate(int window_width, int window_height) {
     item->setRotation(degree);
 }
 
-void AntiAircraftGun::shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds) {
+void AntiAircraftGun::shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds, Sounds *sounds) {
     bool bullet_used;
     int x = item->x() + img.width()/2;
     int y = item->y() + img.height()/2;
@@ -53,6 +53,8 @@ void AntiAircraftGun::shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds) {
                 bullets[i]->item->setPos(x, y);
                 bullets[i]->set_params(rotation_angle);
                 bullets[i]->calculate_x_y_speed();
+
+                sounds->gun_shot->play();
 
                 break;
             }
