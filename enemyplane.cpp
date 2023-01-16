@@ -74,3 +74,10 @@ void EnemyPlane::move_to_point() {
         item->setPos(destination);
     }
 }
+
+bool EnemyPlane::collision_with_player_plane(PlayerPlane *playerPlane) {
+    if (item->collidesWithItem(playerPlane->item)) {
+        return true;
+    }
+    return false;
+}

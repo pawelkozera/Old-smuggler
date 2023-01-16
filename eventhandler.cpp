@@ -115,7 +115,10 @@ void EventHandler::my_timer_slot() {
     }
 
     for(int i = 0; i < enemyPlanes.size(); i++) {
-        if (enemyPlanes[i]->is_in_range(player_plane->item) && !player_character_events) {
+        if (enemyPlanes[i]->collision_with_player_plane(player_plane) && !player_character_events) {
+            player_plane->hp = 0;
+        }
+        else if (enemyPlanes[i]->is_in_range(player_plane->item) && !player_character_events) {
             enemyPlanes[i]->rotate(settings->window_width, settings->window_height);
             enemyPlanes[i]->follow_player(settings->window_width, settings->window_height, player_plane);
             enemyPlanes[i]->shoot(player_plane->item, clouds);

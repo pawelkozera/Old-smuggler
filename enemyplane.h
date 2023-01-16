@@ -24,6 +24,7 @@ public:
     void move_plane(long double x_speed, long double y_speed);
     void follow_player(int window_width, int window_height, PlayerPlane *playerPlane);
     void move_to_point();
+    bool collision_with_player_plane(PlayerPlane *playerPlane);
 };
 
 #endif // ENEMYPLANE_H
