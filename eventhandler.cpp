@@ -27,8 +27,8 @@ EventHandler::EventHandler(std::vector<Island *> islands
                            std::vector<EnemyPlane *> enemyPlanes)
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
-    timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(my_timer_slot()));
+    main_timer = new QTimer();
+    connect(main_timer, SIGNAL(timeout()), this, SLOT(main_events()));
     timerCloud = new QTimer();
     connect(timerCloud, &QTimer::timeout, this,  &EventHandler::moveCloud);
     timerCloud->start(20);
@@ -37,7 +37,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
     timerGameOver->start(1000);
     ms = 1000;
     fps = 60;
-    timer->start(ms/fps);
+    main_timer->start(ms/fps);
     waitForCrash = new QTimer();
 
     this->islands = islands;
@@ -72,7 +72,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
 
 }
 
-void EventHandler::my_timer_slot() {
+void EventHandler::main_events() {
     sounds->music->play();
 
     if (!player_character_events) {
@@ -175,7 +175,7 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
                 score->increase(player_plane->cargo);
                 player_plane->drop_cargo();
                 drop_cago();
-                select_target_island();
+                select_target_island(player_island);
                 sounds->score->play();
             }
         }
@@ -523,7 +523,6 @@ void EventHandler::select_target_island(const Island *previous_target_island) {
     }
     while (islands[island_index] == previous_target_island);
 
-
     islands[island_index]->target_island = true;
     target_island=islands[island_index];
     map->generate_img_of_map(islands);
@@ -626,7 +625,7 @@ void EventHandler::GameOver()
         menu->draw_game_over(score->getScore());
         connect(waitForCrash, &QTimer::timeout, this,  &EventHandler::wait);
         timerGameOver->stop();
-        timer->stop();
+        main_timer->stop();
     }
 }
 
@@ -645,11 +644,18 @@ void EventHandler::reset_game() {
     islands[0]->objects[0]->item->setPos(islands[0]->island_item->x() + 256, islands[0]->island_item->y() + 480);
     islands[0]->objects[1]->item->setPos(islands[0]->island_item->x() + 288, islands[0]->island_item->y() + 32);
 
+    map->generate_map(islands);
+    map->generate_img_of_map(islands);
+    QPixmap newMap("../smuggler/assets/interface/map.png");
+    newMap = newMap.scaled(1408, 792);
+    interface->map_item->setPixmap(newMap);
+
     player_plane->item->setScale(player_plane->originalScale);
 
     player_plane->restart();
     interface->draw_cockpit(settings->window_height, player_plane);
     interface->cockpit_item->hide();
+    interface->can_item->hide();
 
     x = islands[0]->island_item->x() + 4;
     y = islands[0]->island_item->y() + 224;
@@ -690,14 +696,8 @@ void EventHandler::reset_game() {
         plane_island_spawn += 2;
     }
 
-    map->generate_map(islands);
-    map->generate_img_of_map(islands);
-    QPixmap newMap("../smuggler/assets/interface/map.png");
-    newMap = newMap.scaled(1408, 792);
-    interface->map_item->setPixmap(newMap);
-
     timerGameOver->start(1000);
-    timer->start(ms/fps);
+    main_timer->start(ms/fps);
 
     sounds->menu_button_space->play();
 }

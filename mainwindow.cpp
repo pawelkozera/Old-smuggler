@@ -144,6 +144,7 @@ MainWindow::MainWindow(QWidget *parent)
         antiAircraftGun->item = Scene->addPixmap(antiAircraftGun->img);
         antiAircraftGun->item->setShapeMode(QGraphicsPixmapItem::HeuristicMaskShape);
         antiAircraftGun->item->setTransformOriginPoint(antiAircraftGun->img.width()/2, antiAircraftGun->img.height()/2);
+        antiAircraftGun->range = antiAircraftGun->range*2;
 
         antiAircraftGun->item->setPos(antiaircraftgun_coordinates[i - 1].first, antiaircraftgun_coordinates[i - 1].second);
         islands[i]->antiAircraftGun = antiAircraftGun;

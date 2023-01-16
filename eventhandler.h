@@ -43,7 +43,7 @@ public:
                  QList<Cloud*> clouds,
                  std::vector<EnemyPlane *> enemyPlanes);
 
-    QTimer *timer;
+    QTimer *main_timer;
     QTimer *timer2;
     QTimer *timerCloud;
     QTimer *timerGameOver;
@@ -103,8 +103,7 @@ public:
     void fuel_run_out();
 
 public slots:
-    void my_timer_slot();
-
+    void main_events();
 
 };
 

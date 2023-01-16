@@ -191,6 +191,9 @@ void PlayerPlane::set_up_current_speed() {
 
         int max_speed = MovingSpeed::max_speed[current_power] - fuel - cargo - plane_damaged_debuff;
 
+        if (max_speed < 0 && current_power != 0)
+            max_speed = 0;
+
         QVector2D wind_direction=wind->GetWindDirection();
         QVector2D plane_speed=QVector2D(MovingSpeed::x_speed, MovingSpeed::y_speed);
         qreal angle=QVector2D::dotProduct(wind_direction, plane_speed);
@@ -219,7 +222,6 @@ void PlayerPlane::set_up_current_speed() {
             }
         }
 
-
         if (MovingSpeed::current_speed < 0 && current_power == 1)
             MovingSpeed::current_speed = 0;
     }
@@ -233,6 +235,9 @@ void PlayerPlane::set_up_current_speed() {
             }
         }
     }
+
+    if (MovingSpeed::current_power/MovingSpeed::division_power_factor_index == 1)
+        MovingSpeed::current_speed = 0;
 }
 
 void PlayerPlane::calculate_x_y_speed() {
