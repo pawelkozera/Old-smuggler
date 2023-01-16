@@ -196,6 +196,10 @@ MainWindow::MainWindow(QWidget *parent)
     interface->cargo->setPos(54, interface->cockpit_item->y() + 95);
     interface->cockpit_item->hide();
 
+    interface->can_item = Scene->addPixmap(interface->can_img);
+    interface->can_item->setPos(5, WINDOW_HEIGHT - interface->cockpit_img.height() - padding*2 - interface->can_img.height());
+    interface->can_item->hide();
+
     interface->key_to_draw_map = Scene->addText("Press M for map");
     interface->key_to_draw_map->setDefaultTextColor(QColor(255, 255, 255));
     interface->key_to_draw_map->setPos(WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT - padding - 20);

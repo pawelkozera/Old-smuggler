@@ -129,8 +129,14 @@ void EventHandler::my_timer_slot() {
         }
     }
 
-    if (player_plane->IsOnIsland(islands[0]) && player_plane->tank_damaged)
+    if (player_plane->IsOnIsland(islands[0]) && player_plane->tank_damaged) {
         player_plane->tank_damaged = false;
+        interface->can_item->hide();
+        if (player_plane->hp <= 5)
+            player_plane->hp = 6;
+    }
+    if (player_plane->tank_damaged && !interface->can_item->isVisible())
+        interface->can_item->show();
 
     fuel_run_out();
 }

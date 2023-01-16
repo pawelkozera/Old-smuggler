@@ -4,6 +4,7 @@
 Interface::Interface() {
     cockpit_img.load("../smuggler/assets/interface/cockpit.png");
     map_img.load("../smuggler/assets/interface/map.png");
+    can_img.load("../smuggler/assets/interface/can.png");
 
     map_img = map_img.scaled(1408, 792);
 }
@@ -39,5 +40,14 @@ void Interface::draw_map() {
     }
     else {
         map_item->show();
+    }
+}
+
+void Interface::draw_can() {
+    if (can_item->isVisible()) {
+        can_item->hide();
+    }
+    else {
+        can_item->show();
     }
 }
