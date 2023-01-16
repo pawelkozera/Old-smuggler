@@ -639,12 +639,6 @@ void EventHandler::wait()
 void EventHandler::reset_game() {
     leaving_plane_event();
 
-    map->generate_map(islands);
-    map->generate_img_of_map(islands);
-    QPixmap newMap("../smuggler/assets/interface/map.png");
-    newMap = newMap.scaled(1408, 792);
-    interface->map_item->setPixmap(newMap);
-
     int x = WINDOW_WIDTH/4;
     int y = WINDOW_HEIGHT/10;
     islands[0]->island_item->setPos(x, y);
@@ -695,6 +689,12 @@ void EventHandler::reset_game() {
 
         plane_island_spawn += 2;
     }
+
+    map->generate_map(islands);
+    map->generate_img_of_map(islands);
+    QPixmap newMap("../smuggler/assets/interface/map.png");
+    newMap = newMap.scaled(1408, 792);
+    interface->map_item->setPixmap(newMap);
 
     timerGameOver->start(1000);
     timer->start(ms/fps);
