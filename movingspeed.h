@@ -1,7 +1,7 @@
 #ifndef MOVINGSPEED_H
 #define MOVINGSPEED_H
 
-
+///Klasa szybkości poruszania zmiennych statycznych
 class MovingSpeed
 {
 public:

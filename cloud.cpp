@@ -1,6 +1,6 @@
 #include "cloud.h"
 
-
+/*!Konstruktor wyglądu i cech chmur*/
 Cloud::Cloud(int x)
 {
     QString imagePath = "../smuggler/assets/clouds/Cloud_" +QString::number(x)+".png";
@@ -15,6 +15,7 @@ Cloud::Cloud(int x)
     cloudPixmap->setPos(randomX, randomY);
 }
 
+/*!Funkcja ustawiająca prędkości chmur w stosunku do ruchu gracza*/
 void Cloud::move_cloud_event(QKeyEvent *event)
 {
     long double x_speed=MovingSpeed::x_speed;
@@ -34,6 +35,7 @@ void Cloud::move_cloud_event(QKeyEvent *event)
     }
 }
 
+/*!Funkcja poruszająca chmurami na mapie*/
 void Cloud::move_cloud(long double x_speed, long double y_speed)
 {
     float cloud_x = cloudPixmap->x();

@@ -1,6 +1,6 @@
 #include "menu.h"
 
-
+/*!Konstruktor ładujący obrazki menu*/
 Menu::Menu() {
     menu_texture.load("../smuggler/assets/menu/menu_background.png");
     menu_title1.load("../smuggler/assets/menu/title1.png");
@@ -24,10 +24,12 @@ Menu::Menu() {
     game_over_paper.load("../smuggler/assets/menu/GameOverPaper.png");
 }
 
+/*!Konstruktor zwracający teksturę menu*/
 QImage Menu::get_menu_texture() {
     return menu_texture;
 }
 
+/*!Funkcja rysująca menu*/
 void Menu::draw_menu(int width, int height, QAudioOutput *audio)
 {
     panel = new QGraphicsRectItem(0,0,width,height);
@@ -87,6 +89,7 @@ void Menu::draw_menu(int width, int height, QAudioOutput *audio)
    pixmapPaper->hide();
 }
 
+/*!Funkcja rysująca opcję - opcje*/
 void Menu::draw_settings()
 {
     scene->removeItem(pixmapExit);
@@ -107,6 +110,7 @@ void Menu::draw_settings()
 
 }
 
+/*!Funkcja rysująca tablicę wyników*/
 void Menu::draw_points_table(HallOfFame *hallOfFame)
 {
     scene->removeItem(pixmapExit);
@@ -151,6 +155,7 @@ void Menu::draw_points_table(HallOfFame *hallOfFame)
     }
 }
 
+/*!Funkcja rysująca ekran przegranej*/
 void Menu::draw_game_over(int points)
 {
     panel = new QGraphicsRectItem(0,0,1408,800);
@@ -194,6 +199,7 @@ void Menu::draw_game_over(int points)
     scene->addItem(textPoints);
 }
 
+/*!Funkcja usuwająca ekran przegranej*/
 void Menu::remove_game_over()
 {
     scene->removeItem(panel);
@@ -203,6 +209,7 @@ void Menu::remove_game_over()
     nickInput->setVisible(false);
 }
 
+/*!Funkcja usuwająca menu*/
 void Menu::remove_menu()
 {
     scene->removeItem(pixmapExit);
@@ -222,6 +229,7 @@ void Menu::remove_menu()
     }
 }
 
+/*!Funkcja zmieniająca wielkość podświetlonej opcji*/
 void Menu::change_size(int selectedOption)
 {
     int btn_x=(1408/2)-(pixmapPlay->pixmap().width()/4);
@@ -294,6 +302,7 @@ void Menu::change_size(int selectedOption)
     }
 }
 
+/*!Funkcja zmieniająca wielkość podświetlonej opcji w opcjach gry*/
 void Menu::change_size_settings(int selectedOption, QAudioOutput *audio)
 {
     int btn_x=(1408/2)-(pixmapPlay->pixmap().width()/4)-90;
@@ -336,10 +345,3 @@ void Menu::change_size_settings(int selectedOption, QAudioOutput *audio)
         pixmapBack->setPos(btn_x, btn_y+120);
     }
 }
-
-
-
-
-
-
-

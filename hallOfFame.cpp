@@ -5,12 +5,13 @@
 
 const QString fileName = "rekordy.txt";
 
+/*!Konstruktor odczytu pliku*/
 HallOfFame::HallOfFame()
 {
     readFile();
 }
 
-
+/*!Funkcja wczytująca gracza i jego wynik z pliku*/
 void HallOfFame::readFile() {
     listaSlawy.clear();
     QFile file(fileName);
@@ -30,6 +31,7 @@ void HallOfFame::readFile() {
         file.close();
 }
 
+/*!Funkcja zapisująca gracza i jego wynik do pliku*/
 void HallOfFame::writeFile(QString nick, int points) {
     QFile file(fileName);
        if(!file.open(QIODevice::WriteOnly | QIODevice::Append))

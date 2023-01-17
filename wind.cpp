@@ -1,6 +1,7 @@
 #include "wind.h"
 #include <cmath>
 
+/*!Konstruktor cech wiatru i ładujący ikonkę wiatru*/
 Wind::Wind()
 {
     direction = QVector2D(0,0);
@@ -19,19 +20,21 @@ Wind::Wind()
     srand(time(NULL));
 }
 
+/*!Funkcja aktualizująca kierunek wiatru*/
 void Wind::UpdateWindDirection()
 {
-
     int wind_direction_degrees = rand() % 360;
     direction = QVector2D(cos(wind_direction_degrees), sin(wind_direction_degrees));
     UpdateArrow();
 }
 
+/*!Funkcja aktualizująca siłe wiatru do 0.4*/
 void Wind::UpdateWindStrength()
 {
     strength=0.4;
 }
 
+/*!Funkcja aktualizująca pozycję strzałki wiatru*/
 void Wind::UpdateArrow()
 {
     DirectionPixmap->setRotation(0);
@@ -41,13 +44,14 @@ void Wind::UpdateArrow()
     DirectionPixmap->setRotation(wind_angle);
 }
 
+/*!Funkcja zwracająca kierunek wiatru*/
 QVector2D Wind::GetWindDirection() const
 {
     return direction;
 }
 
+/*!Funkcja zwracająca siłę wiatru*/
 float Wind::GetWindStrength() const
 {
     return 0.4;
 }
-

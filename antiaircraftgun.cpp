@@ -2,6 +2,7 @@
 
 #include <QPainterPath>
 
+/*!Konstruktor wyglądu, cech i działania działek przeciwlotniczych*/
 AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amount_of_bullets) {
     img.load("../smuggler/assets/enemy/" + img_name);
     range = 740;
@@ -20,6 +21,7 @@ AntiAircraftGun::AntiAircraftGun(QString img_name, Settings *settings, int amoun
     }
 }
 
+/*!Funkcja sprawdzająca dla działek przeciwlotniczych czy gracz jest w zasięgu ognia*/
 bool AntiAircraftGun::is_in_range(QGraphicsPixmapItem *playerPlaneItem) {
     QPointF offset = playerPlaneItem->pos() - item->pos();
     double manhattanL = offset.manhattanLength();
@@ -28,6 +30,7 @@ bool AntiAircraftGun::is_in_range(QGraphicsPixmapItem *playerPlaneItem) {
     return false;
 }
 
+/*!Funkcja obracająca działkiem przeciwlotniczym*/
 void AntiAircraftGun::rotate(int window_width, int window_height) {
     float x = item->x() - window_width/2;
     float y = -(item->y() - window_height/2);
@@ -39,6 +42,7 @@ void AntiAircraftGun::rotate(int window_width, int window_height) {
     item->setRotation(degree);
 }
 
+/*!Funkcja cech i działania pocisków wystrzeliwanych przez działka przeciwlotnicze*/
 void AntiAircraftGun::shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds, Sounds *sounds) {
     bool bullet_used;
     int x = item->x() + img.width()/2;
@@ -67,6 +71,7 @@ void AntiAircraftGun::shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds, So
     }
 }
 
+/*!Funkcja usuwania pocisków*/
 void AntiAircraftGun::move_used_bullets() {
     for (int i = 0; i < used_bullets.size(); i++) {
         if (used_bullets[i]->out_of_range())
@@ -76,6 +81,7 @@ void AntiAircraftGun::move_used_bullets() {
     }
 }
 
+/*!Funkcja sprawdzająca kolizje pocisków z graczem i zadawania obrażeń*/
 void AntiAircraftGun::check_used_bullets_collision(QGraphicsPixmapItem *target, int *target_hp, bool *target_fuel) {
     bool target_hit = false;
     int chance;
@@ -93,6 +99,7 @@ void AntiAircraftGun::check_used_bullets_collision(QGraphicsPixmapItem *target, 
     }
 }
 
+/*!Funkcja sprawdzająca czy gracz jest zasłonięty w chmurach*/
 bool AntiAircraftGun::is_in_cloud(QGraphicsPixmapItem *plane, QList<Cloud *> clouds)
 {
     for (Cloud* cloud : clouds)

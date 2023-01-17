@@ -4,6 +4,8 @@
 #include "playerplane.h"
 #include <QGraphicsItem>
 
+
+///Klasa interfejsu
 class Interface
 {
 public:
@@ -24,9 +26,11 @@ public:
     QPixmap can_img;
     QGraphicsPixmapItem *can_item;
 
-
+    /*!Funkcja pobiera wysokość okna i wskaźnik samolotu gracza; zwraca nic*/
     void draw_cockpit(int window_height, PlayerPlane const *player_plane);
+    /*!Funkcja pobiera nic; zwraca nic*/
     void draw_map();
+    /*!Funkcja pobiera nic; zwraca nic*/
     void draw_can();
 };
 

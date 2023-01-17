@@ -10,6 +10,8 @@
 #include "cloud.h"
 #include "sounds.h"
 
+
+///Klasa działek przeciwlotniczych
 class AntiAircraftGun
 {
 public:
@@ -24,11 +26,17 @@ public:
     int delay;
     int current_delay;
 
+    /*!Funkcja pobiera wskaźnik na samolot gracza; zwraca true/false*/
     bool is_in_range(QGraphicsPixmapItem *playerPlaneItem);
+    /*!Funkcja pobiera rozmiary okna gry; zwraca nic*/
     void rotate(int window_width, int window_height);
+    /*!Funkcja pobiera wskaźnik samolotu wroga, strukturę vector chmur, dźwięki ; zwraca nic*/
     void shoot(QGraphicsPixmapItem *plane, QList<Cloud*> clouds, Sounds *sounds);
+    /*!Funkcja pobiera nic; zwraca nic*/
     void move_used_bullets();
+    /*!Funkcja pobiera wskaźnik trafienia gracza, wskaźnik życia gracza, wskaźnik paliwa gracza; zwraca nic*/
     void check_used_bullets_collision(QGraphicsPixmapItem *target, int *target_hp, bool *target_fuel);
+    /*!Funkcja pobiera wskaźnik samolotu wroga, strukturę vector chmur; zwraca true/false*/
     bool is_in_cloud(QGraphicsPixmapItem *plane, QList<Cloud*> clouds);
 };
 

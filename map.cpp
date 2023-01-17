@@ -4,15 +4,17 @@
 #include <random>
 #include <cmath>
 
-
+/*!Konstruktor ładujący teksturę wody*/
 Map::Map() {
     map_texture.load("../smuggler/assets/map/background.png");
 }
 
+/*!Konstruktor zwracający teksturę wody*/
 QPixmap Map::get_map_texture() {
     return map_texture;
 }
 
+/*!Funkcja generowania na mapie wysp*/
 void Map::generate_map(std::vector<Island *> islands) {
     // random number generator
     std::random_device rd;
@@ -44,6 +46,7 @@ void Map::generate_map(std::vector<Island *> islands) {
     islands[0]->y_starting = islands[0]->island_item->y();
 }
 
+/*!Funkcja określająca warunki generowania wysp*/
 bool Map::collision_and_gap_between_islands(Island *current_island, std::vector<Island *> islands) {
     for (int i = 0; i < islands.size(); i++) {
         islands[i]->island_item->setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
@@ -59,6 +62,7 @@ bool Map::collision_and_gap_between_islands(Island *current_island, std::vector<
     return false;
 }
 
+/*!Funkcja tworząca minimapę gry*/
 void Map::generate_img_of_map(std::vector<Island *> islands) {
     const QImage blank_map("../smuggler/assets/interface/blank_map.png");
     QImage map(blank_map.width(), blank_map.height(), QImage::Format_ARGB32_Premultiplied);

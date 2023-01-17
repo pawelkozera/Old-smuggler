@@ -12,6 +12,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+
+///Klasa głównego okna gry
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,6 +23,7 @@ public:
     ~MainWindow();
 
     Menu *menu;
+    /*!Funkcja pobiera nic; zwraca nic*/
     void set_window_parameters();
 
 private:

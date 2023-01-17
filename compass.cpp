@@ -1,6 +1,6 @@
 #include "compass.h"
 
-
+/*!Konstruktor wyglądu, cech kompasu*/
 Compass::Compass()
 {
     compassImg.load("../smuggler/assets/compass/navigate.png");
@@ -18,6 +18,7 @@ Compass::Compass()
     arroItem->setTransformOriginPoint(center_point);
 }
 
+/*!Funkcja sprawdzająca dystans do wyspy docelowej*/
 double Compass::caluclateDistance(PlayerPlane *player, Island *island)
 {
     double distance=QLineF(player->item->pos(), island->island_item->pos()).length();

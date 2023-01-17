@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 
-
+/*!Konstruktor wyglądu i cech gracza*/
 PlayerCharacter::PlayerCharacter() {
     current_index_of_player_img = 0;
     delay_animation_counter = 0;
@@ -17,7 +17,7 @@ PlayerCharacter::PlayerCharacter() {
     }
 }
 
-
+/*!Funkcja animująca poruszanie się gracza*/
 void PlayerCharacter::player_animation(QKeyEvent *event) {
     bool key_pressed = false;
     // moving left
@@ -55,6 +55,7 @@ void PlayerCharacter::player_animation(QKeyEvent *event) {
         delay_animation_counter++;
 }
 
+/*!Funkcja zmieniająca aktywny indeks*/
 void PlayerCharacter::change_current_index(int max_index, int min_index) {
     if (current_index_of_player_img < max_index && current_index_of_player_img >= min_index) {
         current_index_of_player_img++;
@@ -65,12 +66,14 @@ void PlayerCharacter::change_current_index(int max_index, int min_index) {
     delay_animation_counter = 0;
 }
 
+/*!Funkcja zmieniająca obrazki wyglądu gracza*/
 void PlayerCharacter::change_character_img(int index) {
     if (index == -1)
         index = current_index_of_player_img;
     player_item->setPixmap(player_imgs[index]);
 }
 
+/*!Funkcja sprawdzająca czy gracz jest na wyspie*/
 Island* PlayerCharacter::player_on_island(QKeyEvent *event, std::vector<Island *> islands) {
     bool player_on_island = false;
 
@@ -83,6 +86,7 @@ Island* PlayerCharacter::player_on_island(QKeyEvent *event, std::vector<Island *
     return NULL;
 }
 
+/*!Funkcja sprawdzająca kolizję gracza z różnymi obiektami*/
 InteractiveObject* PlayerCharacter::collision_with_island_objects(QKeyEvent *event, Island* player_island) {
     InteractiveObject *island_object = NULL;
 
@@ -94,6 +98,7 @@ InteractiveObject* PlayerCharacter::collision_with_island_objects(QKeyEvent *eve
     return NULL;
 }
 
+/*!Funkcja blokująca ruch gracza na obiekty*/
 bool PlayerCharacter::collision(QKeyEvent *event, QGraphicsPixmapItem *item, bool ContainsItemShape) {
     int x = this->player_item->x();
     int y = this->player_item->y();

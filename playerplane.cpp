@@ -8,6 +8,7 @@
 #include <cmath>
 #include <QPixmap>
 
+/*!Konstruktor wyglądu i cech samolotu*/
 PlayerPlane::PlayerPlane(Wind *wind,  QList<Cloud*> clouds) {
     x=0;
     y=0;
@@ -33,6 +34,7 @@ PlayerPlane::PlayerPlane(Wind *wind,  QList<Cloud*> clouds) {
     }
 }
 
+/*!Funkcja animacji samolotu*/
 void PlayerPlane::animation() {
     if (current_index_of_plane_img >= 2 && delay_animation_counter == delay_animation) {
         current_index_of_plane_img = 0;
@@ -49,6 +51,7 @@ void PlayerPlane::animation() {
     delay_animation_counter++;
 }
 
+/*!Funkcja centrująca samolot na środku okna*/
 std::pair<int, int> PlayerPlane::center_plane_on_screen(PlayerCharacter *player_character) {
     std::pair<int, int> pixels_to_move;
     pixels_to_move.first = player_character->player_item->x() - item->x() - imgs[0].width()/2;
@@ -57,6 +60,7 @@ std::pair<int, int> PlayerPlane::center_plane_on_screen(PlayerCharacter *player_
     return pixels_to_move;
 }
 
+/*!Funkcja sprawdzająca możliwość opuszczenia samolotu przez gracza*/
 std::pair<int, int> PlayerPlane::leave_plane(PlayerCharacter *player_character) {
     std::pair<int, int> pixels_to_move;
     float radius = 18;
@@ -97,6 +101,7 @@ std::pair<int, int> PlayerPlane::leave_plane(PlayerCharacter *player_character) 
     return pixels_to_move;
 }
 
+/*!Funkcja sczytująca przyciski ruchu samolotu*/
 void PlayerPlane::simple_movement_event(QKeyEvent *event,  int x_speed, int y_speed) {
     if (event->key() == Qt::Key_A) {
         simple_movement(x_speed, 0);
@@ -112,12 +117,14 @@ void PlayerPlane::simple_movement_event(QKeyEvent *event,  int x_speed, int y_sp
     }
 }
 
+/*!Funkcja ruchu samolotu*/
 void PlayerPlane::simple_movement(int x_speed, int y_speed) {
     int plane_x = item->x();
     int plane_y = item->y();
     item->setPos(plane_x + x_speed, plane_y + y_speed);
 }
 
+/*!Funkcja sprawdzająca przyziemienie samolotu*/
 Island* PlayerPlane::plane_on_island(QKeyEvent *event, std::vector<Island *> islands) {
     bool plane_on_island = false;
 
@@ -130,6 +137,7 @@ Island* PlayerPlane::plane_on_island(QKeyEvent *event, std::vector<Island *> isl
     return NULL;
 }
 
+/*!Funkcja zmiany mocy silnika*/
 void PlayerPlane::change_power(QKeyEvent *event) {
     if (event->key() == Qt::Key_W) {
         if (MovingSpeed::current_power < MovingSpeed::max_power)
@@ -141,6 +149,7 @@ void PlayerPlane::change_power(QKeyEvent *event) {
     }
 }
 
+/*!Funkcja obrótu samolotu*/
 void PlayerPlane::rotate(QKeyEvent *event) {
     float rotate = 0;
 
@@ -179,6 +188,7 @@ void PlayerPlane::rotate(QKeyEvent *event) {
 
 }
 
+/*!Funkcja licząca prędkości zależnej od wiatru, ładunku, paliwa i uszkodzeń*/
 void PlayerPlane::set_up_current_speed() {
     if (fuel > 0) {
         int current_power = MovingSpeed::current_power/MovingSpeed::division_power_factor_index;
@@ -240,6 +250,7 @@ void PlayerPlane::set_up_current_speed() {
         MovingSpeed::current_speed = 0;
 }
 
+/*!Funkcja licząca prędkość*/
 void PlayerPlane::calculate_x_y_speed() {
     const long double pi = 3.14159265358979323851;
 
@@ -251,26 +262,31 @@ void PlayerPlane::calculate_x_y_speed() {
         }
 }
 
+/*!Funkcja dodająca do samolotu cargo*/
 void PlayerPlane::add_cargo(int max_cargo) {
     if (cargo < max_cargo)
         cargo++;
 }
 
+/*!Funkcja usuwająca z samolotu cargo*/
 void PlayerPlane::remove_cargo() {
     if (cargo > 0)
         cargo--;
 }
 
+/*!Funkcja dodająca do samolotu paliwo*/
 void PlayerPlane::add_fuel(int max_fuel) {
     if (fuel < max_fuel)
         fuel++;
 }
 
+/*!Funkcja usuwająca z samolotu paliwo*/
 void PlayerPlane::remove_fuel() {
     if (fuel > 0)
         fuel--;
 }
 
+/*!Funkcja usuwająca paliwo podczas lotu*/
 void PlayerPlane::fuel_usage() {
     if (MovingSpeed::current_speed > 10) {
         if (tank_damaged)
@@ -280,6 +296,7 @@ void PlayerPlane::fuel_usage() {
     }
 }
 
+/*!Funkcja aktywująca zniszczenie samolotu*/
 void PlayerPlane::crash()
 {
     gameOver=true;
@@ -287,6 +304,7 @@ void PlayerPlane::crash()
     crash_timer->start(50);
 }
 
+/*!Funkcja sprawdzająca czy samolot jest nad wyspą docelową*/
 bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)
 {
     for(int i = 0; i < islands.size(); i++) {
@@ -300,6 +318,7 @@ bool PlayerPlane::IsOnTargetIsland(std::vector<Island *> islands)
     return false;
 }
 
+/*!Funkcja sprawdzająca czy samolot jest na wyspie startowej*/
 bool PlayerPlane::IsOnIsland(Island *island)
 {
     if (item->collidesWithItem(island->island_item, Qt::ContainsItemShape))
@@ -307,6 +326,7 @@ bool PlayerPlane::IsOnIsland(Island *island)
     return false;
 }
 
+/*!Funkcja zerująca ilość cargo*/
 void PlayerPlane::drop_cargo()
 {
     if(cargo>0)
@@ -315,6 +335,7 @@ void PlayerPlane::drop_cargo()
     }
 }
 
+/*!Funkcja pokazującej tekst o zrzucie cargo*/
 void PlayerPlane::set_text_drop()
 {
     text_drop=new QGraphicsTextItem("Press Q to drop cargo");
@@ -328,12 +349,14 @@ void PlayerPlane::set_text_drop()
     text_drop->hide();
 }
 
+/*!Funkcja zwiększająca prędkość*/
 void PlayerPlane::caluculate_x_y()
 {
      x+=MovingSpeed::x_speed;
      y+=MovingSpeed::y_speed;
 }
 
+/*!Funkcja zatrzymująca stoper zniszczenia*/
 void PlayerPlane::UpdateCrashAppearance()
 {
     crash_timer->stop();
@@ -348,6 +371,7 @@ void PlayerPlane::UpdateCrashAppearance()
     */
 }
 
+/*!Funkcja restartująca parametry samolotu*/
 void PlayerPlane::restart() {
     cargo = fuel = 0;
     hp = 10;

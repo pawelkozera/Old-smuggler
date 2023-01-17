@@ -1,9 +1,11 @@
 #include "resources.h"
 
+/*!Konstruktor aktywujący alert cargo*/
 Resources::Resources(QString img_name, Alert *alert, QString alert_img_name) : InteractiveObject(img_name, alert, alert_img_name) {
     cargo_alert = true;
 }
 
+/*!Funkcja wyświetlająca wybór ilości zasobów*/
 void Resources::show_alert(int cargo) {
     int x = item->x();
     int y = item->y() + 200;
@@ -26,12 +28,14 @@ void Resources::show_alert(int cargo) {
     alert->amount->setPos(text_x, text_y);
 }
 
+/*!Funkcja ukrywająca wybór ilości zasobów*/
 void Resources::hide_alert() {
     alert->change_img(alert->img);
     alert->draw_filling(true);
     alert->amount->setPlainText("");
 }
 
+/*!Funkcja zwracająca ilość maksymalną cargo*/
 int Resources::max_amount_of_cargo() {
     return 40;
 }

@@ -4,6 +4,8 @@
 #include <QGraphicsItem>
 #include <cmath>
 
+
+///Klasa pocisku
 class Bullet
 {
 public:
@@ -19,10 +21,15 @@ public:
     float x_start;
     float y_start;
 
+    /*!Funkcja pobiera nic; zwraca nic*/
     void move_bullet();
+    /*!Funkcja pobiera parametr kąta obrotu; zwraca nic*/
     void set_params(float rotation_angle);
+    /*!Funkcja pobiera nic; zwraca nic*/
     void calculate_x_y_speed();
+    /*!Funkcja pobiera nic; zwraca true/false*/
     bool out_of_range();
+    /*!Funkcja pobiera; zwraca true/false*/
     bool collision(QGraphicsPixmapItem *target);
 };
 

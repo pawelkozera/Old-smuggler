@@ -5,6 +5,8 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 
+
+///Klasa dźwięków
 class Sounds
 {
 public:

@@ -1,9 +1,11 @@
 #include "fuel.h"
 
+/*!Konstruktor paliwa*/
 Fuel::Fuel(QString img_name, Alert *alert, QString alert_img_name) : InteractiveObject(img_name, alert, alert_img_name) {
     fuel_alert = true;
 }
 
+/*!Funkcja wyświetlania i wyczerpywania się paliwa*/
 void Fuel::show_alert(int fuel) {
     int width_gap_box_alert = alert->img.width() - img.width();
     int x = item->x() - width_gap_box_alert/2;
@@ -27,10 +29,12 @@ void Fuel::show_alert(int fuel) {
     alert->amount->setPos(text_x, text_y);
 }
 
+/*!Funkcja chowająca wartość paliwa*/
 void Fuel::hide_alert() {
     alert->change_img(alert->img);
     alert->draw_filling(true);
     alert->amount->setPlainText("");
 }
 
+/*!Funkcja zwracająca ilość paliwa*/
 int Fuel::max_amount_of_fuel() {return 20;}

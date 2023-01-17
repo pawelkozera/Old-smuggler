@@ -3,6 +3,8 @@
 
 #include <QGraphicsScene>
 
+
+///Klasa ustawień
 class Settings
 {
 public:

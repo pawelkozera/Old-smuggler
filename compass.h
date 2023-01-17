@@ -8,10 +8,12 @@
 #include "island.h"
 
 
+///Klasa kompasu
 class Compass
 {
 public:
     Compass();
+    /*!Funkcja pobiera wskaźnik na gracza i wyspę; zwraca dystans do wyspy docelowej*/
     double caluclateDistance(PlayerPlane *player, Island *island);
 
     QImage compassImg;

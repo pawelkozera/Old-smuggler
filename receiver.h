@@ -3,6 +3,8 @@
 
 #include "interactiveobject.h"
 
+
+///Klasa odbiorcy
 class Receiver : public InteractiveObject
 {
 public:
@@ -10,7 +12,9 @@ public:
 
     QPixmap alert_img_no_cargo;
 
+    /*!Funkcja pobiera ilość cargo; zwraca nic*/
     void show_alert(int cargo);
+    /*!Funkcja pobiera nic; zwraca nic*/
     void hide_alert();
 };
 

@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "movingspeed.h"
 
+/*!Konstruktor wyglądu i cech pocisków*/
 Bullet::Bullet(QString img_name) {
     img.load("../smuggler/assets/objects/" + img_name);
     speed = 6;
@@ -8,6 +9,7 @@ Bullet::Bullet(QString img_name) {
     max_range = 1000;
 }
 
+/*!Funkcja poruszająca pociskiem*/
 void Bullet::move_bullet() {
     if (angle >= 0 && angle <= 90)
         item->setPos(item->x() - x_speed + MovingSpeed::x_speed, item->y() + y_speed + MovingSpeed::y_speed);
@@ -19,6 +21,7 @@ void Bullet::move_bullet() {
         item->setPos(item->x() - x_speed + MovingSpeed::x_speed, item->y() - y_speed + MovingSpeed::y_speed);
 }
 
+/*!Funkcja ustawiająca parametry kierunku lotu pocisku*/
 void Bullet::set_params(float rotation_angle) {
     item->setRotation(rotation_angle);
     angle = -rotation_angle;
@@ -26,6 +29,7 @@ void Bullet::set_params(float rotation_angle) {
     y_start = item->y();
 }
 
+/*!Funkcja obliczająca prędkość pocisku*/
 void Bullet::calculate_x_y_speed() {
     float degree = 0;
 
@@ -43,6 +47,7 @@ void Bullet::calculate_x_y_speed() {
     y_speed = speed*sin(degrees_to_radians);
 }
 
+/*!Funkcja sprawdzająca czy pocisk jest poza zasięgiem i usuwająca go*/
 bool Bullet::out_of_range() {
     float x = x_start - item->x();
     float y = y_start - item->y();
@@ -55,6 +60,7 @@ bool Bullet::out_of_range() {
     return false;
 }
 
+/*!Funkcja usuwająca pocisk jeśli trafi gracza*/
 bool Bullet::collision(QGraphicsPixmapItem *target) {
     if (item->collidesWithItem(target)) {
         item->hide();

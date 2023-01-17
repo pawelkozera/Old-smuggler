@@ -14,6 +14,7 @@
 #include "sounds.h"
 #include "hallOfFame.h"
 
+///Klasa menu
 class Menu
 {
     QImage menu_texture;
@@ -66,13 +67,21 @@ class Menu
     int selectedOptonStettings=0;
 
     Menu();
-    void draw_menu( int width, int height, QAudioOutput *audio);
+    /*!Funkcja pobiera parametry rozmiarów i wskaźnik na audio; zwraca nic*/
+    void draw_menu(int width, int height, QAudioOutput *audio);
+    /*!Funkcja pobiera nic; zwraca nic*/
     void draw_settings();
+    /*!Funkcja pobiera wskaźnik na tablicę wyników; zwraca nic*/
     void draw_points_table(HallOfFame *hallOfFame);
+    /*!Funkcja pobiera ilość punktów; zwraca nic*/
     void draw_game_over(int points);
+    /*!Funkcja pobiera nic; zwraca nic*/
     void remove_game_over();
+    /*!Funkcja pobiera nic; zwraca nic*/
     void remove_menu();
+    /*!Funkcja pobiera wybraną opcję; zwraca nic*/
     void change_size(int selectedOption);
+    /*!Funkcja pobiera wybraną opcję i wskaźnik na audio; zwraca nic*/
     void change_size_settings(int selectedOption, QAudioOutput *audio);
     QImage get_menu_texture();
     bool menuIsEnable=false;

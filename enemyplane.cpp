@@ -1,11 +1,13 @@
 #include "enemyplane.h"
 
+/*!Konstruktor cech samolotu wroga*/
 EnemyPlane::EnemyPlane(QString img_name, Settings *settings, int amount_of_bullets) : AntiAircraftGun(img_name, settings, amount_of_bullets) {
     speed = 2;
     range = 1200;
     index = 0;
 }
 
+/*!Funkcja ustawiająca prędkość samolotu wroga w stosunku do ruchu gracza*/
 void EnemyPlane::move_plane_event(QKeyEvent *event, long double x_speed, long double y_speed) {
     if (event->key() == Qt::Key_A) {
         move_plane(x_speed, 0);
@@ -21,6 +23,7 @@ void EnemyPlane::move_plane_event(QKeyEvent *event, long double x_speed, long do
     }
 }
 
+/*!Funkcja poruszająca samolotem wroga*/
 void EnemyPlane::move_plane(long double x_speed, long double y_speed) {
     float plane_x = item->x();
     float plane_y = item->y();
@@ -36,6 +39,7 @@ void EnemyPlane::move_plane(long double x_speed, long double y_speed) {
     item->setPos(plane_x + x_speed, plane_y + y_speed);
 }
 
+/*!Funkcja podążania samolotu wroga za graczem*/
 void EnemyPlane::follow_player(int window_width, int window_height, PlayerPlane *playerPlane) {
     QPointF offset = playerPlane->item->pos() - item->pos();
     double manhattanL = offset.manhattanLength();
@@ -54,6 +58,7 @@ void EnemyPlane::follow_player(int window_width, int window_height, PlayerPlane 
     }
 }
 
+/*!Funkcja obracająca samolotem*/
 void EnemyPlane::move_to_point() {
     QPointF destination = QPointF(x_points[index], y_points[index]);
     QPointF currentPos = item->pos();
@@ -75,6 +80,7 @@ void EnemyPlane::move_to_point() {
     }
 }
 
+/*!Funkcja sprawdzająca kolizję samolotu wroga z graczem*/
 bool EnemyPlane::collision_with_player_plane(PlayerPlane *playerPlane) {
     if (item->collidesWithItem(playerPlane->item)) {
         return true;

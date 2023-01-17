@@ -5,6 +5,7 @@
 #include "island.h"
 
 
+///Klasa map
 class Map
 {
 private:
@@ -14,8 +15,11 @@ public:
 
     QPixmap get_map_texture();
 
+    /*!Funkcja pobiera kontener vector wysp; zwraca nic*/
     void generate_map(std::vector<Island *> islands);
+    /*!Funkcja pobiera wskaźnik aktywnej wyspy i kontener vector wysp; zwraca true/false*/
     bool collision_and_gap_between_islands(Island *current_island, std::vector<Island *> islands);
+    /*!Funkcja pobiera kontener vector wysp; zwraca nic*/
     void generate_img_of_map(std::vector<Island *> islands);
 };
 

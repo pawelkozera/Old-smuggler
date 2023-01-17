@@ -10,7 +10,7 @@
 
 #include <random>
 
-
+/*!Konstruktor cech obsługi zdarzeń i danych startowych gry*/
 EventHandler::EventHandler(std::vector<Island *> islands
                            ,PlayerCharacter *player_character,
                            PlayerPlane *player_plane,
@@ -72,6 +72,7 @@ EventHandler::EventHandler(std::vector<Island *> islands
 
 }
 
+/*!Funkcja obsługująca zdarzenia główne*/
 void EventHandler::main_events() {
     sounds->music->play();
 
@@ -100,9 +101,6 @@ void EventHandler::main_events() {
                 }
             }
         }
-    }
-    else {
-        sounds->prop_plane->play();
     }
 
     for(int i = 0; i < islands.size(); i++) {
@@ -141,6 +139,7 @@ void EventHandler::main_events() {
     fuel_run_out();
 }
 
+/*!Funkcja obsługująca zdarzenia wciskania klawiszy*/
 void EventHandler::keyPressEvent(QKeyEvent *event) {
     if(event->key() == Qt::Key_G)
     {
@@ -356,7 +355,10 @@ void EventHandler::keyPressEvent(QKeyEvent *event) {
     update();
 }
 
+/*!Funkcja obsługująca wejście do samolotu*/
 void EventHandler::entering_plane_event() {
+    sounds->prop_plane->setLoopCount(QSoundEffect::Infinite);
+    sounds->prop_plane->play();
     player_character_events = false;
     player_character->player_item->hide();
     MovingSpeed::x_speed = 0;
@@ -385,6 +387,7 @@ void EventHandler::entering_plane_event() {
     interface->cockpit_item->show();
 }
 
+/*!Funkcja obsługująca zdarzenia związane z graczem chodzącym po wyspie*/
 void EventHandler::character_on_island_event(QKeyEvent *event) {
     player_island = player_character->player_on_island(event, islands);
     if (player_island) {
@@ -412,6 +415,7 @@ void EventHandler::character_on_island_event(QKeyEvent *event) {
     player_character->change_character_img();
 }
 
+/*!Funkcja obsługująca chodzenie gracza*/
 void EventHandler::character_moving(QKeyEvent *event) {
     for(int i = 0; i < islands.size(); i++) {
         islands[i]->move_island_event(event);
@@ -424,7 +428,9 @@ void EventHandler::character_moving(QKeyEvent *event) {
         cloud->move_cloud_event(event);
 }
 
+/*!Funkcja obsługująca wyjście z samolotu*/
 void EventHandler::leaving_plane_event() {
+    sounds->prop_plane->stop();
     player_character_events = true;
     player_character->player_item->show();
     wind->WindSock->hide();
@@ -443,11 +449,13 @@ void EventHandler::leaving_plane_event() {
     player_plane->simple_movement(pixels_to_move.first, pixels_to_move.second);
 }
 
+/*!Funkcja obsługująca zdarzenia związane z obrotem i siłą mocy samolotu gracza*/
 void EventHandler::plane_events(QKeyEvent *event) {
     player_plane->change_power(event);
     player_plane->rotate(event);
 }
 
+/*!Funkcja obsługująca zdarzenia interakcji gracza z magazynami cargo i paliwa na lotnisku*/
 void EventHandler::set_interactive_object_collided(InteractiveObject *object_collided_bufor) {
     player_last_position.first = player_plane->item->x();
     player_last_position.second = player_plane->item->y();
@@ -462,6 +470,7 @@ void EventHandler::set_interactive_object_collided(InteractiveObject *object_col
         interactive_object_collided->show_alert(player_plane->cargo);
 }
 
+/*!Funkcja obsługująca zdarzenia uzupełniania cargo i paliwa na lotnisku*/
 void EventHandler::interactive_objects_handler(QKeyEvent *event) {
     bool player_position_changed = (player_last_position.first != player_plane->item->x() || player_last_position.second != player_plane->item->y());
 
@@ -507,6 +516,7 @@ void EventHandler::interactive_objects_handler(QKeyEvent *event) {
     }
 }
 
+/*!Funkcja losująca i generująca wyspę docelową*/
 void EventHandler::select_target_island(const Island *previous_target_island) {
     for (int i = 0; i < islands.size(); i++) {
         if (islands[i]->target_island)
@@ -538,6 +548,7 @@ void EventHandler::select_target_island(const Island *previous_target_island) {
     compass->prevoious_distance=compass->caluclateDistance(player_plane, target_island);
 }
 
+/*!Funkcja obsługująca zdarzenie zrzutu cargo*/
 void EventHandler::drop_cago()
 {
     QImage box;
@@ -551,6 +562,7 @@ void EventHandler::drop_cago()
     timer2->start(30);
 }
 
+/*!Funkcja obsługująca zdarzenie spadania cargo na wyspę*/
 void EventHandler::cargo_item_update()
 {
     cargo_item->setScale(cargo_item->scale()*0.9);
@@ -560,6 +572,7 @@ void EventHandler::cargo_item_update()
     }
 }
 
+/*!Funkcja obsługująca zdarzenie obracania się kompasu*/
 void EventHandler::UpdateArrowDirection()
 {
     qreal distance=QLineF(player_plane->item->pos(), target_island->island_item->pos()).length();
@@ -575,6 +588,7 @@ void EventHandler::UpdateArrowDirection()
     compass->prevoious_distance=distance;
 }
 
+/*!Funkcja obsługująca zdarzenie ustawienia kompasu na cel*/
 void EventHandler::setArrow()
 {
     compass->arroItem->setRotation(0);
@@ -583,6 +597,7 @@ void EventHandler::setArrow()
     compass->arroItem->setRotation(angle * 180.0 / M_PI);
 }
 
+/*!Funkcja obsługująca zdarzenie poruszania się chmur*/
 void EventHandler::moveCloud()
 {
     QVector2D windDirection=wind->GetWindDirection().normalized();
@@ -601,6 +616,7 @@ void EventHandler::moveCloud()
     }
 }
 
+/*!Funkcja obsługująca zdarzenie zapisu wyniku do tabeli wyników*/
 void EventHandler::handleReturnPressed()
 {
     QString nick=menu->nickInput->text();
@@ -621,6 +637,7 @@ void EventHandler::handleReturnPressed()
     menu->nickInput->disconnect();
 }
 
+/*!Funkcja obsługująca zdarzenie przegranej*/
 void EventHandler::GameOver()
 {
     if(player_plane->hp<=0)
@@ -634,12 +651,14 @@ void EventHandler::GameOver()
     }
 }
 
+/*!Funkcja obsługująca zdarzenie czekania*/
 void EventHandler::wait()
 {
     connect(menu->nickInput, &QLineEdit::returnPressed, this, &EventHandler::handleReturnPressed);
     waitForCrash->stop();
 }
 
+/*!Funkcja obsługująca zdarzenie restartu gry*/
 void EventHandler::reset_game() {
     leaving_plane_event();
 
@@ -707,6 +726,7 @@ void EventHandler::reset_game() {
     sounds->menu_button_space->play();
 }
 
+/*!Funkcja obsługująca zdarzenie utraty całego paliwa*/
 void EventHandler::fuel_run_out() {
     bool isPlaneOnIsland = false;
     for (int i = 0; i < islands.size(); i++) {
@@ -714,7 +734,7 @@ void EventHandler::fuel_run_out() {
             isPlaneOnIsland = true;
     }
 
-    if (player_plane->fuel <= 0 && MovingSpeed::current_speed <= 0 && !player_character_events && !isPlaneOnIsland)
+    if (MovingSpeed::current_speed <= 0 && !player_character_events && !isPlaneOnIsland)
         player_plane->hp = 0;
 }
 

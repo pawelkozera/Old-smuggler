@@ -1,7 +1,7 @@
 #include "sounds.h"
 #include <QDebug>
 
-
+/*!Konstruktor dźwięków i muzyki gry*/
 Sounds::Sounds() {
     effects_volume = 1.0;
     music_volume = 0;

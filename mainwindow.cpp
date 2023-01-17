@@ -29,7 +29,8 @@ const int WINDOW_WIDTH = 1408;
 const int WINDOW_HEIGHT = 800;
 
 
-
+/*!Konstruktor pobierający obrazy i tworzący: ustawienia, dźwięki, wyspy, mapy, komunikaty, interaktywne obiekty, gracza, zderzenie gracza z wyspą,
+wiatr, chmury, działka przeciwlotnicze, samolot gracza, samoloty wroga, interfejs, kompas, menu, tablicę wyników i obsługę zdarzeń*/
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -245,11 +246,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+/*!Destruktor głównego okna gry*/
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/*!Funkcja ustawiająca parametry okna gry*/
 void MainWindow::set_window_parameters() {
     this->setCentralWidget(ui->graphicsView);
     this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
