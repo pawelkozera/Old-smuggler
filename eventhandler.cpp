@@ -129,7 +129,7 @@ void EventHandler::main_events() {
         }
     }
 
-    if (player_plane->IsOnIsland(islands[0]) && player_plane->tank_damaged) {
+    if (player_plane->IsOnIsland(islands[0]) && player_plane->tank_damaged && MovingSpeed::current_speed == 0) {
         player_plane->tank_damaged = false;
         interface->can_item->hide();
         if (player_plane->hp <= 5)
@@ -508,6 +508,11 @@ void EventHandler::interactive_objects_handler(QKeyEvent *event) {
 }
 
 void EventHandler::select_target_island(const Island *previous_target_island) {
+    for (int i = 0; i < islands.size(); i++) {
+        if (islands[i]->target_island)
+            previous_target_island = islands[i];
+    }
+
     for (int i = 0; i < islands.size(); i++) {
         islands[i]->target_island = false;
     }
