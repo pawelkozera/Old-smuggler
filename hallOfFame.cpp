@@ -14,20 +14,23 @@ HallOfFame::HallOfFame()
 void HallOfFame::readFile() {
     listaSlawy.clear();
     QFile file(fileName);
-        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            qDebug() << "Error while opening file";
-            return;
-        }
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Error while opening file";
+        return;
+    }
 
-        QTextStream stream(&file);
-        while(!stream.atEnd()) {
-            Wpis wpis;
-            stream >> wpis.name;
-            stream >> wpis.score;
-            listaSlawy.push_back(wpis);
-        }
-        file.close();
+    QTextStream stream(&file);
+    while(!stream.atEnd()) {
+        Wpis wpis;
+        stream >> wpis.name;
+        stream >> wpis.score;
+        listaSlawy.push_back(wpis);
+    }
+    file.close();
+
+    std::sort(listaSlawy.begin(), listaSlawy.end(), [](const Wpis& a, const Wpis& b) {
+        return a.score > b.score;
+    });
 }
 
 void HallOfFame::writeFile(QString nick, int points) {

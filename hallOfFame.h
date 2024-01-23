@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 #include <QFile>
+#include <algorithm>
 
 typedef struct {
     int score;
